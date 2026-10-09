@@ -6,7 +6,7 @@ MarketFlow's real API or the caller is told plainly that it didn't.
 import httpx
 from . import payloads
 
-TIMEOUT = 2.5
+TIMEOUT = 400.0  # one MarketFlow run = 4 paced LLM calls; 2.5s always timed out
 
 
 def is_marketflow_live() -> bool:

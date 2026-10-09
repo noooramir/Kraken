@@ -17,3 +17,7 @@ node_modules/
 # IDE files
 .vscode/
 .idea/
+
+.env
+*.env
+eval_results/

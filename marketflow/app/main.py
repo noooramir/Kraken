@@ -6,11 +6,18 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional
 
+from fastapi.responses import JSONResponse
 from . import store, agents, fallback_responses, propagation, kraken_client, llm
 from .trace import RunTrace, detect_markers
 
 app = FastAPI(title="MarketFlow", description="Realistic-looking storefront that is secretly a 4-agent AI shopping demo -- FYP prompt-injection PoC")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+
+
+@app.exception_handler(llm.LLMUnavailable)
+async def _llm_unavailable(request, exc):
+    # Strict-live mode (MARKETFLOW_STRICT_LIVE=1): refuse to fabricate a result.
+    return JSONResponse(status_code=503, content={"error": "llm_unavailable", "detail": str(exc)})
 
 
 def _product_card(p):
@@ -234,6 +241,7 @@ def run_goal(req: RunReq):
     if not product:
         return {"error": "unknown product"}
 
+    llm.reset_fallbacks()
     run_id = store.next_run_id()
     _fb_start = llm.FALLBACK_COUNT
     tr = RunTrace(run_id)
@@ -261,6 +269,7 @@ def run_goal(req: RunReq):
             "run_id": run_id, "product": product, "request": None, "offer": None, "decision": None,
             "routed": None, "order": None, "violations": violations, "trace": tr.as_list(),
             "activity_feed": [{"icon": "cross", "text": f"Blocked by Kraken before reaching the Buyer Agent ({blocked_on})."}],
+            "fallback_used": llm.fallbacks_used(),
             "policy": store.POLICY, "kraken_checks": kraken_checks, "blocked": True,
         }
 
@@ -293,6 +302,7 @@ def run_goal(req: RunReq):
                 "run_id": run_id, "product": product, "request": request, "offer": offer, "decision": decision,
                 "routed": None, "order": None, "violations": violations, "trace": tr.as_list(),
                 "activity_feed": [{"icon": "cross", "text": "Offer approved, but Kraken blocked it from reaching Checkout."}],
+                "fallback_used": llm.fallbacks_used(),
                 "policy": store.POLICY, "kraken_checks": kraken_checks, "blocked": True,
             }
 
@@ -380,6 +390,8 @@ def run_goal(req: RunReq):
         "policy": store.POLICY,
         "kraken_checks": kraken_checks,
         "blocked": False,
+        "fallback_used": llm.fallbacks_used(),  # [] = fully live run; anything else = contaminated
+        "attack_type_classified": attack_type,
         "fallback_calls": llm.FALLBACK_COUNT - _fb_start,
     }
 
