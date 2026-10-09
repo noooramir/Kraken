@@ -170,25 +170,37 @@ async function sendChatMessage() {
   const input = document.getElementById("chat-input");
   const text = input.value.trim();
   if (!text) return;
-  chatGoal = text;
+  const history = Array.from(document.querySelectorAll("#chat-body .chat-bubble")).slice(-6)
+    .map(b => ({role: b.classList.contains("user") ? "user" : "assistant", text: b.textContent}));
   addChatBubble(text, "user");
   input.value = "";
   input.disabled = true;
 
-  setTimeout(() => {
-    addChatBubble("On it -- let me negotiate that with the seller now.", "assistant");
-  }, 400);
-
-  // The goal you just typed IS the instruction to the Buyer Agent -- sending
-  // it is what starts the autonomous run, exactly like a real agentic
-  // assistant. No separate "Buy Now" click needed.
   const budget = parseFloat(document.getElementById("chat-budget").value) || 50;
-  const notes = document.getElementById("pd-gift-note").value;
-  cart = {product_id: currentProductId, qty: 1, goal: text, budget};
-  updateCartBadge();
-  await runAutonomousPipeline(currentProductId, budget, text, notes);
+  let chat = {intent: "question", reply: "Sorry, I couldn't process that. Please try again."};
+  try {
+    chat = await j("/api/chat", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({product_id: currentProductId, message: text, budget, history, force_fallback: forceFallback})
+    });
+  } catch (e) {
+    console.error("[MarketFlow] chat request failed:", e);
+  }
+  if (!chat.intent || !chat.reply) chat = {intent: "question", reply: "Sorry, I couldn't process that. Please try again."};
+  addChatBubble(chat.reply, "assistant");
+
+  // Only a purchase / negotiation request starts the autonomous run.
+  // Questions and small talk just get an answer.
+  if (chat.intent === "purchase") {
+    chatGoal = text;
+    const notes = document.getElementById("pd-gift-note").value;
+    cart = {product_id: currentProductId, qty: 1, goal: text, budget};
+    updateCartBadge();
+    await runAutonomousPipeline(currentProductId, budget, text, notes, true);
+  }
 
   input.disabled = false;
+  input.focus();
 }
 
 document.addEventListener("keypress", e => {
@@ -211,7 +223,7 @@ async function buyNow() {
     : "Get me the best possible deal within my budget.";
   cart = {product_id: currentProductId, qty: 1, goal, budget};
   updateCartBadge();
-  await runAutonomousPipeline(cart.product_id, budget, goal, notes);
+  await runAutonomousPipeline(cart.product_id, budget, goal, notes, true);
 }
 
 function updateCartBadge() {
@@ -261,8 +273,8 @@ async function placeOrder() {
 /* The single entry point for a full, uninterrupted agent run: Buyer -> Negotiator
    -> Buyer (evaluate) -> Orchestrator -> Checkout, all fired from one click, with
    the activity panel streaming automatically end to end -- no further clicks. */
-async function runAutonomousPipeline(product_id, budget, goal, notes) {
-  document.getElementById("activity-panel").classList.add("open");
+async function runAutonomousPipeline(product_id, budget, goal, notes, inline = false) {
+  setActivityOpen(true);
   document.getElementById("activity-list").innerHTML =
     `<div class="empty-note">Starting your assistant...</div>`;
 
@@ -273,7 +285,7 @@ async function runAutonomousPipeline(product_id, budget, goal, notes) {
     });
     lastResult = result;
     const totalDelay = streamActivity(result.activity_feed || []);
-    setTimeout(() => renderConfirmation(result), totalDelay + 300);
+    setTimeout(() => renderConfirmation(result, inline), totalDelay + 300);
   } catch (e) {
     console.error("[MarketFlow] run failed unexpectedly:", e);
     document.getElementById("activity-list").innerHTML =
@@ -281,7 +293,36 @@ async function runAutonomousPipeline(product_id, budget, goal, notes) {
   }
 }
 
-function renderConfirmation(result) {
+function renderInlineResult(result) {
+  const p = result.product;
+  const body = document.getElementById("chat-body");
+  const div = document.createElement("div");
+  if (!result.order) {
+    div.className = "chat-bubble assistant result fail";
+    const why = result.blocked
+      ? "The request was blocked by Kraken before an order could be placed."
+      : "The seller's offer was not approved within your budget. Adjust your budget or message and try again.";
+    div.innerHTML = `<div class="r-title">😕 Order not placed</div><div>${escapeHtml(why)}</div>`;
+  } else {
+    const o = result.order;
+    const off = (p.list_price - o.final_price).toFixed(2);
+    div.className = "chat-bubble assistant result ok";
+    div.innerHTML = `<div class="r-title">🎉 Order placed -- #${escapeHtml(String(o.order_id))}</div>
+      <div class="r-line"><span>${escapeHtml(p.name)}</span><span>$${p.list_price}</span></div>
+      <div class="r-line"><span>Discount</span><span>-${o.discount_pct}% (-$${off})</span></div>
+      <div class="r-line" style="font-weight:700;"><span>Total</span><span>$${o.final_price}</span></div>`;
+  }
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+}
+
+function renderConfirmation(result, inline = false) {
+  if (inline) {
+    renderInlineResult(result);
+    cart = null;
+    updateCartBadge();
+    return;  // stay on the product page: chat + activity + result all visible together
+  }
   const box = document.getElementById("receipt-box");
   const p = result.product;
 
@@ -320,14 +361,19 @@ function renderConfirmation(result) {
 
 /* ---------------- Assistant activity panel ---------------- */
 
+function setActivityOpen(open) {
+  document.getElementById("activity-panel").classList.toggle("open", open);
+  document.body.classList.toggle("activity-open", open);
+}
+
 function toggleActivity() {
-  document.getElementById("activity-panel").classList.toggle("open");
+  setActivityOpen(!document.getElementById("activity-panel").classList.contains("open"));
 }
 
 function streamActivity(feed) {
   const panel = document.getElementById("activity-panel");
   const list = document.getElementById("activity-list");
-  panel.classList.add("open");
+  setActivityOpen(true);
   list.innerHTML = "";
   let elapsed = 0;
   feed.forEach((step) => {
@@ -359,7 +405,7 @@ async function resetDemoEnvironment() {
   updateCartBadge();
   document.getElementById("activity-list").innerHTML =
     `<div class="empty-note">No activity yet -- browse a product and check out to see your assistant at work.</div>`;
-  document.getElementById("activity-panel").classList.remove("open");
+  setActivityOpen(false);
   document.getElementById("pd-gift-note").value = "";
   document.getElementById("chat-input").value = "";
   chatGoal = "";

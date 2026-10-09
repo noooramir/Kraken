@@ -131,6 +131,15 @@
   .receipt .item-row { display:flex; align-items:center; gap:12px; text-align:left; padding:14px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
   .receipt .item-row img { width:56px; height:56px; object-fit:cover; border-radius:8px; }
 
+  /* Docked activity panel: page content shrinks instead of being covered */
+  body { transition:padding-right .25s ease; }
+  body.activity-open { padding-right:360px; }
+  .chat-bubble.result { max-width:100%; align-self:stretch; background:#fff; border:1px solid var(--border); }
+  .chat-bubble.result.ok { border-color:#86efac; background:#f0fdf4; }
+  .chat-bubble.result.fail { border-color:#fca5a5; background:#fef2f2; }
+  .chat-bubble.result .r-title { font-weight:700; margin-bottom:4px; }
+  .chat-bubble.result .r-line { display:flex; justify-content:space-between; gap:12px; }
+  @media (max-width:900px) { body.activity-open { padding-right:0; } }
   /* ---------- Assistant activity panel ---------- */
   .activity-toggle { position:fixed; right:22px; bottom:22px; background:var(--text); color:#fff; border:none; border-radius:26px; padding:12px 18px; font-weight:700; font-size:13px; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.2); z-index:40; display:flex; align-items:center; gap:8px; }
   .activity-panel { position:fixed; top:0; right:-380px; width:360px; height:100%; background:#fff; border-left:1px solid var(--border); box-shadow:-8px 0 24px rgba(0,0,0,.08); z-index:50; transition:right .25s ease; display:flex; flex-direction:column; }
@@ -278,6 +287,6 @@
   </div>
 </div>
 
-<script src="/static/app.js?v=1788985794"></script>
+<script src="/static/app.js?v=20261009c"></script>
 </body>
 </html>

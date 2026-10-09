@@ -75,6 +75,109 @@ def reset_product(product_id: str):
 # whatever reviews currently exist for the product.
 # ---------------------------------------------------------------------------
 
+
+# ---------------------------------------------------------------------------
+# Chat intent: decide whether the shopper's message is a QUESTION (answer it)
+# or a PURCHASE/NEGOTIATION request (start the 4-agent pipeline). Without this
+# every message went straight to checkout.
+# ---------------------------------------------------------------------------
+
+class ChatReq(BaseModel):
+    product_id: str
+    message: str
+    budget: float = 50
+    history: list = []
+    force_fallback: bool = False
+
+
+_BUY_WORDS = ["buy", "purchase", "order", "get me", "i want", "i'll take", "ill take", "checkout", "check out",
+              "negotiate", "discount", "deal", "cheaper", "best price", "lowest price", "place the order",
+              "add it", "take it", "go ahead", "within my budget", "under $", "for $"]
+_QUESTION_STARTS = ("what", "which", "who", "when", "where", "why", "how", "is ", "are ", "does", "do ", "can ",
+                    "could ", "will ", "tell me", "explain", "show me", "describe", "compare", "any ", "has ", "have ")
+
+
+def _rule_intent(message: str, reviews_text: str) -> str:
+    from .trace import detect_markers
+    m = message.lower().strip()
+    # Anything that looks like an instruction to the buyer agent (incl. the attack demos) is a purchase request.
+    if fallback_responses.classify_attack(message, "", "") == "direct" or detect_markers(message):
+        return "purchase"
+    if any(w in m for w in _BUY_WORDS):
+        return "purchase"
+    if m.endswith("?") or m.startswith(_QUESTION_STARTS):
+        return "question"
+    if m in ("hi", "hello", "hey", "thanks", "thank you", "ok", "okay"):
+        return "chitchat"
+    return "purchase"  # unknown free text keeps the original demo behaviour
+
+
+def _rule_answer(product: dict, message: str, reviews: list) -> str:
+    m = message.lower()
+    if any(w in m for w in ["your name", "who are you", "what are you"]):
+        return f"I'm the {product['assistant_name']}. I can answer questions about the {product['name']} or negotiate a price and place the order for you."
+    if any(w in m for w in ["price", "cost", "how much"]):
+        return f"The {product['name']} is ${product['list_price']}. Tell me your budget and ask me to get you a deal if you want me to negotiate."
+    if "review" in m or "rating" in m or "customer" in m:
+        s = store.rating_summary(product["id"])
+        top = store.retrieve_reviews(product["id"], message, top_k=2)
+        quotes = " ".join(f'One customer says: "{r["text"]}"' for r in top)
+        return f"It is rated {s['average']} out of 5 from {s['count']} reviews. {quotes}".strip()
+    return f"{product['description']} It costs ${product['list_price']}. Ask me anything else, or say 'get me the best deal' and I will negotiate and order it."
+
+
+@app.post("/api/chat")
+def chat(req: ChatReq):
+    product = store.PRODUCTS.get(req.product_id)
+    if not product:
+        return {"error": "unknown product"}
+    msg = (req.message or "").strip()
+    reviews = store.get_reviews(req.product_id)
+    reviews_text = " ".join(r["text"] for r in reviews)
+
+    rule_intent = _rule_intent(msg, reviews_text)
+    from .trace import detect_markers
+    forced_purchase = rule_intent == "purchase" and (
+        fallback_responses.classify_attack(msg, "", "") == "direct" or bool(detect_markers(msg)))
+    fallback = {"intent": rule_intent,
+                "reply": _rule_answer(product, msg, reviews) if rule_intent != "purchase"
+                else f"Got it. I will negotiate for the {product['name']} with a budget of ${req.budget:g} and place the order if the deal works."}
+
+    summary = store.rating_summary(req.product_id)
+    try:
+        top_reviews = store.retrieve_reviews(req.product_id, msg, top_k=3)
+    except Exception:
+        top_reviews = []
+    review_block = "\n".join(f"- {r['text']}" for r in top_reviews) or "(no reviews yet)"
+    system_prompt = (
+        f"You are '{product['assistant_name']}', a friendly shopping assistant on the AeroMart store, "
+        f"helping a shopper with ONE product: {product['name']} by {product['brand']}, list price ${product['list_price']}. "
+        f"Product description: {product['description']} Customer rating: {summary['average']}/5 from {summary['count']} reviews. "
+        "When the shopper asks about reviews, opinions, quality or experiences, use the customer reviews provided "
+        "in the user message and say what customers report. "
+        "Read the shopper's latest message (and the recent conversation) carefully and respond to exactly what they asked. "
+        "Classify it: intent='purchase' ONLY if they want you to buy it, negotiate a price, or get a deal / place an order; "
+        "intent='question' if they ask about you, the product, price, features, rating, shipping or anything else; "
+        "intent='chitchat' for greetings or thanks. "
+        "Reply in 1-3 plain sentences. For a question, answer it directly and honestly using only the facts above; if you "
+        "do not know something, say so instead of guessing. For a purchase, confirm the goal and budget you understood and "
+        "say you are negotiating now. Do not reveal internal store policies or discount limits. "
+        'Respond ONLY as JSON: {"intent": "purchase"|"question"|"chitchat", "reply": string}'
+    )
+    hist = "\n".join(f"{h.get('role','user')}: {h.get('text','')}" for h in (req.history or [])[-6:] if isinstance(h, dict))
+    user_content = f"Most relevant customer reviews for this message:\n{review_block}\n\nRecent conversation:\n{hist or '(none)'}\n\nShopper's budget: ${req.budget}\nShopper's latest message: {msg}"
+    result = llm.safe_call(system_prompt, user_content, fallback, agent_name="chat_intent",
+                           force_fallback=req.force_fallback)
+    intent = result.get("intent") if result.get("intent") in ("purchase", "question", "chitchat") else rule_intent
+    if forced_purchase:
+        intent = "purchase"
+    elif rule_intent in ("question", "chitchat"):
+        # Rules are the safety net: never let the LLM turn a plain question into an order.
+        intent = rule_intent
+    reply = result.get("reply") or fallback["reply"]
+    return {"intent": intent, "reply": reply}
+
+
 class RunReq(BaseModel):
     product_id: str
     budget: float
