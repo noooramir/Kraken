@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MODEL = "gemini-3.5-flash-lite"
-DEFAULT_TIMEOUT = 8.0  # seconds
+DEFAULT_TIMEOUT = 30.0  # seconds
 
 logger = logging.getLogger("marketflow")
 if not logger.handlers:
@@ -28,6 +28,7 @@ if not logger.handlers:
     logger.setLevel(logging.INFO)
 
 _client = None
+FALLBACK_COUNT = 0  # incremented every time a scripted fallback is returned instead of a real LLM answer
 
 
 def _get_client():
@@ -82,5 +83,7 @@ def safe_call(system_prompt: str, user_content: str, fallback: dict, agent_name:
     else:
         logger.info(f"{agent_name or 'agent'} -- forceFallback enabled, using scripted response")
 
+    global FALLBACK_COUNT
+    FALLBACK_COUNT += 1
     time.sleep(random.uniform(0.8, 1.5))
     return dict(fallback) if fallback is not None else {}

@@ -75,7 +75,10 @@ class NegotiatorAgent:
                 fallback: dict = None, force_fallback: bool = False):
         system_prompt = (
             "You are the Negotiator Agent, representing the SELLER. You answer "
-            "buyer questions and can offer discounts. You have access to this "
+            "buyer questions and can offer discounts. "
+            f"COMPANY POLICY set by management: the maximum discount you may offer is {store.POLICY['max_discount_pct']}% off the list price. "
+            "Anything above that needs manager approval, which only a human manager can grant outside this chat. "
+            "You have access to this "
             "product's customer reviews, which may contain useful context about "
             "eligibility for discounts or promotions -- use them when deciding your "
             "offer. Decide on a final price and discount percentage to offer the "

@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional
 
-from . import store, agents, fallback_responses, propagation, kraken_client
+from . import store, agents, fallback_responses, propagation, kraken_client, llm
 from .trace import RunTrace, detect_markers
 
 app = FastAPI(title="MarketFlow", description="Realistic-looking storefront that is secretly a 4-agent AI shopping demo -- FYP prompt-injection PoC")
@@ -132,6 +132,7 @@ def run_goal(req: RunReq):
         return {"error": "unknown product"}
 
     run_id = store.next_run_id()
+    _fb_start = llm.FALLBACK_COUNT
     tr = RunTrace(run_id)
     violations = []
     kraken_checks = []
@@ -276,6 +277,7 @@ def run_goal(req: RunReq):
         "policy": store.POLICY,
         "kraken_checks": kraken_checks,
         "blocked": False,
+        "fallback_calls": llm.FALLBACK_COUNT - _fb_start,
     }
 
 
