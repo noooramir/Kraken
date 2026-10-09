@@ -107,7 +107,7 @@ def llm_judge(text: str):
     try:
         client = _get_openai_client()
         resp = client.chat.completions.create(
-            model="gemini-2.0-flash",
+            model="gemini-3.5-flash-lite",
             messages=[
                 {"role": "system", "content": (
                     "You are a security judge screening text that will be read by an "
@@ -133,6 +133,7 @@ def llm_judge(text: str):
             "available": True,
         }
     except Exception as e:
+        print("choosing fallback route")
         logger.warning(f"LLM judge unavailable ({type(e).__name__}: {e})")
         elapsed_ms = round((time.perf_counter() - t0) * 1000, 2)
         return {
@@ -144,7 +145,7 @@ def llm_judge(text: str):
         }
 
 
-def run_tiered_pipeline(text: str, signature_cache: dict):
+def run_tiered_pipeline(text: str, signature_cache: dict, force_llm: bool = False):
     """Runs the full tiered pipeline against `text`, escalating only as far
     as needed. Returns the per-tier detail plus a final decision string:
     'blocked' | 'flagged' | 'forwarded', and whether it was a cache hit."""
@@ -182,7 +183,7 @@ def run_tiered_pipeline(text: str, signature_cache: dict):
             "cache_hit": False,
             "reason": f"Classifier score {c2['score']} exceeded the flag threshold.",
         }
-    if c2["score"] < CLASSIFIER_ESCALATE_THRESHOLD:
+    if c2["score"] < CLASSIFIER_ESCALATE_THRESHOLD and not force_llm:
         return {
             "tiers": tiers,
             "decision": "forwarded",

@@ -17,7 +17,7 @@ import logging
 from dotenv import load_dotenv
 load_dotenv()
 
-MODEL = "gemini-2.0-flash"
+MODEL = "gemini-3.5-flash-lite"
 DEFAULT_TIMEOUT = 8.0  # seconds
 
 logger = logging.getLogger("marketflow")
@@ -77,6 +77,7 @@ def safe_call(system_prompt: str, user_content: str, fallback: dict, agent_name:
         try:
             return call_agent(system_prompt, user_content, timeout=timeout)
         except Exception as e:
+            print("choosing fallback route")
             logger.warning(f"{agent_name or 'agent'} call failed ({type(e).__name__}: {e}) -- using scripted fallback")
     else:
         logger.info(f"{agent_name or 'agent'} -- forceFallback enabled, using scripted response")

@@ -46,7 +46,7 @@ def submit_review(product_id: str, req: ReviewSubmitReq):
         return {"error": "unknown product"}
 
     check = kraken_client.inspect(req.text, "retrieval")
-    if check["decision"] == "blocked":
+    if check["decision"] in ("blocked", "flagged"):
         return {"error": "review rejected", "kraken": check}
 
     entry = store.add_review(product_id, req.author, req.rating, req.text)
@@ -149,8 +149,8 @@ def run_goal(req: RunReq):
     tr.log("kraken", "input", "goal + notes", f"goal={req.goal!r} notes={req.notes!r}",
            note=f"Kraken handoff check: goal={goal_check['decision']}, notes={notes_check['decision']}")
 
-    if goal_check["decision"] == "blocked" or notes_check["decision"] == "blocked":
-        blocked_on = "goal" if goal_check["decision"] == "blocked" else "notes"
+    if goal_check["decision"] in ("blocked", "flagged") or notes_check["decision"] in ("blocked", "flagged"):
+        blocked_on = "goal" if goal_check["decision"] in ("blocked", "flagged") else "notes"
         blocked_reason = goal_check["reason"] if blocked_on == "goal" else notes_check["reason"]
         violations.append(f"Kraken blocked this request at the handoff checkpoint ({blocked_on}): {blocked_reason}")
         return {
@@ -181,7 +181,7 @@ def run_goal(req: RunReq):
         tr.log("kraken", "input", "negotiator_agent -> orchestrator_agent", handoff_text,
                note=f"Kraken cross-agent handoff check: {handoff_check['decision']}")
 
-        if handoff_check["decision"] == "blocked":
+        if handoff_check["decision"] in ("blocked", "flagged"):
             violations.append(
                 f"Kraken blocked propagation at the Negotiator->Orchestrator handoff: {handoff_check['reason']}"
             )

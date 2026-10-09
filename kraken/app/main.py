@@ -203,7 +203,8 @@ def inspect(req: InspectReq):
                 "reason": "Kraken is disabled -- request passed through unchecked.",
                 "tiers": {}, "evidence_id": entry["id"]}
 
-    result = detectors.run_tiered_pipeline(req.text, state.SIGNATURE_CACHE)
+    result = detectors.run_tiered_pipeline(req.text, state.SIGNATURE_CACHE,
+                                           force_llm=(req.checkpoint == "retrieval"))
     entry = state.record_defense_run(req.checkpoint, req.checkpoint, result["decision"], result["cache_hit"],
                                       result["reason"], result["tiers"])
     return {
@@ -233,7 +234,7 @@ def defense_run(req: DefenseRunReq):
     if not state.STATE["defense_on"]:
         decision, cache_hit, reason, tiers = "forwarded", False, "Kraken is disabled -- request passed through unchecked.", {}
     else:
-        result = detectors.run_tiered_pipeline(text, state.SIGNATURE_CACHE)
+        result = detectors.run_tiered_pipeline(text, state.SIGNATURE_CACHE, force_llm=(checkpoint == "retrieval"))
         decision, cache_hit, reason, tiers = result["decision"], result["cache_hit"], result["reason"], result["tiers"]
 
     mf_result = None

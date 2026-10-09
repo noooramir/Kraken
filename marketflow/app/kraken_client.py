@@ -13,7 +13,7 @@ returned dict (`kraken_reachable: False`), never silent.
 import httpx
 
 KRAKEN_URL = "http://127.0.0.1:8002"
-TIMEOUT = 2.0
+TIMEOUT = 12.0  # must exceed Kraken llm_judge timeout (8s), else slow judge calls fail open
 
 
 def inspect(text: str, checkpoint: str):
