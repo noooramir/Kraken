@@ -145,6 +145,22 @@ def test_review_payloads_are_retrievable_by_marketflow_query():
         assert words & set(p.text.lower().replace(",", " ").replace(".", " ").split()), p.id
 
 
+def test_get_payloads_by_id():
+    got = tasks.get_payloads(ids=["review-paraphrased", "review-authority-a"])
+    assert {p.id for p in got} == {"review-paraphrased", "review-authority-a"}
+
+
+def test_get_payloads_unknown_id_raises():
+    with pytest.raises(ValueError):
+        tasks.get_payloads(ids=["nope"])
+
+
+def test_authority_payloads_have_no_crude_markers():
+    for p in tasks.PAYLOADS:
+        if p.id.startswith("review-authority"):
+            assert "[" not in p.text and not any(m in p.text.lower() for m in CRUDE), p.id
+
+
 def test_get_payloads_filters():
     only = tasks.get_payloads(vectors=["review"], stealth=["stealthy"])
     assert only and all(p.vector == "review" and p.stealth == "stealthy" for p in only)

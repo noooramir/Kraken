@@ -155,6 +155,8 @@ def main(argv=None, client=None):
     ap.add_argument("--trials", type=int, default=5, help="runs per payload (default 5)")
     ap.add_argument("--vectors", nargs="*", choices=tasks.VECTORS)
     ap.add_argument("--stealth", nargs="*", choices=tasks.STEALTH_LEVELS)
+    ap.add_argument("--ids", nargs="*", help="run only these payload ids, e.g. review-paraphrased review-authority-a")
+    ap.add_argument("--no-control", action="store_true", help="skip the control (no-attack) runs")
     ap.add_argument("--marketflow", default="http://127.0.0.1:8001")
     ap.add_argument("--kraken", default="http://127.0.0.1:8002")
     ap.add_argument("--delay", type=float, default=20.0,
@@ -180,8 +182,8 @@ def main(argv=None, client=None):
         return 2
 
     user_task = tasks.BENIGN_USER_TASK
-    payloads = tasks.get_payloads(args.vectors, args.stealth)
-    plan = [None] + payloads                      # None = control run first
+    payloads = tasks.get_payloads(args.vectors, args.stealth, args.ids)
+    plan = ([] if args.no_control else [None]) + payloads                      # None = control run first
     out_path = Path(args.out or f"offense/results/baseline_{datetime.now():%Y%m%d_%H%M%S}.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
