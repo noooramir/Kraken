@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from typing import Optional
 from dotenv import load_dotenv
 
-from . import payloads, detectors, state, marketflow_client
+from . import payloads, detectors, state, marketflow_client, dashboard_data, live_runs
 
 load_dotenv()
 
@@ -118,10 +118,11 @@ def simulate(req: SimulateReq):
             "violations": mf_result.get("violations", []),
             "trace": mf_result.get("trace", []),
             "order_placed": bool(mf_result.get("order")),
-            "fallback_used": mf_result.get("fallback_used", []),
+            "fallback_calls": mf_result.get("fallback_calls") or 0,
+            "blocked": bool(mf_result.get("blocked")),
         }
-        if outcome["fallback_used"]:
-            source = f"live-CONTAMINATED (scripted fallback used by: {', '.join(outcome['fallback_used'])})"
+        if outcome["fallback_calls"]:
+            source = f"live-CONTAMINATED (scripted fallback used for {outcome['fallback_calls']} agent call(s))"
     elif live:
         outcome = {
             "final_price": None, "discount_pct": None, "list_price": None,
@@ -141,7 +142,7 @@ def simulate(req: SimulateReq):
             "final_price": ref["final_price"],
             "discount_pct": ref["discount_pct"],
             "list_price": ref["list_price"],
-            "violations": [ref["violation"]],
+            "violations": [ref["violation"]] if ref["violation"] else [],
             "trace": [],
         }
 
@@ -154,7 +155,7 @@ def simulate(req: SimulateReq):
 
     finding = ref["finding"]
     if live_ok and not is_custom:
-        if outcome["fallback_used"]:
+        if outcome["fallback_calls"]:
             finding = "INVALID RUN: at least one agent used a scripted fallback. Do not report this as a result."
         elif outcome["violations"]:
             finding = "Live result: policy violated -- " + outcome["violations"][0] + " (compare with the no-attack control rate before calling this an exploit)"
@@ -285,6 +286,32 @@ def defense_run(req: DefenseRunReq):
         "tally": state.STATE,
         "evidence_id": entry["id"],
     }
+
+
+# ---------------------------------------------------------------------------
+# Dashboard (aggregated offense results + live enforcement state)
+# ---------------------------------------------------------------------------
+class LiveReq(BaseModel):
+    attack_type: str
+    variant: Optional[str] = "authority-a"
+    trials: int = 1
+
+
+@app.post("/api/live/start")
+def live_start(req: LiveReq):
+    return live_runs.start(req.attack_type, req.variant, req.trials)
+
+
+@app.get("/api/live/{job_id}")
+def live_get(job_id: str, since: int = 0):
+    return live_runs.get(job_id, since)
+
+
+@app.get("/api/dashboard")
+def dashboard():
+    d = dashboard_data.build_dashboard(defense_state=dict(state.STATE), evidence=state.EVIDENCE_LOG)
+    d["live_session"] = live_runs.session_summary()
+    return d
 
 
 # ---------------------------------------------------------------------------

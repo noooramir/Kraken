@@ -12,6 +12,7 @@ function escapeHtml(s) {
 }
 
 function scrollToId(id) {
+  if (typeof showView === "function") showView("main");
   document.getElementById(id).scrollIntoView({behavior: "smooth", block: "start"});
 }
 

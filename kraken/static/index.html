@@ -157,20 +157,23 @@
 
   footer.site { text-align:center; padding:40px 24px; color:var(--muted); font-size:12px; border-top:1px solid var(--border); margin-top:20px; }
 </style>
+<link rel="stylesheet" href="/static/dashboard.css" />
 </head>
 <body>
 
 <header class="site">
   <div class="header-inner">
-    <div class="logo"><img src="/static/logo.png" alt="Kraken" class="logo-mark" /> KRAKEN<span class="dot">.</span></div>
+    <div class="logo" style="cursor:pointer" onclick="showView('main')"><img src="/static/logo.png" alt="Kraken" class="logo-mark" /> KRAKEN<span class="dot">.</span></div>
     <nav class="top-nav">
       <a onclick="scrollToId('offense')">Attack Simulator</a>
       <a onclick="scrollToId('defense')">Live Enforcement</a>
       <a onclick="scrollToId('architecture')">Architecture</a>
+      <a onclick="showView('dashboard')" id="nav-dashboard">Dashboard</a>
     </nav>
     <div class="status-chip"><span class="status-dot" id="mf-status-dot"></span> <span id="mf-status-text">Checking MarketFlow...</span></div>
   </div>
 </header>
+<div id="view-main">
 
 <section class="hero">
   <div class="wrap">
@@ -271,8 +274,11 @@
   </div>
 </section>
 
+</div>
+<div id="view-dashboard" style="display:none"><div class="wrap" id="live-root" style="padding-top:28px"></div><div class="wrap" id="dash-root" style="padding-top:18px"></div></div>
 <footer class="site">Kraken</footer>
 
 <script src="/static/app.js"></script>
+<script src="/static/dashboard.js"></script>
 </body>
 </html>

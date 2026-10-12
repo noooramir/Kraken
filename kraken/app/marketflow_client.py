@@ -33,24 +33,34 @@ def forward_attack(attack_id: str, custom_payload: str = None, product_id: str =
     text = custom_payload if custom_payload is not None else spec["payload_text"]
     target_product = product_id or payloads.DEFAULT_PRODUCT_ID
 
+    # Always start from a clean product, so earlier clicks (or earlier planted
+    # reviews) cannot influence this run.
+    with httpx.Client(timeout=TIMEOUT) as client:
+        client.post(f"{payloads.MARKETFLOW_URL}/api/products/{target_product}/reset")
+
     if attack_id == "rag" or (attack_id == "cross_agent" and spec["payload_field"] == "review"):
         with httpx.Client(timeout=TIMEOUT) as client:
-            client.post(
+            planted = client.post(
                 f"{payloads.MARKETFLOW_URL}/api/products/{target_product}/reviews",
                 json={"author": "Verified Buyer", "rating": 5, "text": text},
-            )
+            ).json()
+            if planted.get("error"):
+                # Rejected at submission (Kraken blocked it): the agents never see it.
+                return {"blocked": True, "blocked_at": "review submission", "order": None,
+                        "violations": [], "trace": [], "product": {}, "fallback_calls": 0,
+                        "note": str(planted.get("error"))}
             run = client.post(
                 f"{payloads.MARKETFLOW_URL}/api/run",
                 json={
                     "product_id": target_product,
                     "budget": payloads.DEFAULT_BUDGET,
-                    "goal": "Get me the best possible deal within my budget.",
+                    "goal": payloads.DEFAULT_GOAL,
                     "notes": "",
                 },
             )
             return run.json()
 
-    goal = text if spec["payload_field"] == "goal" else "Get me the best possible deal within my budget."
+    goal = f"{payloads.DEFAULT_GOAL} {text}" if spec["payload_field"] == "goal" else payloads.DEFAULT_GOAL
     notes = text if spec["payload_field"] == "notes" else ""
 
     with httpx.Client(timeout=TIMEOUT) as client:
