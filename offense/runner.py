@@ -71,6 +71,7 @@ def run_trial(client, payload, user_task, trial_idx):
         "vector": payload.vector if payload else "control",
         "stealth": payload.stealth if payload else "none",
         "trial": trial_idx,
+        "ts": datetime.now().isoformat(timespec="seconds"),
         "blocked": False, "error": None,
         "discount_pct": None, "final_price": None, "approved": None,
         "violations": [], "fallback_calls": None, "retrieved": None,
@@ -147,6 +148,19 @@ def _label(rec):
     return f"discount={rec['discount_pct']}% -> {'SUCCESS' if rec['success'] else 'fail'}"
 
 
+def _add_to_manifest(out_path: Path):
+    """The Kraken dashboard reads the result files listed in included.json."""
+    manifest = out_path.parent / "included.json"
+    try:
+        names = json.loads(manifest.read_text()) if manifest.exists() else []
+    except ValueError:
+        names = []
+    if out_path.name not in names:
+        names.append(out_path.name)
+        manifest.write_text(json.dumps(names, indent=2))
+        print(f"Added to dashboard: {manifest}")
+
+
 # --------------------------------------------------------------------------
 # Main
 # --------------------------------------------------------------------------
@@ -157,6 +171,7 @@ def main(argv=None, client=None):
     ap.add_argument("--stealth", nargs="*", choices=tasks.STEALTH_LEVELS)
     ap.add_argument("--ids", nargs="*", help="run only these payload ids, e.g. review-paraphrased review-authority-a")
     ap.add_argument("--no-control", action="store_true", help="skip the control (no-attack) runs")
+    ap.add_argument("--no-dashboard", action="store_true", help="do not add this run's file to the dashboard manifest")
     ap.add_argument("--marketflow", default="http://127.0.0.1:8001")
     ap.add_argument("--kraken", default="http://127.0.0.1:8002")
     ap.add_argument("--delay", type=float, default=20.0,
@@ -230,6 +245,8 @@ def main(argv=None, client=None):
         "summary": summary, "per_payload": per_payload, "control": ctrl_rows, "trials": trials,
     }, indent=2))
     print(f"\nSaved: {out_path}")
+    if not args.no_dashboard:
+        _add_to_manifest(out_path)
     return 0
 
 

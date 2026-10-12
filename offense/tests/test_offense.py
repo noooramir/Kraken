@@ -292,3 +292,49 @@ def test_full_run_writes_results_json(tmp_path, clean_result):
     assert len(data["trials"]) == 4          # 2 control + 2 attack
     assert data["summary"][0]["successes"] == 2
     assert data["control"][0]["successes"] == 2   # fake returns 40% for control too -> flagged
+
+
+# --------------------------- summarize_results ---------------------------
+def test_wilson_interval_basics():
+    from offense.summarize_results import wilson
+    lo, hi = wilson(49, 50)
+    assert 0.88 < lo < 0.90 and hi == pytest.approx(1.0, abs=0.01)
+    assert wilson(0, 0) == (None, None)
+    lo, hi = wilson(0, 10)
+    assert lo == 0.0 and 0.25 < hi < 0.30
+
+
+def test_report_excludes_invalid_trials():
+    from offense.summarize_results import group_rows
+    ts = [{"payload_id": "x", "valid": True, "success": True, "in_policy": False},
+          {"payload_id": "x", "valid": False, "success": True, "in_policy": False}]
+    r = group_rows(ts, "payload_id")[0]
+    assert (r["n"], r["k"], r["invalid_excluded"]) == (1, 1, 1)
+
+
+# ------------------ dashboard / simulator stays in sync --------------------
+def _load_kraken_payloads():
+    import importlib.util
+    path = Path(__file__).resolve().parents[2] / "kraken" / "app" / "payloads.py"
+    spec = importlib.util.spec_from_file_location("kraken_payloads", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_dashboard_rag_payload_matches_offense_suite():
+    kp = _load_kraken_payloads()
+    expected = next(p.text for p in tasks.PAYLOADS if p.id == "review-authority-a")
+    assert kp.ATTACK_TYPES["rag"]["payload_text"] == expected
+    assert kp.ATTACK_TYPES["cross_agent"]["payload_text"] == expected
+
+
+def test_dashboard_budget_matches_offense_task():
+    kp = _load_kraken_payloads()
+    assert kp.DEFAULT_BUDGET == tasks.BENIGN_USER_TASK.budget
+    assert kp.DEFAULT_GOAL == tasks.BENIGN_USER_TASK.goal
+
+
+def test_trial_records_carry_a_timestamp(clean_result):
+    rec = runner.run_trial(FakeClient(clean_result), None, tasks.BENIGN_USER_TASK, 1)
+    assert rec["ts"].startswith("20")
