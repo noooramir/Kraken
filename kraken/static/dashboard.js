@@ -152,6 +152,7 @@ function renderDashboard(root, d) {
     <div class="dcard span-7"><h3>Payload effectiveness</h3><div class="dsub">Successes / trials per payload (hover for confidence interval)</div>${payloadBars(d.by_payload)}</div>
     <div class="dcard span-5"><h3>Discount granted</h3><div class="dsub">Distribution of final discounts across valid trials</div>${histogram(d.histogram, d.policy_max)}</div>
     <div class="dcard span-12"><h3>Attack timeline</h3><div class="dsub">Every trial in run order</div>${timeline(d.sequence)}</div>
+    <div class="dcard span-12"><h3>RAG poisoning benchmark (PoisonedRAG dataset)</h3><div class="dsub">Published dataset: 100 target questions per corpus, 5 poisoned passages each. Attack succeeds when the model answers with the attacker's wrong answer.</div>${ragBench(d.rag_benchmark)}</div>
     <div class="dcard span-12"><h3>Live session</h3><div class="dsub">Attacks fired from the live runner since Kraken was started (not part of the baseline numbers)</div>${liveSession(d.live_session)}</div>
     <div class="dcard span-6"><h3>Kraken OFF vs ON</h3><div class="dsub">Defense effectiveness</div>${comparison(d.comparison)}</div>
     <div class="dcard span-6"><h3>Kraken live enforcement</h3><div class="dsub">Counters from the running defense</div>${liveTiles(live)}${evidence(d.evidence)}</div>
@@ -256,4 +257,15 @@ function liveSession(ls) {
   if (!ls || !ls.total) return `<div class="dash-sub">No live attacks yet. Use the runner above.</div>`;
   const rows = ls.by_attack.map(a => `<tr><td>${dEsc(a.attack)}</td><td><span class="out out-violation">${a.success}</span></td><td><span class="out out-held">${a.fail}</span></td><td><span class="out out-blocked">${a.blocked}</span></td><td><span class="out out-invalid">${a.invalid + a.error}</span></td></tr>`).join("");
   return `<div class="scroll-x"><table class="dtable"><tr><th>Attack</th><th>Succeeded</th><th>Failed</th><th>Blocked</th><th>Invalid</th></tr>${rows}</table></div>`;
+}
+
+function ragBench(rows) {
+  if (!rows || !rows.length) return `<div class="dash-empty" style="padding:22px 10px">No benchmark run yet.<br><code>marketflow\\venv\\Scripts\\python -m offense.ragpoison --dataset nq</code></div>`;
+  const bar = (label, v, col) => `<div class="hbar"><div class="name">${label}</div><div class="track"><div class="fill" style="width:${(v||0)*100}%;background:${col}"></div></div><div class="val">${pct(v,0)}</div></div>`;
+  return rows.map(r => { const s = r.summary, m = r.meta;
+    return `<div style="margin-bottom:14px"><div style="font-weight:700;font-size:12.5px;margin-bottom:6px">${dEsc(m.dataset)} <span class="dash-sub">&middot; ${s.poisoned_n} valid questions &middot; ${dEsc(m.llm)} &middot; ${dEsc(m.retriever.split(";")[0])}</span></div>
+      ${bar("Clean accuracy (no attack)", s.clean_accuracy, "#1E8E5A")}
+      ${bar("Poison reached top-" + m.top_k, s.retrieved_rate, "#B9770E")}
+      ${bar("Attack success rate", s.asr, "#C6403A")}
+      <div class="dash-sub">ASR 95% CI ${pct(s.asr_ci[0])}-${pct(s.asr_ci[1])} &middot; ASR when poison retrieved ${pct(s.asr_when_retrieved)} &middot; paper-style substring ASR ${pct(s.asr_paper_substring)} &middot; ${s.invalid_excluded} invalid excluded</div></div>`; }).join("");
 }

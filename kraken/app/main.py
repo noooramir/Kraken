@@ -311,6 +311,7 @@ def live_get(job_id: str, since: int = 0):
 def dashboard():
     d = dashboard_data.build_dashboard(defense_state=dict(state.STATE), evidence=state.EVIDENCE_LOG)
     d["live_session"] = live_runs.session_summary()
+    d["rag_benchmark"] = dashboard_data.rag_benchmark()
     return d
 
 
@@ -324,3 +325,7 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 @app.get("/")
 def index():
     return FileResponse(os.path.join(static_dir, "index.html"))
+
+# Live Cycle view: step-by-step lifecycle of the attack currently running
+from . import lifecycle  # noqa: E402
+app.include_router(lifecycle.router)

@@ -50,6 +50,7 @@ def _worker(job):
     for i in range(1, n + 1):
         if i > 1:
             time.sleep(PACE_SECONDS)
+        job["trial"], job["label"] = i, label
         _add(job, "info", f"[{label} {i}/{n}] running (resets product, takes ~20-60s)...")
         try:
             if atk == "control":

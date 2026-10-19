@@ -224,3 +224,19 @@ def build_dashboard(defense_state=None, evidence=None):
             for e in (evidence or [])[:12]
         ],
     }
+
+
+def rag_benchmark():
+    """Latest PoisonedRAG benchmark run per dataset (offense/results/poisonedrag_*.json)."""
+    import glob, json, os
+    base = os.path.join(os.path.dirname(__file__), "..", "..", "offense", "results")
+    latest = {}
+    for f in sorted(glob.glob(os.path.join(base, "poisonedrag_*.json"))):
+        try:
+            d = json.load(open(f, encoding="utf-8"))
+            latest[d["meta"]["dataset"]] = {"file": os.path.basename(f), "meta": {
+                k: d["meta"].get(k) for k in ("started", "dataset", "questions", "top_k", "retriever", "llm", "source")},
+                "summary": d["summary"]}
+        except Exception:
+            continue
+    return list(latest.values())

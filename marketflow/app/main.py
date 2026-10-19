@@ -436,3 +436,7 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 @app.get("/")
 def index():
     return FileResponse(os.path.join(static_dir, "index.html"))
+
+# Live Cycle feed: records each step of a run so Kraken can show it live
+from . import live_feed  # noqa: E402
+live_feed.install(app)
