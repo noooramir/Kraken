@@ -153,7 +153,7 @@ function renderDashboard(root, d) {
     <div class="dcard span-5"><h3>Discount granted</h3><div class="dsub">Distribution of final discounts across valid trials</div>${histogram(d.histogram, d.policy_max)}</div>
     <div class="dcard span-12"><h3>Attack timeline</h3><div class="dsub">Every trial in run order</div>${timeline(d.sequence)}</div>
     <div class="dcard span-12"><h3>RAG poisoning benchmark (PoisonedRAG dataset)</h3><div class="dsub">Published dataset: 100 target questions per corpus, 5 poisoned passages each. Attack succeeds when the model answers with the attacker's wrong answer.</div>${ragBench(d.rag_benchmark)}</div>
-    <div class="dcard span-12"><h3>Live session</h3><div class="dsub">Attacks fired from the live runner since Kraken was started (not part of the baseline numbers)</div>${liveSession(d.live_session)}</div>
+    <div class="dcard span-12"><h3>Live session</h3><div class="dsub">Every attack fired from this Kraken since it started: simulator, enforcement check and live runner (not part of the baseline numbers)</div>${liveSession(d.live_session)}</div>
     <div class="dcard span-6"><h3>Kraken OFF vs ON</h3><div class="dsub">Defense effectiveness</div>${comparison(d.comparison)}</div>
     <div class="dcard span-6"><h3>Kraken live enforcement</h3><div class="dsub">Counters from the running defense</div>${liveTiles(live)}${evidence(d.evidence)}</div>
   </div>`;
@@ -225,7 +225,8 @@ async function startLive(atk) {
   btns.forEach(b => b.disabled = true);
   try {
     const r = await fetch("/api/live/start", {method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({attack_type: atk, variant: document.getElementById("live-variant").value,
+      body: JSON.stringify({attack_type: atk, product_id: (typeof targetProduct === "function" ? targetProduct() : null),
+                            variant: document.getElementById("live-variant").value,
                             trials: parseInt(document.getElementById("live-trials").value, 10)})});
     const d = await r.json();
     if (d.error) { liveLog("error", d.error); btns.forEach(b => b.disabled = false); return; }
@@ -256,14 +257,17 @@ async function pollLive() {
 function liveSession(ls) {
   if (!ls || !ls.total) return `<div class="dash-sub">No live attacks yet. Use the runner above.</div>`;
   const rows = ls.by_attack.map(a => `<tr><td>${dEsc(a.attack)}</td><td><span class="out out-violation">${a.success}</span></td><td><span class="out out-held">${a.fail}</span></td><td><span class="out out-blocked">${a.blocked}</span></td><td><span class="out out-invalid">${a.invalid + a.error}</span></td></tr>`).join("");
-  return `<div class="scroll-x"><table class="dtable"><tr><th>Attack</th><th>Succeeded</th><th>Failed</th><th>Blocked</th><th>Invalid</th></tr>${rows}</table></div>`;
+  const recent = (ls.recent || []).map(r => `<tr><td>${dEsc(r.ts)}</td><td>${dEsc(r.source || "")}</td><td>${dEsc(r.attack)}</td><td>${dEsc(r.product || "")}</td><td><span class="out out-${r.kind === "success" ? "violation" : r.kind === "fail" ? "held" : r.kind === "blocked" ? "blocked" : "invalid"}">${dEsc(r.kind)}${r.discount != null ? " (" + Number(r.discount).toFixed(0) + "% off)" : ""}</span></td></tr>`).join("");
+  return `<div class="dash-sub" style="margin-bottom:6px">${ls.attacks_succeeded || 0} of ${ls.attacks_run || 0} valid attacks succeeded</div>
+    <div class="scroll-x"><table class="dtable"><tr><th>Attack</th><th>Succeeded</th><th>Failed</th><th>Blocked</th><th>Invalid</th></tr>${rows}</table></div>
+    <div class="scroll-x" style="margin-top:10px"><table class="dtable"><tr><th>Time</th><th>From</th><th>Attack</th><th>Product</th><th>Result</th></tr>${recent}</table></div>`;
 }
 
 function ragBench(rows) {
-  if (!rows || !rows.length) return `<div class="dash-empty" style="padding:22px 10px">No benchmark run yet.<br><code>marketflow\\venv\\Scripts\\python -m offense.ragpoison --dataset nq</code></div>`;
+  if (!rows || !rows.length) return `<div class="dash-empty" style="padding:22px 10px">No benchmark run yet.<br><code>python -m offense.ragpoison --n-poison 2</code></div>`;
   const bar = (label, v, col) => `<div class="hbar"><div class="name">${label}</div><div class="track"><div class="fill" style="width:${(v||0)*100}%;background:${col}"></div></div><div class="val">${pct(v,0)}</div></div>`;
   return rows.map(r => { const s = r.summary, m = r.meta;
-    return `<div style="margin-bottom:14px"><div style="font-weight:700;font-size:12.5px;margin-bottom:6px">${dEsc(m.dataset)} <span class="dash-sub">&middot; ${s.poisoned_n} valid questions &middot; ${dEsc(m.llm)} &middot; ${dEsc(m.retriever.split(";")[0])}</span></div>
+    return `<div style="margin-bottom:14px"><div style="font-weight:700;font-size:12.5px;margin-bottom:6px">${dEsc(m.dataset)}${m.n_poison ? " &middot; " + m.n_poison + " fake review" + (m.n_poison > 1 ? "s" : "") + " planted" : ""} <span class="dash-sub">&middot; ${s.poisoned_n} valid questions &middot; ${dEsc(m.llm)} &middot; ${dEsc(m.retriever.split(";")[0])}</span></div>
       ${bar("Clean accuracy (no attack)", s.clean_accuracy, "#1E8E5A")}
       ${bar("Poison reached top-" + m.top_k, s.retrieved_rate, "#B9770E")}
       ${bar("Attack success rate", s.asr, "#C6403A")}

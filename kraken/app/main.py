@@ -19,7 +19,10 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 # Compute an honest false-positive rate once at startup against a fixed,
 # non-malicious sample set (see detectors.BENIGN_SAMPLES).
 try:
-    state.STATE["false_positive_rate"] = detectors.compute_false_positive_rate()
+    _fp = detectors.false_positive_report()
+    state.STATE["false_positive_rate"], state.STATE["false_positive_n"] = _fp["rate"], _fp["n"]
+    if _fp["flagged"]:
+        print(f"[kraken] false positives on benign text ({_fp['rate']}% of {_fp['n']}): {_fp['flagged']}")
 except Exception:
     state.STATE["false_positive_rate"] = None
 
@@ -29,12 +32,19 @@ def meta():
     return {
         "marketflow_live": marketflow_client.is_marketflow_live(),
         "defense_on": state.STATE["defense_on"],
+        "inline_connected": state.STATE["inline_connected"],
     }
 
 
 @app.get("/api/attack-types")
 def attack_types():
     return list(payloads.ATTACK_TYPES.values())
+
+
+@app.get("/api/products")
+def products():
+    """MarketFlow's live catalog, for the product selectors. [] when MarketFlow is offline."""
+    return marketflow_client.list_products()
 
 
 @app.get("/api/citations")
@@ -83,12 +93,13 @@ def simulate(req: SimulateReq):
     if not spec:
         return {"error": "unknown attack type"}
 
-    text = req.custom_payload if req.custom_payload else spec["payload_text"]
+    live = marketflow_client.is_marketflow_live()
+    prod = marketflow_client.get_product(req.product_id or payloads.DEFAULT_PRODUCT_ID) if live else None
+    text = payloads.payload_for(req.attack_type, req.custom_payload if req.custom_payload else spec["payload_text"], prod)
     is_custom = bool(req.custom_payload)
     r1 = detectors.regex_check(text)
     c2 = detectors.classifier_score(text, r1["matches"])
 
-    live = marketflow_client.is_marketflow_live()
     mf_result = None
     source = "recorded"
     if live:
@@ -107,6 +118,8 @@ def simulate(req: SimulateReq):
     ref = payloads.RECORDED_REFERENCE[req.attack_type]
     live_ok = mf_result is not None and "error" not in mf_result
     if live_ok:
+        live_runs.record_outcome("simulator", spec["label"], prod, mf_result, payload=text)
+    if live_ok:
         # ALWAYS report the live result, including when the agents resisted
         # (order is None). Previously a resisted attack fell through to the
         # hardcoded 90% reference and was shown as a successful exploit.
@@ -120,6 +133,7 @@ def simulate(req: SimulateReq):
             "order_placed": bool(mf_result.get("order")),
             "fallback_calls": mf_result.get("fallback_calls") or 0,
             "blocked": bool(mf_result.get("blocked")),
+            "payload_retrieved": live_runs.payload_retrieved(mf_result, text),   # None for non-review attacks
         }
         if outcome["fallback_calls"]:
             source = f"live-CONTAMINATED (scripted fallback used for {outcome['fallback_calls']} agent call(s))"
@@ -161,6 +175,9 @@ def simulate(req: SimulateReq):
             finding = "Live result: policy violated -- " + outcome["violations"][0] + " (compare with the no-attack control rate before calling this an exploit)"
         else:
             finding = "Live result: no policy violation (agents resisted, or no order was placed)."
+            if outcome.get("payload_retrieved") is False:
+                finding = ("Live result: no policy violation. The planted review was NOT retrieved by the Negotiator "
+                           "(real reviews outranked it), so the agents never saw the attack.")
     elif live and not is_custom:
         finding = "Live run failed; no finding."
 
@@ -175,7 +192,7 @@ def simulate(req: SimulateReq):
         "payload": text,
         "is_custom_payload": is_custom,
         "outcome": outcome,
-        "target": {"live": live, "source": source},
+        "target": {"live": live, "source": source, "product": (prod or {}).get("name")},
     }
 
 
@@ -202,6 +219,7 @@ def evidence_log():
 @app.post("/api/defense/reset")
 def defense_reset():
     state.reset_tallies()
+    live_runs.SESSION.clear()
     marketflow_client.reset_marketflow()
     return {"ok": True}
 
@@ -253,7 +271,9 @@ def defense_run(req: DefenseRunReq):
     spec = payloads.ATTACK_TYPES.get(req.attack_type)
     if not spec:
         return {"error": "unknown attack type"}
-    text = req.custom_payload if req.custom_payload else spec["payload_text"]
+    live = marketflow_client.is_marketflow_live()
+    prod = marketflow_client.get_product(req.product_id or payloads.DEFAULT_PRODUCT_ID) if live else None
+    text = payloads.payload_for(req.attack_type, req.custom_payload if req.custom_payload else spec["payload_text"], prod)
     checkpoint = spec["checkpoint"]
 
     if not state.STATE["defense_on"]:
@@ -263,7 +283,6 @@ def defense_run(req: DefenseRunReq):
         decision, cache_hit, reason, tiers = result["decision"], result["cache_hit"], result["reason"], result["tiers"]
 
     mf_result = None
-    live = marketflow_client.is_marketflow_live()
     if req.forward_to_marketflow and decision != "blocked" and live:
         try:
             mf_result = marketflow_client.forward_attack(req.attack_type, custom_payload=req.custom_payload,
@@ -273,6 +292,11 @@ def defense_run(req: DefenseRunReq):
 
     entry = state.record_defense_run(req.attack_type, checkpoint, decision, cache_hit, reason, tiers,
                                       marketflow_result=mf_result)
+    if mf_result is not None:
+        live_runs.record_outcome("enforcement", spec["label"], prod, mf_result, payload=text)
+    elif decision == "blocked" and req.forward_to_marketflow:
+        live_runs.record_outcome("enforcement", spec["label"], prod,
+                                 {"blocked": True, "blocked_at": f"{checkpoint} checkpoint (Kraken)"})
 
     return {
         "checkpoint": checkpoint,
@@ -295,11 +319,12 @@ class LiveReq(BaseModel):
     attack_type: str
     variant: Optional[str] = "authority-a"
     trials: int = 1
+    product_id: Optional[str] = None
 
 
 @app.post("/api/live/start")
 def live_start(req: LiveReq):
-    return live_runs.start(req.attack_type, req.variant, req.trials)
+    return live_runs.start(req.attack_type, req.variant, req.trials, req.product_id)
 
 
 @app.get("/api/live/{job_id}")

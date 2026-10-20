@@ -27,7 +27,9 @@
   nav.top-nav { display:flex; gap:22px; margin-left:12px; }
   nav.top-nav a { color:var(--muted); font-size:13.5px; font-weight:600; cursor:pointer; }
   nav.top-nav a:hover { color:var(--navy); }
-  .status-chip { margin-left:auto; display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--muted); }
+  .target-pick { margin-left:auto; display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; }
+  .target-pick select { max-width:190px; font-size:12.5px; padding:5px 8px; border:1px solid var(--border,#d9dee7); border-radius:6px; background:#fff; color:inherit; }
+  .status-chip { margin-left:16px; display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--muted); }
   .status-dot { width:8px; height:8px; border-radius:50%; background:#ccc; }
   .status-dot.live { background:var(--success); box-shadow:0 0 0 3px rgba(30,142,90,.18); }
   .status-dot.offline { background:var(--danger); box-shadow:0 0 0 3px rgba(198,64,58,.15); }
@@ -171,6 +173,8 @@
       <a onclick="scrollToId('architecture')">Architecture</a>
       <a onclick="showView('dashboard')" id="nav-dashboard">Dashboard</a>
     </nav>
+    <label class="target-pick" title="Every attack and enforcement check from this page targets this MarketFlow product">Target
+      <select id="target-product"><option value="">loading...</option></select></label>
     <div class="status-chip"><span class="status-dot" id="mf-status-dot"></span> <span id="mf-status-text">Checking MarketFlow...</span></div>
   </div>
 </header>

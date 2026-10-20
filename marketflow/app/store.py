@@ -88,6 +88,17 @@ REVIEWS = {
 }
 
 import copy
+
+# Real amazon.com review products (see real_catalog.py). Listed first so the storefront leads with them;
+# the three original synthetic products stay available, unchanged.
+try:
+    from . import real_catalog
+    _real_products, _real_reviews = real_catalog.load(_seed_review)
+    PRODUCTS = {**_real_products, **PRODUCTS}
+    REVIEWS = {**_real_reviews, **REVIEWS}
+except Exception as _e:          # never stop MarketFlow from starting because of the optional catalog
+    print(f"[marketflow] real catalog not loaded: {_e}")
+
 _SEED_REVIEWS = copy.deepcopy(REVIEWS)
 
 ORDERS = []

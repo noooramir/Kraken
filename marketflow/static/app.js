@@ -50,6 +50,7 @@ function navigate(view, param) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
   document.getElementById("view-" + view).classList.add("active");
   window.scrollTo(0, 0);
+  if (view !== "product") stopProductSync();
   if (view === "product" && param) openProduct(param);
   if (view === "cart") renderCart();
   if (view === "checkout") renderCheckout();
@@ -93,7 +94,8 @@ async function openProduct(id) {
     <img src="${g}" class="${i === 0 ? "active" : ""}" onclick="setMainImg(this, '${g}')" />
   `).join("");
   document.getElementById("chat-assistant-name").textContent = p.assistant_name;
-  document.getElementById("chat-budget").value = 50;
+  // real-catalog products carry a budget that fits their price; the original three keep 50
+  document.getElementById("chat-budget").value = p.suggested_budget || 50;
 
   document.getElementById("chat-body").innerHTML = `
     <div class="chat-bubble assistant">Hi! I'm the ${escapeHtml(p.assistant_name)}. Set your budget below, then tell me what you're looking for and I'll negotiate and place the order for you.</div>
@@ -101,6 +103,42 @@ async function openProduct(id) {
 
   renderReviews(p);
   resetReviewForm();
+  startProductSync(id, p);
+}
+
+/* Keep the product page in step with whatever is happening to it elsewhere (for example a Kraken attack
+   planting a review or placing an order): poll the real API, render only when something changed. */
+let _syncTimer = null, _syncSig = "", _policyMax = null;
+
+function stopProductSync() { if (_syncTimer) clearInterval(_syncTimer); _syncTimer = null; }
+
+function startProductSync(id, p) {
+  stopProductSync();
+  _syncSig = `${p.review_count}:${(p.reviews[0] || {}).id}`;
+  _syncTimer = setInterval(async () => {
+    if (document.hidden || currentProductId !== id) return;
+    try {
+      const [cur, orders] = await Promise.all([j(`/api/products/${id}`), j("/api/orders")]);
+      if (_policyMax === null) _policyMax = (await j("/api/policy")).max_discount_pct;
+      if (cur.error) return;
+      const sig = `${cur.review_count}:${(cur.reviews[0] || {}).id}`;
+      if (sig !== _syncSig) {
+        _syncSig = sig;
+        document.getElementById("pd-stars").textContent = starString(cur.rating);
+        document.getElementById("pd-rating-text").textContent = `${cur.rating} out of 5 (${cur.review_count} reviews)`;
+        renderReviews(cur);
+      }
+      const mine = orders.filter(o => o.product_id === id);
+      const box = document.getElementById("latest-order");
+      if (!mine.length) { box.style.display = "none"; return; }
+      const o = mine[mine.length - 1];
+      const over = Number(o.discount_pct) > _policyMax;
+      box.style.display = "block";
+      box.className = "latest-order" + (over ? " violation" : "");
+      box.textContent = `Latest order #${o.order_id}: $${o.final_price} (${o.discount_pct}% off $${cur.list_price})` +
+        (over ? ` -- above the ${_policyMax}% policy limit` : "");
+    } catch (e) { /* server restarting: try again next tick */ }
+  }, 4000);
 }
 
 function setMainImg(el, src) {

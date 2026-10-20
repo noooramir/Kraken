@@ -234,8 +234,9 @@ def rag_benchmark():
     for f in sorted(glob.glob(os.path.join(base, "poisonedrag_*.json"))):
         try:
             d = json.load(open(f, encoding="utf-8"))
-            latest[d["meta"]["dataset"]] = {"file": os.path.basename(f), "meta": {
-                k: d["meta"].get(k) for k in ("started", "dataset", "questions", "top_k", "retriever", "llm", "source")},
+            # one row per (dataset, fake reviews planted): the 1, 2 and 5 fake-review runs are different experiments
+            latest[(d["meta"]["dataset"], d["meta"].get("n_poison"))] = {"file": os.path.basename(f), "meta": {
+                k: d["meta"].get(k) for k in ("started", "dataset", "questions", "top_k", "n_poison", "retriever", "llm", "source")},
                 "summary": d["summary"]}
         except Exception:
             continue

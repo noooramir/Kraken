@@ -10,6 +10,13 @@ STATE = {
     "cache_hits": 0,
     "total": 0,
     "false_positive_rate": None,  # computed at startup, see main.py
+    "false_positive_n": None,     # how many benign samples that rate is based on
+    # Attacks actually fired at MarketFlow from ANY Kraken screen (simulator, enforcement check, live runner)
+    "attacks_run": 0,             # valid outcomes: succeeded + held + blocked
+    "attacks_succeeded": 0,       # an order above the 10% policy limit was placed
+    # Does MarketFlow actually reach this Kraken for its inline checks? None until a live run tells us.
+    # False means the two apps disagree on Kraken's port, so "Kraken ON" is not defending anything.
+    "inline_connected": None,
 }
 
 SIGNATURE_CACHE = {}
@@ -51,5 +58,7 @@ def reset_tallies():
     STATE["forwarded"] = 0
     STATE["cache_hits"] = 0
     STATE["total"] = 0
+    STATE["attacks_run"] = 0
+    STATE["attacks_succeeded"] = 0
     SIGNATURE_CACHE.clear()
     EVIDENCE_LOG.clear()

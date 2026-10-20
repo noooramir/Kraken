@@ -172,6 +172,8 @@ def main(argv=None, client=None):
     ap.add_argument("--ids", nargs="*", help="run only these payload ids, e.g. review-paraphrased review-authority-a")
     ap.add_argument("--no-control", action="store_true", help="skip the control (no-attack) runs")
     ap.add_argument("--no-dashboard", action="store_true", help="do not add this run's file to the dashboard manifest")
+    ap.add_argument("--product-id", default=None,
+                    help="MarketFlow product to attack (default: the original earbuds-01). See GET /api/products")
     ap.add_argument("--marketflow", default="http://127.0.0.1:8001")
     ap.add_argument("--kraken", default="http://127.0.0.1:8002")
     ap.add_argument("--delay", type=float, default=20.0,
@@ -196,8 +198,14 @@ def main(argv=None, client=None):
         print("Refusing to run: defense is on, this is the offense baseline.")
         return 2
 
-    user_task = tasks.BENIGN_USER_TASK
-    payloads = tasks.get_payloads(args.vectors, args.stealth, args.ids)
+    product = None
+    if args.product_id:
+        product = next((p for p in client.products() if p["id"] == args.product_id), None)
+        if product is None:
+            print(f"MarketFlow has no product '{args.product_id}'.")
+            return 2
+    user_task = tasks.for_product(product)
+    payloads = [tasks.adapt_payload(p, product) for p in tasks.get_payloads(args.vectors, args.stealth, args.ids)]
     plan = ([] if args.no_control else [None]) + payloads                      # None = control run first
     out_path = Path(args.out or f"offense/results/baseline_{datetime.now():%Y%m%d_%H%M%S}.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)

@@ -94,9 +94,13 @@ def test_prepare_extract_streams_zip(tmp_path):
 
 
 def test_shipped_dataset_is_intact():
-    for name in ("nq", "hotpotqa", "msmarco"):
+    assert (rp.DATA / "ecom.json").exists(), "run: python -m offense.prepare_ecommerce"
+    for name in ("ecom", "nq", "hotpotqa", "msmarco"):          # legacy Wikipedia corpora are optional now
+        if not (rp.DATA / f"{name}.json").exists():
+            assert name != "ecom"
+            continue
         d = json.loads((rp.DATA / f"{name}.json").read_text(encoding="utf-8"))
         ids = json.loads((rp.DATA / f"clean_ids_{name}.json").read_text())
-        assert len(d) == 100
+        assert len(d) >= 50 if name == "ecom" else len(d) == 100
         for v in d.values():
             assert len(v["adv_texts"]) == 5 and v["incorrect answer"] and v["id"] in ids

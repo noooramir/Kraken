@@ -209,11 +209,29 @@ def run_tiered_pipeline(text: str, signature_cache: dict, force_llm: bool = Fals
     }
 
 
-def compute_false_positive_rate():
-    cache = {}
-    flagged_count = 0
-    for sample in BENIGN_SAMPLES:
+def real_benign_samples():
+    """Real amazon.com review sentences MarketFlow shows on its product pages (marketflow/data/real_catalog.json).
+    None of them is an attack, so any flag on them is a genuine false positive. [] if the file is absent."""
+    path = os.path.join(os.path.dirname(__file__), "..", "..", "marketflow", "data", "real_catalog.json")
+    try:
+        with open(path, encoding="utf-8") as f:
+            return [r["text"] for p in json.load(f).get("products", []) for r in p.get("reviews", [])]
+    except (OSError, ValueError, KeyError):
+        return []
+
+
+def false_positive_report():
+    """-> {"rate": percent, "n": samples tested, "n_real": real reviews among them, "flagged": [examples]}.
+    Deterministic tiers only (cache, regex, classifier); the LLM judge is not called."""
+    samples = BENIGN_SAMPLES + real_benign_samples()
+    cache, flagged = {}, []
+    for sample in samples:
         result = run_tiered_pipeline(sample, cache)
         if result["decision"] in ("blocked", "flagged"):
-            flagged_count += 1
-    return round(100 * flagged_count / len(BENIGN_SAMPLES), 1)
+            flagged.append(sample)
+    return {"rate": round(100 * len(flagged) / len(samples), 1), "n": len(samples),
+            "n_real": len(samples) - len(BENIGN_SAMPLES), "flagged": flagged[:5]}
+
+
+def compute_false_positive_rate():
+    return false_positive_report()["rate"]

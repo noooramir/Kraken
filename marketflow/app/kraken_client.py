@@ -10,9 +10,13 @@ undefended baseline when Kraken is off/down, exactly like the untouched
 attack surface you already have. The failure is always visible in the
 returned dict (`kraken_reachable: False`), never silent.
 """
+import os
+
 import httpx
 
-KRAKEN_URL = "http://127.0.0.1:8002"
+# Where Kraken's /api/inspect lives. Default matches the README (Kraken on 8000). If you start Kraken on another
+# port, set KRAKEN_URL before starting MarketFlow, e.g.  $env:KRAKEN_URL="http://127.0.0.1:8000"
+KRAKEN_URL = os.environ.get("KRAKEN_URL", "http://127.0.0.1:8000").rstrip("/")
 TIMEOUT = 12.0  # must exceed Kraken llm_judge timeout (8s), else slow judge calls fail open
 
 

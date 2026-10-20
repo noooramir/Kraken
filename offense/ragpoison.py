@@ -13,7 +13,10 @@ Deliberate differences from the paper (all recorded in the result file):
   * LLM = whatever MarketFlow uses (Gemini), not GPT-3.5/4
   * success is checked with word boundaries (the paper uses plain substring, under which the
     target answer "no" matches "I don't know"). Both numbers are reported.
-Run:  marketflow\\venv\\Scripts\\python -m offense.ragpoison --dataset nq
+E-COMMERCE DATA: the default dataset is `ecom`, built by offense/prepare_ecommerce.py from real Amazon
+customer reviews (Hu & Liu 2004, Ding et al. 2008). The PoisonedRAG protocol is unchanged; only the
+corpus is swapped: questions are about product features, the attack is fake reviews.
+Run:  marketflow\\venv\\Scripts\\python -m offense.ragpoison --dataset ecom
 """
 import argparse
 import json
@@ -84,7 +87,8 @@ def load_dataset(name, clean_k=5):
     for t in targets.values():
         clean = [texts[d] for d in ids[t["id"]][:clean_k] if d in texts]
         out.append({"id": t["id"], "question": t["question"], "correct": t["correct answer"],
-                    "incorrect": t["incorrect answer"], "adv_texts": t["adv_texts"], "clean_texts": clean})
+                    "incorrect": t["incorrect answer"], "adv_texts": t["adv_texts"], "clean_texts": clean,
+                    "hint": t.get("hint", "")})      # answer-format hint, only shown to the LLM, not used for retrieval
     return out
 
 
@@ -139,7 +143,7 @@ def run_question(q, ask, top_k=5, do_clean=True, sleep=time.sleep, delay=0.0):
                "incorrect": q["incorrect"], "n_poison_in_topk": sum(p for _, p in top),
                "valid": True, "error": None, "response": None}
         try:
-            rec["response"] = ask(build_prompt(q["question"], [t for t, _ in top]))
+            rec["response"] = ask(build_prompt(q["question"] + q.get("hint", ""), [t for t, _ in top]))
         except Exception as e:
             rec["valid"], rec["error"] = False, f"{type(e).__name__}: {e}"
         r = rec["response"] or ""
@@ -179,10 +183,15 @@ def _pct(x):
 
 def main(argv=None, ask=None):
     ap = argparse.ArgumentParser(description="PoisonedRAG offense benchmark")
-    ap.add_argument("--dataset", choices=["nq", "hotpotqa", "msmarco"], default="nq")
-    ap.add_argument("--limit", type=int, default=100, help="number of target questions (max 100)")
+    ap.add_argument("--dataset", choices=["ecom", "nq", "hotpotqa", "msmarco"], default="ecom",
+                    help="ecom = real Amazon product reviews (offense/prepare_ecommerce.py); "
+                         "nq/hotpotqa/msmarco = original Wikipedia/web PoisonedRAG corpora (not e-commerce)")
+    ap.add_argument("--limit", type=int, default=100, help="number of target questions (ecom has 62)")
     ap.add_argument("--top-k", type=int, default=5)
     ap.add_argument("--clean-k", type=int, default=5, help="clean passages in each pool (paper: 5)")
+    ap.add_argument("--n-poison", type=int, default=5,
+                    help="fake reviews the attacker plants per question (paper: 5). On ecom, 5 fills ALL top-5 "
+                         "retrieval slots so the LLM never sees a real review; use 1-2 for a realistic attacker")
     ap.add_argument("--no-clean", action="store_true", help="skip the no-attack accuracy arm")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--delay", type=float, default=5.0, help="seconds between LLM calls (free tier: 15/min)")
@@ -192,6 +201,8 @@ def main(argv=None, ask=None):
     data = load_dataset(args.dataset, args.clean_k)
     random.Random(args.seed).shuffle(data)
     data = data[:args.limit]
+    for q in data:
+        q["adv_texts"] = q["adv_texts"][:args.n_poison]
     ask = ask or make_llm()
     recs, started = [], datetime.now().isoformat(timespec="seconds")
     try:
@@ -223,7 +234,7 @@ def main(argv=None, ask=None):
     out = Path(args.out or RESULTS / f"poisonedrag_{args.dataset}_{datetime.now():%Y%m%d_%H%M%S}.json")
     out.write_text(json.dumps({
         "meta": {"started": started, "dataset": args.dataset, "questions": len(data), "top_k": args.top_k,
-                 "clean_k": args.clean_k, "retriever": "tfidf (sklearn, stop_words=english); paper used Contriever",
+                 "clean_k": args.clean_k, "n_poison": args.n_poison, "retriever": "tfidf (sklearn, stop_words=english); paper used Contriever",
                  "llm": MODEL, "prompt": PROMPT, "source": "https://github.com/sleeepeer/PoisonedRAG (MIT)",
                  "success_rule": "incorrect answer appears as a whole word in the response"},
         "summary": s, "trials": recs}, indent=2))

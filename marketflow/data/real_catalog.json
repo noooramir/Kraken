@@ -1,0 +1,1614 @@
+{
+ "products": [
+  {
+   "id": "real-apex-ad2600-progressive-scan-dvd-player",
+   "name": "Apex AD2600 Progressive-Scan DVD Player",
+   "brand": "Apex",
+   "category": "DVD player",
+   "noun": "DVD player",
+   "list_price": 59.99,
+   "suggested_budget": 55.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23b45309%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EApex%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EDVD%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23b45309%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EApex%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EDVD%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "DVD player. Built from 428 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: customer service, picture, remote, look, sound. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Apex Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "For the most part this is a good dvd player.",
+     "days_ago": 41,
+     "verified": false,
+     "feature": "player"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "We have had this product for over a month and yesterday it stopped working.",
+     "days_ago": 63,
+     "verified": false,
+     "feature": "product"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "For the price, it's a very nice dvd player.",
+     "days_ago": 83,
+     "verified": false,
+     "feature": "dvd player"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Still, i was willing to overlook those things as this unit looks sleek and has a myriad of features!",
+     "days_ago": 145,
+     "verified": false,
+     "feature": "look"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The entire unit was poorly crafted.",
+     "days_ago": 155,
+     "verified": false,
+     "feature": "unit"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "This has happened with several different dvd's and occasionally if we keep trying something, it will work when it did not work one time before.",
+     "days_ago": 198,
+     "verified": false,
+     "feature": "player"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "The build quality shows why its so cheap - small scratches on the base plate, something that you wouldn't see on a sony and an overall plasticky feel",
+     "days_ago": 246,
+     "verified": false,
+     "feature": "quality"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Ability to play most discs - i tried dvd, vcd, dvd-r, audio cd and it played all",
+     "days_ago": 249,
+     "verified": false,
+     "feature": "format"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "5) this apex model 2600 will not work with my universal remote control.",
+     "days_ago": 306,
+     "verified": false,
+     "feature": "universal remote control"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I find this to be a great feature.",
+     "days_ago": 321,
+     "verified": false,
+     "feature": "mpeg"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "I try navigating to a chapter past 34 via the menu and it wouldn't do it!",
+     "days_ago": 337,
+     "verified": false,
+     "feature": "player"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "First of all, i bought this dvd as a christmas present for my girlfriend and i am somewhat disappointed.",
+     "days_ago": 398,
+     "verified": false,
+     "feature": "dvd"
+    }
+   ]
+  },
+  {
+   "id": "real-ipod",
+   "name": "Apple iPod",
+   "brand": "Apple",
+   "category": "MP3 player",
+   "noun": "iPod",
+   "list_price": 199.99,
+   "suggested_budget": 183.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EApple%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EiPod%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EApple%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EiPod%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "MP3 player. Built from 191 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: battery, itunes, design, sound, apple. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Apple Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I loaded a lot of photos into it and they display very clearly for such a small screen and, very importantly, the transition from one photo to the next is instantaneous.",
+     "days_ago": 54,
+     "verified": false,
+     "feature": "photos"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "This new click wheel iPod allows you to navigate through the menus and song via a touch-wheel for scrolling and click-able buttons for selection.",
+     "days_ago": 92,
+     "verified": false,
+     "feature": "click wheel"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Good sound-- Plays very nicely, even though the stock headphones are kind of weak Durable-- not the most durable because its mostly plastic, but very compact and sturdy",
+     "days_ago": 214,
+     "verified": false,
+     "feature": "sound"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "There technical service isn't helpful either; they just read what's on their website and charge you $50 (+ toll fees) to do it.",
+     "days_ago": 236,
+     "verified": false,
+     "feature": "technical service"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Battery life keeps improving on the iPod, and a new iPod will give you up to twelve hours of play time, per charge.",
+     "days_ago": 261,
+     "verified": false,
+     "feature": "battery life"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "The software with the iPod includes iTunes, which allows you to play the music on your computer, rip CDs onto your computer, and move your music from the computer to the iPod.",
+     "days_ago": 289,
+     "verified": false,
+     "feature": "itunes"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Finding all the albums, songs etc is much easier than you would think it would be even if you have 20 gig (well 18 gig) worth of music.",
+     "days_ago": 323,
+     "verified": false,
+     "feature": "finding"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The biggest red flag for me was the fact that although my cousin's player was relatively new, it was riddled with scratches.",
+     "days_ago": 327,
+     "verified": false,
+     "feature": "scratches"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The battery issue is superficially a concern, but any reasonable solder-jockey (such as myself:-) can pop in a new one when the time comes (based upon the plentiful info gained from a google for 'ipod battery replacement').",
+     "days_ago": 364,
+     "verified": false,
+     "feature": "battery"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "But I had to give you four because the service for my brand-new iPod was terribly slow.",
+     "days_ago": 375,
+     "verified": false,
+     "feature": "service"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I was worried about what the sound quality would be like, but that seems to be just as good as the actual CD sound.",
+     "days_ago": 380,
+     "verified": false,
+     "feature": "sound quality"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I have an ipod and it is a great buy.",
+     "days_ago": 414,
+     "verified": false,
+     "feature": "ipod"
+    }
+   ]
+  },
+  {
+   "id": "real-canon-g3",
+   "name": "Canon G3 Digital Camera",
+   "brand": "Canon",
+   "category": "digital camera",
+   "noun": "camera",
+   "list_price": 249.99,
+   "suggested_budget": 229.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Digital camera. Built from 285 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: picture, viewfinder, picture quality, control, photo. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Canon Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I have owned this camera for a short time and wouldn't give it up for anything.",
+     "days_ago": 62,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The zooming lever is shaky, i hope it does not operate mechanically, otherwise you 'll feel uneasy.",
+     "days_ago": 80,
+     "verified": false,
+     "feature": "zooming lever"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I recommend unreservedly the powershot g3 to any potential buyer looking for a first-class digital camera at a reasonable price - there is no better camera out there - period!",
+     "days_ago": 91,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I needed three batteries to keep myself going with the s330, but the battery in the g3 is a real powerhouse:",
+     "days_ago": 97,
+     "verified": false,
+     "feature": "battery"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "1. the ability to selectively switch to raw format during record review gives you incredible more post-processing flexibility.",
+     "days_ago": 112,
+     "verified": false,
+     "feature": "raw format"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "Relative to what i can easily achieve with external flash on my nikon slr, the internal flash on the g3 produces harsh, flat images with ugly hot spots.",
+     "days_ago": 121,
+     "verified": false,
+     "feature": "flash"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "And the body / construction in general has quite a bit of plastic, a disappointment after the stainless steel heft of the s330.",
+     "days_ago": 144,
+     "verified": false,
+     "feature": "body"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I 've had this for 3 months now, and i am pleased with my decision.",
+     "days_ago": 207,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "This is a great camera for you!",
+     "days_ago": 240,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I have taken hundreds of photos with it and i continue to be amazed by their quality.",
+     "days_ago": 322,
+     "verified": false,
+     "feature": "photo quality"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "It is versatile and seems to be one of the best.",
+     "days_ago": 385,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Rather heavy for point and shoot but a great camera for semi pros.",
+     "days_ago": 411,
+     "verified": false,
+     "feature": "weight"
+    }
+   ]
+  },
+  {
+   "id": "real-canon-s100",
+   "name": "Canon PowerShot S100 Digital ELPH Camera",
+   "brand": "Canon",
+   "category": "digital camera",
+   "noun": "camera",
+   "list_price": 149.99,
+   "suggested_budget": 138.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Digital camera. Built from 218 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: size, pictures, battery, zoom, ease of use. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Canon Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I received this little jewel as a gift and I can honestly say Iabsolutely love it.",
+     "days_ago": 21,
+     "verified": false,
+     "feature": "jewel"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The movie mode can only record a max of 30 seconds at 160X120 per clip and a max of 4 seconds at 640X480.",
+     "days_ago": 31,
+     "verified": false,
+     "feature": "movie mode"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "The zoom range is a little narrow (35-70mm in 35mm film equivalent), but given that the camera is the same as my wallet, I can't think of any real complaint.",
+     "days_ago": 34,
+     "verified": false,
+     "feature": "zoom range"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I bought this little guy a few weeks back, and I have to saythat I never had so much fun with a new toy as this.",
+     "days_ago": 163,
+     "verified": false,
+     "feature": "fun"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The only thing I don't like is the small size (8 MEG) memory card that comes with it.",
+     "days_ago": 164,
+     "verified": false,
+     "feature": "memory"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I discovered that the camera has a manual mode that gives you total control over exposure, white balance, flash (red eye, person against bright background, flash on, flash off, flash automatic).",
+     "days_ago": 167,
+     "verified": false,
+     "feature": "manual mode"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "This camera is great, wonderfully small, and has attactive hi-tech casing.",
+     "days_ago": 192,
+     "verified": false,
+     "feature": "size"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I purchased the Elph s100 mainly because I thought it was cool.",
+     "days_ago": 221,
+     "verified": false,
+     "feature": "elph s100"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "It's still one of the smallest 2MP digital cameras on the market, and absolutely one of the best-built most stylish cameras ever.",
+     "days_ago": 255,
+     "verified": false,
+     "feature": "smallest"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "In auto mode anyone can use it as a point and shoot camera.",
+     "days_ago": 297,
+     "verified": false,
+     "feature": "auto mode"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "It's not my first choice in cameras,",
+     "days_ago": 388,
+     "verified": false,
+     "feature": "cameras"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "I originally gave this camera 5 stars. When I had Windows 98 it was wonderful but I got a new computer last November with XP the usb software is Sooo... not compatible with XP",
+     "days_ago": 410,
+     "verified": false,
+     "feature": "software"
+    }
+   ]
+  },
+  {
+   "id": "real-canon-powershot-sd500",
+   "name": "Canon PowerShot SD500 Digital ELPH Camera",
+   "brand": "Canon",
+   "category": "digital camera",
+   "noun": "camera",
+   "list_price": 299.99,
+   "suggested_budget": 275.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Digital camera. Built from 148 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: pictures, lcd, image, size, flash. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Canon Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Audio is mono and fairly acceptable, quiet also with little distortions.",
+     "days_ago": 3,
+     "verified": false,
+     "feature": "audio"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Overall build quality, good macros-results, impressive video-quality, good pictures with flash (good colours, sharp results), excellent auto white balance.",
+     "days_ago": 33,
+     "verified": false,
+     "feature": "build"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "Also as someone who at least knows a little bit about the technical work of taking a photo i really miss having manual controls.",
+     "days_ago": 65,
+     "verified": false,
+     "feature": "manual controls"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I still have my s70 because I like the wider lens sometimes, but in general, if you are looking for a small camera with the whole package, the sd500 is the only one you should buy.",
+     "days_ago": 78,
+     "verified": false,
+     "feature": "sd500"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "It has an exterior design that combines form and function more elegantly than any point-and-shoot we've ever tested.",
+     "days_ago": 141,
+     "verified": false,
+     "feature": "design"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "I took it out one day and the LCD was not working.",
+     "days_ago": 146,
+     "verified": false,
+     "feature": "lcd"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Powerup is quick, and you can even set your favorite image to display for a second or so as it turns on.",
+     "days_ago": 195,
+     "verified": false,
+     "feature": "powerup"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "I also own a Canon Digital Rebel and I agree that the advanced controls on the SD500 are not as robust, but overall picture quality goes head-to-head with the Digital Rebel.",
+     "days_ago": 222,
+     "verified": false,
+     "feature": "advanced controls"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "The view finder shows crystal clear pictures that will look even better when you get them to the computer.",
+     "days_ago": 228,
+     "verified": false,
+     "feature": "view finder"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I've only had this camera for a few days, but it's been great.",
+     "days_ago": 261,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I upgraded from a very small 3.2 mpxl camera to this camera with great results.",
+     "days_ago": 269,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "However, this ultracompact allows the photographer to personalize his or her shooting preferences through a variety of preset and user definable modes.",
+     "days_ago": 365,
+     "verified": false,
+     "feature": "preset"
+    }
+   ]
+  },
+  {
+   "id": "real-creative-labs-nomad-jukebox-zen-xtra-40gb",
+   "name": "Creative Nomad Jukebox Zen Xtra 40GB MP3 Player",
+   "brand": "Creative",
+   "category": "MP3 player",
+   "noun": "MP3 player",
+   "list_price": 129.99,
+   "suggested_budget": 119.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECreative%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EMP3%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECreative%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EMP3%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "MP3 player. Built from 845 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: sound, price, battery, size, sound quality. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Creative Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "The volume range is great, so you can blast it if you want.",
+     "days_ago": 50,
+     "verified": false,
+     "feature": "volume range"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "This product is too fragile for normal use.",
+     "days_ago": 95,
+     "verified": false,
+     "feature": "player"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "However, i don't like to carry it on my belt because the clip isn't secure and the case can slip off.",
+     "days_ago": 108,
+     "verified": false,
+     "feature": "clip"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Not only is it more affordable, but its a better player for windows, which is what i have.",
+     "days_ago": 168,
+     "verified": false,
+     "feature": "price"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "But this is * not documented * in the zen manual - neither the hard copy nor the cd version.",
+     "days_ago": 202,
+     "verified": false,
+     "feature": "manual"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "This thing seriously is a good player though.",
+     "days_ago": 313,
+     "verified": false,
+     "feature": "player"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "The player is intuitive and outputs great sound quality.",
+     "days_ago": 331,
+     "verified": false,
+     "feature": "player"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "You even can not navigate by genre / artist / album since under genre you get just all tracks in that genre, no other division.",
+     "days_ago": 360,
+     "verified": false,
+     "feature": "navigation"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "2) no games - it has a cool screen - why not use it.",
+     "days_ago": 383,
+     "verified": false,
+     "feature": "game"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "The controls are on the side instead of on the front, which i like, because that's where my thumb is when i hold the thing!",
+     "days_ago": 388,
+     "verified": false,
+     "feature": "control"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "1) great sound (> 98db signal-to-noise ratio beats ipod's \" unspecified \" ratio) and good power output allow the zen xtra to drive large head-phones as well as external speakers.",
+     "days_ago": 406,
+     "verified": false,
+     "feature": "sound"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I found using the supplied mediasource software very easy.",
+     "days_ago": 413,
+     "verified": false,
+     "feature": "software"
+    }
+   ]
+  },
+  {
+   "id": "real-diaper-champ",
+   "name": "Diaper Champ Diaper Pail",
+   "brand": "Diaper Champ",
+   "category": "diaper pail",
+   "noun": "diaper pail",
+   "list_price": 39.99,
+   "suggested_budget": 37.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230e7490%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EDiaper%20Champ%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ediaper%20pail%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230e7490%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EDiaper%20Champ%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ediaper%20pail%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Diaper pail. Built from 239 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: odors, refills, diapers, smell, garbage bags. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Diaper Champ Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "The thought of not having to buy refills and just using regular bags is awesome!",
+     "days_ago": 47,
+     "verified": false,
+     "feature": "refills"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "But from my experience, by the time it gets to that point, the bag is really heavy, so I think this is kind of helpful- it's a built-in way of keeping the bag manageable upon emptying.",
+     "days_ago": 96,
+     "verified": false,
+     "feature": "emptying"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "All in all, this product is definitely one I would recommend and certainly worth the very reasonable price.",
+     "days_ago": 130,
+     "verified": false,
+     "feature": "product"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "And it's the largest diaper pail I've seen without taking up more floor space.",
+     "days_ago": 136,
+     "verified": false,
+     "feature": "diaper pail"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "I wash ours out with lysol each time I empty it, and that helps, but when its hot out- well, just be prepared.",
+     "days_ago": 243,
+     "verified": false,
+     "feature": "pail"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I actually took a friends word on it and went with this Champ when registering and I am glad I did.",
+     "days_ago": 256,
+     "verified": false,
+     "feature": "champ"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "If you are looking for a user-friendly diaper pail that actually does keep the odor contained, than the diaper champ is the one for you!",
+     "days_ago": 305,
+     "verified": false,
+     "feature": "diaper champ"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "This holds alot and does not take up alot of space.",
+     "days_ago": 320,
+     "verified": false,
+     "feature": "space"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "It can be frustrating and messy when you put that last diaper in before realizing the unit is full.",
+     "days_ago": 329,
+     "verified": false,
+     "feature": "unit"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I ended up buying one for upstairs and one for downstairs because it works so well and because I change him so often downstairs.",
+     "days_ago": 331,
+     "verified": false,
+     "feature": "works"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "I find the major problem with this item is that if you have a very messy diaper and can't tightly bundle it without a mess, the mess gets all over the module that dumps the diaper and the stink is OUTSIDE of the diaper pail.",
+     "days_ago": 358,
+     "verified": false,
+     "feature": "item"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "It is much easier to fill and unload than the Diaper Genie, plus, why buy refills when you can use trash bags from the Dollar Store?",
+     "days_ago": 382,
+     "verified": false,
+     "feature": "fill"
+    }
+   ]
+  },
+  {
+   "id": "real-hitachi-router",
+   "name": "Hitachi M12V Router (Woodworking Power Tool)",
+   "brand": "Hitachi",
+   "category": "woodworking power router",
+   "noun": "router",
+   "list_price": 189.99,
+   "suggested_budget": 174.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%2392400e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EHitachi%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Erouter%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%2392400e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EHitachi%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Erouter%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Woodworking power router. Built from 265 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: price, adjustment, power, controls, speed. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Hitachi Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "That said, I am disappointed in the plunging mechanism.",
+     "days_ago": 20,
+     "verified": false,
+     "feature": "plunging"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Very good balance in the hands and lighter than most 3 1/4 hp models.",
+     "days_ago": 22,
+     "verified": false,
+     "feature": "balance"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "The height adjustment knob is a bit flimsy, but it works well and provides good accuracy.",
+     "days_ago": 37,
+     "verified": false,
+     "feature": "adjustment"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "It ain't cutting edge (no pun intended) state of the art with all the latest bells & whistles & it definitely ain't pretty.",
+     "days_ago": 148,
+     "verified": false,
+     "feature": "pretty"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "If this machine just stops on you, unplug it quickly and get out of the way!",
+     "days_ago": 163,
+     "verified": false,
+     "feature": "safety"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "It came with a good fence that is simple yet precise and thats well made and won't break.",
+     "days_ago": 166,
+     "verified": false,
+     "feature": "fence"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I have been impressed with the power of the Hitachi M12V.",
+     "days_ago": 186,
+     "verified": false,
+     "feature": "power"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I use the router with a 3 1/2in raised panel bit with no problems.",
+     "days_ago": 271,
+     "verified": false,
+     "feature": "router"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "This was possible due to the variable speed settings for any sized bit.",
+     "days_ago": 309,
+     "verified": false,
+     "feature": "speed"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "All in all I am pleased with the router.",
+     "days_ago": 339,
+     "verified": false,
+     "feature": "router"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I purchased two of these beauties.",
+     "days_ago": 373,
+     "verified": false,
+     "feature": "router"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "Recenly the variable speed control went out.",
+     "days_ago": 403,
+     "verified": false,
+     "feature": "control"
+    }
+   ]
+  },
+  {
+   "id": "real-linksys-router",
+   "name": "Linksys WRT54G Wireless-G Router",
+   "brand": "Linksys",
+   "category": "wireless router",
+   "noun": "router",
+   "list_price": 49.99,
+   "suggested_budget": 46.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23be123c%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ELinksys%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Erouter%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23be123c%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ELinksys%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Erouter%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Wireless router. Built from 216 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: setup, speed, installation, instruction, security. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Linksys Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "At works as well as can be expected for products in this space and the company backs it up with good support.",
+     "days_ago": 14,
+     "verified": false,
+     "feature": "products"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "* I'm giving it 4 stars because the setup process was so miserable.",
+     "days_ago": 76,
+     "verified": false,
+     "feature": "setup"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "No down time, great signal strength.",
+     "days_ago": 97,
+     "verified": false,
+     "feature": "signal"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I've since gotten the Linksys Modem (BEFCMU10) and stacked it with the WRT54G router and it works fantastic!!!",
+     "days_ago": 128,
+     "verified": false,
+     "feature": "wrt54g"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I upgraded from an older 801.11b router to the Linksys WRT54G for its improved security, and of course, speed.",
+     "days_ago": 143,
+     "verified": false,
+     "feature": "security"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I guess the two antennae help with that besides making it look cooler.",
+     "days_ago": 174,
+     "verified": false,
+     "feature": "look"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "As far as dealing with network access of other computers this router is pretty good given the price- remember this router is the same one that was released right when the G standard was introduced to the market.",
+     "days_ago": 218,
+     "verified": false,
+     "feature": "router"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "It works well with my VOIP adapter, which is also a Linksys.",
+     "days_ago": 260,
+     "verified": false,
+     "feature": "voip"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "I had some issues when I had enabled WEP encryption and then moved on to WPA.",
+     "days_ago": 305,
+     "verified": false,
+     "feature": "wep encryption"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "When I saw a high gain (low price) antenna was available to the WRT54G router, I thought I'd happily give up some (practically unattainable anyway, since you've got to be in spitting distance from the router) speed in favour of wider coverage.",
+     "days_ago": 321,
+     "verified": false,
+     "feature": "antenna"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The internet connection would go down every 5 mins when I used it with a P2P program called Bitspirit.",
+     "days_ago": 355,
+     "verified": false,
+     "feature": "connection"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "So the pretty solid router all around good for the money here's the link to firmware updates http://www.sveasoft.com/forum6.html",
+     "days_ago": 370,
+     "verified": false,
+     "feature": "router"
+    }
+   ]
+  },
+  {
+   "id": "real-micromp3",
+   "name": "MicroMP3 Player",
+   "brand": "MicroMP3",
+   "category": "MP3 player",
+   "noun": "MP3 player",
+   "list_price": 79.99,
+   "suggested_budget": 73.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EMicroMP3%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EMP3%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EMicroMP3%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EMP3%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "MP3 player. Built from 573 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: sound, look, size, storage, battery life. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "MicroMP3 Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Moving on to sound department... It delivers!",
+     "days_ago": 7,
+     "verified": false,
+     "feature": "sound"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Smaller size, 1 gb of more space, radio, voice recording, removable battery, cooler look, all in one.",
+     "days_ago": 53,
+     "verified": false,
+     "feature": "size"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "It DOES take some getting used to.",
+     "days_ago": 136,
+     "verified": false,
+     "feature": "scrollpad"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "For the Zen Creative focused on packaging which looked well thought out, well presented and easy to open and put back together.",
+     "days_ago": 167,
+     "verified": false,
+     "feature": "packing"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "After a week I tried to load some more songs and delete a few but the auto load didn't do anything but turn on my player.",
+     "days_ago": 177,
+     "verified": false,
+     "feature": "auto load"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "However, the Ipod does not come close to the number of extra features that the 'Zen Micro' has to offer.",
+     "days_ago": 194,
+     "verified": false,
+     "feature": "features"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Functionality, menus are easy to navigate... As many have mentioned, the touch pads take some time to get used to, but I've gotten used to it.",
+     "days_ago": 300,
+     "verified": false,
+     "feature": "functionality"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "There are 2 things that need fixing First is the battery life. It will run for 6 hrs without problems with medium usage of the buttons.",
+     "days_ago": 327,
+     "verified": false,
+     "feature": "battery life"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Also If you want a device that does soo much more than the Ipod mini but is at the same price, this is the player for you.",
+     "days_ago": 344,
+     "verified": false,
+     "feature": "player"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "It's nice that the Zen Micro has bells and whistles like FM (but where's AM???) and voice recording, and 20% more storage than \"the other\" mini MP3 player, but why is it so (...)ugly?",
+     "days_ago": 351,
+     "verified": false,
+     "feature": "look"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I have owned some kind of Creative audio product since 1993 and have never had to call tech support.",
+     "days_ago": 396,
+     "verified": false,
+     "feature": "creative"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Pros The Design is very nice, and the colors are too.",
+     "days_ago": 410,
+     "verified": false,
+     "feature": "design"
+    }
+   ]
+  },
+  {
+   "id": "real-nikon-coolpix-4300",
+   "name": "Nikon Coolpix 4300 Digital Camera",
+   "brand": "Nikon",
+   "category": "digital camera",
+   "noun": "camera",
+   "list_price": 179.99,
+   "suggested_budget": 165.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENikon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENikon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Digital camera. Built from 203 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: picture, picture quality, size, scene mode, battery life. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Nikon Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Still, at least from my perspective, a great camera for the money, and i'm a happy camper!",
+     "days_ago": 11,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "This camera is perfect for an enthusiastic amateur photographer.",
+     "days_ago": 17,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "The auto-focus performs well, but i love having the 12 optional scene modes - they are dummy-proof, and correspond to many situations in which i would actually seek to use the camera.",
+     "days_ago": 45,
+     "verified": false,
+     "feature": "auto focus"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": ". even the slightest of the shakes totally distorts your image",
+     "days_ago": 115,
+     "verified": false,
+     "feature": "image"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": ". this camera keeps on autofocussing in auto mode with a buzzing sound which can 't be stopped.",
+     "days_ago": 188,
+     "verified": false,
+     "feature": "auto mode"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "It's size also makes it ideal for travel.",
+     "days_ago": 192,
+     "verified": false,
+     "feature": "size"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "After a lengthy and extensive journey for a feature-loaded, high performance, travel size camera, i initially gravitated to this little gem because of the superior picture quality 4 mega pixel.",
+     "days_ago": 215,
+     "verified": false,
+     "feature": "picture quality"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "I am impressed with how easy this camera is to use.",
+     "days_ago": 239,
+     "verified": false,
+     "feature": "use"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "It is small, unlike my canon slr, so it easily fits in my pocket.",
+     "days_ago": 253,
+     "verified": false,
+     "feature": "size"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "The daylight pictures are brilliant and the indoor shots are very good provided that your subject is no more than about 8 feet away.",
+     "days_ago": 314,
+     "verified": false,
+     "feature": "picture"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "The software that comes with it is amazing and the online service that comes free is really very neat. clean clear and well focused on over 95% of all photos taken by a beginner.",
+     "days_ago": 320,
+     "verified": false,
+     "feature": "software"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Great camera, i have been using this for several months and got excellent results, simple friendly usage, in many scenes indoor, outdoor, snow, close up macro etc.",
+     "days_ago": 367,
+     "verified": false,
+     "feature": "camera"
+    }
+   ]
+  },
+  {
+   "id": "real-nokia-6600",
+   "name": "Nokia 6600 Cell Phone",
+   "brand": "Nokia",
+   "category": "cell phone",
+   "noun": "phone",
+   "list_price": 129.99,
+   "suggested_budget": 119.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230f766e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENokia%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ephone%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230f766e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENokia%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ephone%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Cell phone. Built from 453 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: bluetooth, battery life, screen, interface, ringtones. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Nokia Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "This is somewhat annoying, but from working with computers (espcially windows -- ugh...)",
+     "days_ago": 88,
+     "verified": false,
+     "feature": "bluetooth"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "It has raised the bar owing to number of features it offers and the absolute ease of use delight.",
+     "days_ago": 89,
+     "verified": false,
+     "feature": "use"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "I saw a few complaints on the load time of menus and I feel people are over-exaggerating the menu load time.",
+     "days_ago": 91,
+     "verified": false,
+     "feature": "menus"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I've had this beauty for nearly 2 months now and I truely love it.",
+     "days_ago": 102,
+     "verified": false,
+     "feature": "phone"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I have really enjoyed the camera on this phone.",
+     "days_ago": 218,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "Also, when I dial an \"800\" number like an airline, it will not allow me to use number keys to navigatee the prerecorded menu.",
+     "days_ago": 242,
+     "verified": false,
+     "feature": "navigatee"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "The games are decent, but u only get 2 to start off with.",
+     "days_ago": 278,
+     "verified": false,
+     "feature": "games"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "Just don't get drawn into T-Mobile's catchy rebate.",
+     "days_ago": 310,
+     "verified": false,
+     "feature": "rebate"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "5.The Camera installed on this phone is awesome.",
+     "days_ago": 324,
+     "verified": false,
+     "feature": "camera"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Give each friend a different ringtone.",
+     "days_ago": 356,
+     "verified": false,
+     "feature": "ringtone"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Their customer service agents are always prompt and polite and my service is terrific.",
+     "days_ago": 359,
+     "verified": false,
+     "feature": "customer service agents"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Putting in MP3 player, lots of games and application to download.",
+     "days_ago": 419,
+     "verified": false,
+     "feature": "mp3 player"
+    }
+   ]
+  },
+  {
+   "id": "real-nokia-6610",
+   "name": "Nokia 6610 Cell Phone",
+   "brand": "Nokia",
+   "category": "cell phone",
+   "noun": "phone",
+   "list_price": 99.99,
+   "suggested_budget": 92.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230f766e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENokia%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ephone%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230f766e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENokia%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ephone%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Cell phone. Built from 338 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: size, speakerphone, radio, battery life, screen. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Nokia Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Speakerphone - loud and clear has some nice extra features like currency converter and a stopwatch.",
+     "days_ago": 69,
+     "verified": false,
+     "feature": "speakerphone"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "I find the lack of entertaining games on this phone quite disturbing.",
+     "days_ago": 141,
+     "verified": false,
+     "feature": "game"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "Anywhere i went in south africa this phone received full bar reception.",
+     "days_ago": 149,
+     "verified": false,
+     "feature": "reception"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "This phone is a winner...",
+     "days_ago": 168,
+     "verified": false,
+     "feature": "phone"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The screen is easily scratched but if you have the warranty you should be able to swap it out.",
+     "days_ago": 170,
+     "verified": false,
+     "feature": "screen"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "The pc sync feature is superb that comes with nokia pc suite software (with data cable or infrared port or bluetooth).",
+     "days_ago": 206,
+     "verified": false,
+     "feature": "pc sync"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Technology wise, i think this is awesome plus the speaker makes it even great!!!! i love this phone!!!",
+     "days_ago": 244,
+     "verified": false,
+     "feature": "speaker"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "This means that there is a good chance that this phone will not break easily like typical american phones.",
+     "days_ago": 255,
+     "verified": false,
+     "feature": "phone"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Overall this is a slightly better than average phone.",
+     "days_ago": 256,
+     "verified": false,
+     "feature": "phone"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I just purchased this phone and i think this is the coolest phone i ever had.",
+     "days_ago": 303,
+     "verified": false,
+     "feature": "phone"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "As said before this works perfectly.",
+     "days_ago": 319,
+     "verified": false,
+     "feature": "speakerphone"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The volume key can be hard to press, but i think this may be by design rather than a flaw, perhaps to keep you from pressing it accidentally when you are in a call.",
+     "days_ago": 393,
+     "verified": false,
+     "feature": "volume key"
+    }
+   ]
+  },
+  {
+   "id": "real-norton",
+   "name": "Norton Security Software",
+   "brand": "Norton",
+   "category": "security software",
+   "noun": "software",
+   "list_price": 49.99,
+   "suggested_budget": 46.0,
+   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23334155%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENorton%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Esoftware%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "gallery": [
+    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23334155%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENorton%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Esoftware%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+   ],
+   "description": "Security software. Built from 238 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: support, installation, install, symantec, uninstall. (Price and photo are placeholders, the corpora contain neither.)",
+   "assistant_name": "Norton Assistant",
+   "price_is_illustrative": true,
+   "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
+   "reviews": [
+    {
+     "author": "Amazon customer",
+     "rating": 4,
+     "text": "Mine installed no problem (but I DID uninstall my Norton Anti-Virus 2002 & Personal Firewall 2002 first).",
+     "days_ago": 67,
+     "verified": false,
+     "feature": "install"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "I am an IT professional and have used Norton for years, but this product is a complete and utter dud.",
+     "days_ago": 82,
+     "verified": false,
+     "feature": "product"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "To install that version you have to uninstall from the window registery anything called Symantec or Nortron,... also from the common files in the program folder the symantec folder has to be deleted.",
+     "days_ago": 86,
+     "verified": false,
+     "feature": "install"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "I don't know what's happened to Norton, but 2004 is absolute garbage.",
+     "days_ago": 131,
+     "verified": false,
+     "feature": "2004"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 2,
+     "text": "The other annoyance with this that you have to remove every single remnant of previous version of Norton SystemWorks before you installs this.",
+     "days_ago": 160,
+     "verified": false,
+     "feature": "installs"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "There is little meaningful difference between the two versions aside from the tedius activation process, and the product is currently rather buggy and has problems running unless cleanly installed on a formatted drive.",
+     "days_ago": 177,
+     "verified": false,
+     "feature": "activation process"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "After 10 years, I now downloaded McCaffee's product after calling their support....they answered quickly, and for free, and were very helpful.",
+     "days_ago": 236,
+     "verified": false,
+     "feature": "support"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "And, when you think about it, it's insulting that Norton requires its customers to jump through these hoops -- anyone who can provide proof of purchase, whether on the phone or online (what if your computer is down?), should have equal priority.",
+     "days_ago": 278,
+     "verified": false,
+     "feature": "norton"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "Being a past Norton customer, I consider this to be a slap to my face.",
+     "days_ago": 316,
+     "verified": false,
+     "feature": "norton"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 1,
+     "text": "My file log was not responding and the program was not blocking any cookies or unauthorized sites.",
+     "days_ago": 325,
+     "verified": false,
+     "feature": "blocking"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "I work on word, explorer, netscape, acrobat reader, photoshop at same time (meaning using a lot of memory), but still dont see a problem with computer (getting slow or crashing).",
+     "days_ago": 338,
+     "verified": false,
+     "feature": "antivirus"
+    },
+    {
+     "author": "Amazon customer",
+     "rating": 5,
+     "text": "The installation, set-up, and operating interfaces are well organized and intuitive and the email spam component works well.",
+     "days_ago": 419,
+     "verified": false,
+     "feature": "installation"
+    }
+   ]
+  }
+ ]
+}

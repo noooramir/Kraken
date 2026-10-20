@@ -134,6 +134,8 @@
   /* Docked activity panel: page content shrinks instead of being covered */
   body { transition:padding-right .25s ease; }
   body.activity-open { padding-right:360px; }
+  .latest-order { margin:10px 0; padding:10px 12px; border-radius:8px; font-size:13px; background:#f1f5f9; color:#334155; }
+  .latest-order.violation { background:#fee2e2; color:#991b1b; font-weight:600; }
   .chat-bubble.result { max-width:100%; align-self:stretch; background:#fff; border:1px solid var(--border); }
   .chat-bubble.result.ok { border-color:#86efac; background:#f0fdf4; }
   .chat-bubble.result.fail { border-color:#fca5a5; background:#fef2f2; }
@@ -190,6 +192,7 @@
         <div class="rating-row"><span class="stars" id="pd-stars"></span> <span id="pd-rating-text"></span></div>
         <div class="price" id="pd-price"></div>
         <div class="desc" id="pd-desc"></div>
+        <div class="latest-order" id="latest-order" style="display:none"></div>
         <div class="pd-buttons">
           <button class="btn btn-primary" onclick="addToCart()">Add to Cart</button>
           <button class="btn btn-outline" onclick="buyNow()">Buy Now</button>

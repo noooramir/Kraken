@@ -23,8 +23,10 @@ def _payload_text(job):
         if atk == "control":
             return ""
         if atk in ("rag", "cross_agent"):
-            return payloads.RAG_VARIANTS.get(job["variant"], payloads.RAG_VARIANTS["authority-a"])
-        return payloads.ATTACK_TYPES[atk]["payload_text"]
+            text = payloads.RAG_VARIANTS.get(job["variant"], payloads.RAG_VARIANTS["authority-a"])
+        else:
+            text = payloads.ATTACK_TYPES[atk]["payload_text"]
+        return payloads.payload_for(atk, text, job.get("product"))      # the same text forward_attack really sends
     except Exception:
         return ""
 
@@ -45,6 +47,7 @@ def _job_meta():
         "trial": job.get("trial"),
         "trials": job["trials"],
         "payload": _payload_text(job),
+        "product": (job.get("product") or {}).get("name"),
         "last_result": last,
     }
 

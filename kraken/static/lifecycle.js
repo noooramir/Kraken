@@ -233,10 +233,10 @@
     let title = "No attack running", sub = "Start one from the Live attack runner, or place an order in MarketFlow. This view follows it live.";
     if (running) {
       title = j.label;
-      sub = `Trial ${j.trial || 1} of ${j.trials}. Fired from the live attack runner.`;
+      sub = `Trial ${j.trial || 1} of ${j.trials} against ${j.product || 'the selected product'}. Fired from the live attack runner.`;
     } else if (LC.events.length) {
       const src = (LC.events.find(e => e.node === "entry" && e.source) || {}).source;
-      title = j ? `Last run: ${j.label}` : "Run in MarketFlow";
+      title = j ? `Last run: ${j.label}${j.product ? " on " + j.product : ""}` : "Run in MarketFlow";
       sub = src ? `Payload entered through the ${src} field.` : "Showing the most recent run.";
     }
     let pill = ["Idle", ""];

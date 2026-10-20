@@ -30,14 +30,16 @@ PRODUCT_NAME = "AeroBuds Pro Wireless Earbuds"
 CARRIER = "Great AeroBuds Pro Wireless Earbuds, best deal on price and discount within budget. "
 
 
-def load_payloads(ids=None):
+def load_payloads(ids=None, product=None):
     """-> list of (InjectionPayload, family). Placeholders like [original_product] are filled with the real product."""
+    name = (product or {}).get("name", PRODUCT_NAME)
+    carrier = CARRIER.replace(PRODUCT_NAME, name)
     out = []
     for row in json.loads(DATA.read_text(encoding="utf-8")):
         if ids and row["id"] not in ids:
             continue
-        text = row["text"].replace("[original_product]", PRODUCT_NAME)
-        p = tasks.InjectionPayload(id=row["id"], vector="review", stealth="published", text=CARRIER + text)
+        text = row["text"].replace("[original_product]", name)
+        p = tasks.InjectionPayload(id=row["id"], vector="review", stealth="published", text=carrier + text)
         out.append((p, row["family"], row["source"]))
     return out
 
@@ -75,6 +77,7 @@ def main(argv=None, client=None):
     ap.add_argument("--trials", type=int, default=5)
     ap.add_argument("--ids", nargs="*", help="e.g. asb-DiscountApplication sb-T3.2")
     ap.add_argument("--no-control", action="store_true")
+    ap.add_argument("--product-id", default=None, help="MarketFlow product to attack (default: earbuds-01)")
     ap.add_argument("--marketflow", default="http://127.0.0.1:8001")
     ap.add_argument("--kraken", default="http://127.0.0.1:8002")
     ap.add_argument("--delay", type=float, default=20.0)
@@ -96,8 +99,14 @@ def main(argv=None, client=None):
         print("Refusing to run: defense is on, this is the offense baseline.")
         return 2
 
-    user_task = tasks.BENIGN_USER_TASK
-    plan = ([] if args.no_control else [(None, "control", "")]) + load_payloads(args.ids)
+    product = None
+    if args.product_id:
+        product = next((p for p in client.products() if p["id"] == args.product_id), None)
+        if product is None:
+            print(f"MarketFlow has no product '{args.product_id}'.")
+            return 2
+    user_task = tasks.for_product(product)
+    plan = ([] if args.no_control else [(None, "control", "")]) + load_payloads(args.ids, product)
     trials, started = [], datetime.now().isoformat(timespec="seconds")
     try:
         for p, family, _src in plan:

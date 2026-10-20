@@ -19,6 +19,16 @@ cd marketflow && uvicorn app.main:app --host 0.0.0.0 --port 8001
 cd kraken && uvicorn app.main:app --host 0.0.0.0 --port 8002
 ```
 
+### Real-review catalog and keeping the two apps connected
+- MarketFlow lists 14 real products (real amazon.com review excerpts, from `marketflow/data/real_catalog.json`) before the
+  3 original synthetic ones. Rebuild with `python -m offense.prepare_ecommerce`. Set `MARKETFLOW_REAL_CATALOG=0` to hide them.
+  Prices are illustrative and the photos are placeholders: the source data has neither.
+- MarketFlow calls Kraken's `/api/inspect` on **port 8002** by default. If you start Kraken on another port the call fails
+  open and "Kraken ON" defends nothing (Kraken's header then warns). Either use 8002, or set the address first:
+  `$env:KRAKEN_URL="http://127.0.0.1:8000"` (PowerShell) before starting MarketFlow.
+- The **Target** selector in Kraken's header picks which MarketFlow product the Attack Simulator, Live Enforcement and the
+  Dashboard's live runner attack. All three book their results in the same place (tally, dashboard live session, evidence).
+
 Open **http://localhost:8001** — this is the MarketFlow storefront (what a real customer sees).
 Open **http://localhost:8002** — this is the Kraken dashboard (what you use to attack it).
 

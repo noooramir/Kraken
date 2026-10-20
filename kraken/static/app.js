@@ -18,6 +18,30 @@ function scrollToId(id) {
 
 /* ---------------- Header status ---------------- */
 
+/* ---------------- Target product (shared by simulator, enforcement and the live runner) ---------------- */
+
+let products = [];
+
+function targetProduct() {
+  const el = document.getElementById("target-product");
+  return el && el.value ? el.value : null;
+}
+
+async function loadProducts() {
+  const el = document.getElementById("target-product");
+  try { products = await j("/api/products"); }
+  catch (e) {
+    if (el) el.innerHTML = `<option value="">Kraken needs a restart (no /api/products)</option>`;
+    return;
+  }
+  if (!el) return;
+  const keep = el.value;
+  if (!products.length) { el.innerHTML = `<option value="">MarketFlow offline</option>`; return; }
+  el.innerHTML = products.map(p =>
+    `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} ($${p.list_price})${p.real ? "" : " - synthetic"}</option>`).join("");
+  if (keep && products.some(p => p.id === keep)) el.value = keep;
+}
+
 async function refreshMeta() {
   const meta = await j("/api/meta");
   const dot = document.getElementById("mf-status-dot");
@@ -25,6 +49,10 @@ async function refreshMeta() {
   if (meta.marketflow_live) {
     dot.className = "status-dot live";
     text.textContent = "MarketFlow: live";
+    if (meta.inline_connected === false) {
+      dot.className = "status-dot offline";
+      text.textContent = "MarketFlow: live, but it cannot reach THIS Kraken (port mismatch): Kraken ON is not defending. Start MarketFlow with KRAKEN_URL set to this Kraken's address.";
+    }
   } else {
     dot.className = "status-dot offline";
     text.textContent = "MarketFlow: offline (using recorded reference)";
@@ -84,7 +112,7 @@ async function runSimulation() {
 
   const resultPromise = j("/api/simulate", {
     method: "POST", headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({attack_type: selectedOffense})
+    body: JSON.stringify({attack_type: selectedOffense, product_id: targetProduct()})
   });
 
   for (let i = 0; i < stepLabels.length; i++) {
@@ -102,6 +130,7 @@ async function runSimulation() {
 
   const result = await resultPromise;
   renderSimulationResult(result);
+  await refreshTally();      // a simulator run is booked in the same record as enforcement runs
 
   btn.disabled = false;
   btn.textContent = "Run Simulation";
@@ -121,7 +150,10 @@ function renderSimulationResult(r) {
     <div class="risk-row">
       <div class="risk-score ${cls}"><div>${r.risk_score}</div><span class="lbl">risk</span></div>
       <div>
-        <div class="risk-finding-title">${escapeHtml(r.label)} -- ${o.violations.length ? "attack succeeded" : "no violation observed"}</div>
+        <div class="risk-finding-title">${escapeHtml(r.label)} -- ${
+          o.violations.some(v => /discount outside policy/i.test(v)) ? "attack succeeded"
+          : o.violations.length ? "violation observed (not a discount-policy breach, so not counted as a success)"
+          : "no violation observed"}</div>
         <div class="risk-finding-text">${escapeHtml(r.finding)}</div>
       </div>
     </div>
@@ -135,7 +167,7 @@ Final price: $${o.final_price}  (${o.discount_pct}% off)
 ${o.violations.length ? "Violation: " + o.violations.join(" ") : "No policy violation."}</pre>
       ${o.trace && o.trace.length ? `<b>Agent trace (from live MarketFlow run)</b><pre>${escapeHtml(o.trace.map(t => `[${t.agent}] ${t.direction} ${t.direction === "input" ? "from" : "to"} ${t.peer}: ${t.content}`).join("\n\n"))}</pre>` : ""}
     </div>
-    <div class="source-note">Target: MarketFlow (${r.target.live ? "live run" : "recorded reference run"})</div>
+    <div class="source-note">Target: MarketFlow${r.target.product ? " / " + escapeHtml(r.target.product) : ""} (${r.target.live ? "live run" : "recorded reference run"})</div>
   `;
   box.classList.add("show");
 }
@@ -198,7 +230,7 @@ async function runDefense() {
 
   const r = await j("/api/defense/run", {
     method: "POST", headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({attack_type: selectedDefense, forward_to_marketflow: true})
+    body: JSON.stringify({attack_type: selectedDefense, forward_to_marketflow: true, product_id: targetProduct()})
   });
 
   await new Promise(res => setTimeout(res, 500));
@@ -234,7 +266,8 @@ async function refreshTally() {
     <div class="tally-tile"><div class="num">${t.flagged}</div><div class="lbl">Flagged</div></div>
     <div class="tally-tile"><div class="num">${t.forwarded}</div><div class="lbl">Forwarded</div></div>
     <div class="tally-tile"><div class="num">${t.cache_hits}</div><div class="lbl">Cache hits</div></div>
-    <div class="tally-tile"><div class="num">${t.false_positive_rate ?? "--"}%</div><div class="lbl">False positive rate</div></div>
+    <div class="tally-tile"><div class="num">${t.false_positive_rate ?? "--"}%</div><div class="lbl">False positive rate${t.false_positive_n ? " (n=" + t.false_positive_n + ")" : ""}</div></div>
+    <div class="tally-tile"><div class="num">${t.attacks_succeeded ?? 0}/${t.attacks_run ?? 0}</div><div class="lbl">Attacks succeeded</div></div>
   `;
 }
 
@@ -257,8 +290,13 @@ async function init() {
   renderAttackPicker("defense-attack-picker", "selectDefense");
   selectOffense(attackTypes[0].id);
   selectDefense(attackTypes[0].id);
+  await loadProducts();
   await refreshMeta();
   await refreshTally();
+  // keep every panel in step with attacks fired from any screen (and with MarketFlow starting or stopping)
+  setInterval(async () => {
+    try { await refreshMeta(); await refreshTally(); if (!products.length || !targetProduct()) await loadProducts(); } catch (e) {}
+  }, 5000);
 }
 
 init();
