@@ -20,7 +20,7 @@
   .header-inner { max-width:1180px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; gap:24px; }
   .logo { font-weight:800; font-size:20px; color:var(--accent-dark); letter-spacing:-.02em; cursor:pointer; }
   .search-bar { flex:1; max-width:520px; }
-  .search-bar input { width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:22px; background:#f4f5f7; font-size:13.5px; }
+  .search-bar input { width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:8px; background:#fff; font-size:13.5px; }
   .header-right { margin-left:auto; display:flex; align-items:center; gap:22px; }
   .cart-link { position:relative; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px; }
   .cart-badge { background:var(--accent); color:#fff; font-size:10.5px; font-weight:700; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; }
@@ -33,9 +33,30 @@
   .page-title { font-size:22px; font-weight:800; margin:4px 0 18px; }
   .grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
   @media (max-width: 900px) { .grid { grid-template-columns:repeat(2, 1fr); } }
-  .p-card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:pointer; transition:box-shadow .15s, transform .15s; }
-  .p-card:hover { box-shadow:0 8px 24px rgba(20,20,30,.08); transform:translateY(-2px); }
-  .p-card .thumb { width:100%; height:190px; object-fit:cover; background:#f1f2f4; }
+  .shop-tools { display:flex; align-items:center; gap:10px; margin:0 0 18px; flex-wrap:wrap; }
+  .shop-tools select { padding:9px 12px; border:1px solid var(--border); border-radius:6px; background:#fff; color:var(--text); }
+  .category-list { display:flex; gap:8px; flex-wrap:wrap; margin:0 0 20px; }
+  .category-chip { border:1px solid var(--border); background:#fff; color:var(--muted); padding:7px 12px; border-radius:6px; font-size:12.5px; cursor:pointer; }
+  .category-chip.active { border-color:var(--text); background:var(--text); color:#fff; }
+  .card-actions { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+  .card-add { border:1px solid var(--border); border-radius:6px; background:#fff; padding:7px 10px; font-size:12px; cursor:pointer; }
+  .card-add:hover { border-color:var(--accent); color:var(--accent); }
+  .quantity-control { display:flex; align-items:center; gap:8px; margin-left:12px; }
+  .quantity-control .btn { padding:4px 8px; }
+  .header-nav { display:flex; align-items:center; gap:18px; font-size:13px; color:var(--muted); }
+  .header-nav a:hover { color:var(--text); }
+  .order-list { display:grid; gap:12px; }
+  .customer-order { background:#fff; border:1px solid var(--border); border-radius:8px; padding:16px; display:flex; justify-content:space-between; gap:16px; align-items:center; }
+  .order-status { color:var(--green); font-size:12px; font-weight:700; }
+  @media (max-width: 680px) {
+    .header-inner { flex-wrap:wrap; gap:12px; }
+    .header-nav { order:3; width:100%; }
+    .search-bar { order:2; min-width:60%; }
+    .customer-order { align-items:flex-start; flex-direction:column; gap:6px; }
+  }
+  .p-card { background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+  .p-card:hover { border-color:#d1d5db; box-shadow:0 3px 12px rgba(20,20,30,.05); }
+  .p-card .thumb { width:100%; height:190px; object-fit:cover; background:#f7f8fa; }
   .p-card .body { padding:14px 16px 16px; }
   .p-card .brand { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px; }
   .p-card .name { font-size:14.5px; font-weight:700; margin-bottom:6px; line-height:1.3; }
@@ -58,7 +79,7 @@
   .pd-info .price { font-size:26px; font-weight:800; margin:14px 0 6px; }
   .pd-info .desc { color:#374151; font-size:13.5px; line-height:1.6; margin:14px 0 18px; }
   .pd-buttons { display:flex; gap:10px; margin-top:6px; }
-  .btn { border:none; border-radius:8px; padding:11px 20px; font-weight:700; font-size:14px; cursor:pointer; }
+  .btn { border:none; border-radius:6px; padding:11px 20px; font-weight:700; font-size:14px; cursor:pointer; }
   .btn-primary { background:var(--accent); color:#fff; }
   .btn-primary:hover { background:var(--accent-dark); }
   .btn-outline { background:#fff; border:1.5px solid var(--accent); color:var(--accent); }
@@ -98,7 +119,7 @@
   .review-date { font-size:11.5px; color:var(--muted); }
   .review-text { font-size:13px; color:#374151; line-height:1.55; margin-top:4px; }
 
-  .write-review { margin-top:24px; padding:18px; background:#f9fafb; border:1px solid var(--border); border-radius:10px; }
+  .write-review { margin-top:24px; padding:18px; background:#fff; border:1px solid var(--border); border-radius:8px; }
   .write-review h3 { font-size:14px; margin:0 0 12px; }
   .write-review .row { display:flex; gap:10px; margin-bottom:10px; }
   .write-review input[type=text] { flex:1; padding:8px 10px; border:1px solid var(--border); border-radius:6px; font-size:13px; }
@@ -114,7 +135,7 @@
   .cart-row .price { margin-left:auto; font-weight:700; font-size:15px; }
   .checkout-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:28px; }
   @media (max-width: 900px) { .checkout-grid { grid-template-columns:1fr; } }
-  .box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px 22px; }
+  .box { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:20px 22px; }
   .box h3 { margin:0 0 14px; font-size:15px; }
   .field label { display:block; font-size:12.5px; color:var(--muted); margin-bottom:6px; }
   .field textarea, .field input { width:100%; padding:9px 11px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; }
@@ -143,7 +164,7 @@
   .chat-bubble.result .r-line { display:flex; justify-content:space-between; gap:12px; }
   @media (max-width:900px) { body.activity-open { padding-right:0; } }
   /* ---------- Assistant activity panel ---------- */
-  .activity-toggle { position:fixed; right:22px; bottom:22px; background:var(--text); color:#fff; border:none; border-radius:26px; padding:12px 18px; font-weight:700; font-size:13px; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.2); z-index:40; display:flex; align-items:center; gap:8px; }
+  .activity-toggle { position:fixed; right:22px; bottom:22px; background:var(--text); color:#fff; border:none; border-radius:8px; padding:12px 18px; font-weight:700; font-size:13px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.12); z-index:40; display:flex; align-items:center; gap:8px; }
   .activity-panel { position:fixed; top:0; right:-380px; width:360px; height:100%; background:#fff; border-left:1px solid var(--border); box-shadow:-8px 0 24px rgba(0,0,0,.08); z-index:50; transition:right .25s ease; display:flex; flex-direction:column; }
   .activity-panel.open { right:0; }
   .activity-head { padding:18px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
@@ -156,6 +177,8 @@
   .empty-note { color:var(--muted); font-size:13px; padding:20px 0; text-align:center; }
 
   footer.site { margin-top:60px; border-top:1px solid var(--border); padding:26px 24px; text-align:center; color:var(--muted); font-size:12px; }
+  .field input:focus, .field textarea:focus, .search-bar input:focus, .shop-tools select:focus { outline:2px solid #bfdbfe; border-color:var(--accent); }
+  @media (max-width:680px) { .quantity-control { margin-left:0; } }
 </style>
 </head>
 <body>
@@ -163,9 +186,14 @@
 <header class="site">
   <div class="header-inner">
     <div class="logo" onclick="navigate('home')">AeroMart</div>
-    <div class="search-bar"><input type="text" placeholder="Search products..." /></div>
+    <div class="search-bar"><input type="search" id="product-search" placeholder="Search products..." /></div>
+    <nav class="header-nav" aria-label="Store navigation">
+      <a href="#" onclick="navigate('home'); return false;">Shop</a>
+      <a href="#" onclick="navigate('orders'); return false;">My orders</a>
+      <a href="/admin">Admin</a>
+    </nav>
     <div class="header-right">
-      <span class="cart-link" onclick="navigate('cart')">🛒 Cart <span class="cart-badge" id="cart-count">0</span></span>
+      <span class="cart-link" onclick="navigate('cart')">Cart <span class="cart-badge" id="cart-count">0</span></span>
     </div>
   </div>
 </header>
@@ -174,7 +202,17 @@
 
   <!-- HOME -->
   <section class="view active" id="view-home">
-    <div class="page-title">Popular right now</div>
+    <div class="page-title">Shop all products</div>
+    <div class="shop-tools">
+      <select id="sort-products" aria-label="Sort products">
+        <option value="featured">Featured</option>
+        <option value="price-low">Price: low to high</option>
+        <option value="price-high">Price: high to low</option>
+        <option value="rating">Top rated</option>
+      </select>
+      <span id="product-count" style="font-size:12.5px;color:var(--muted)"></span>
+    </div>
+    <div class="category-list" id="category-list"></div>
     <div class="grid" id="product-grid"></div>
   </section>
 
@@ -251,6 +289,12 @@
     <div class="box" id="cart-box"></div>
   </section>
 
+  <section class="view" id="view-orders">
+    <div class="page-title">My orders</div>
+    <p style="color:var(--muted);font-size:13px;margin:-8px 0 20px;">Orders placed in this demo storefront.</p>
+    <div class="order-list" id="customer-order-list"></div>
+  </section>
+
   <!-- CHECKOUT -->
   <section class="view" id="view-checkout">
     <div class="page-title">Checkout</div>
@@ -258,6 +302,18 @@
       <div class="box">
         <h3>Delivery</h3>
         <div class="field">
+          <label for="customer-name">Full name</label>
+          <input id="customer-name" type="text" autocomplete="name" required />
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label for="customer-email">Email</label>
+          <input id="customer-email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label for="customer-address">Delivery address</label>
+          <input id="customer-address" type="text" autocomplete="street-address" required />
+        </div>
+        <div class="field" style="margin-top:12px;">
           <label>Add a gift note or delivery instructions (optional)</label>
           <textarea id="gift-note" placeholder="e.g. Please leave with the front desk."></textarea>
         </div>

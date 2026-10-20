@@ -1,9 +1,16 @@
 let products = [];
 let currentProductId = null;
-let cart = null; // {product_id, qty}
+let cart = [];
 let chatGoal = "";
 let reviewStars = 5;
 let lastResult = null;
+let selectedCategory = "All";
+let searchQuery = "";
+
+try {
+  const savedCart = JSON.parse(localStorage.getItem("mf_cart") || "[]");
+  if (Array.isArray(savedCart)) cart = savedCart;
+} catch (e) { cart = []; }
 
 /* Manual fallback override -- never surfaced in the UI. Toggle with
    ?forceFallback=true in the URL, or Ctrl+Shift+F. Persisted in
@@ -28,7 +35,9 @@ const ICONS = { search: "🔍", spark: "🤝", note: "📝", handshake: "🤝", 
 
 async function j(url, opts) {
   const r = await fetch(url, opts);
-  return r.json();
+  const data = await r.json();
+  if (!r.ok) throw new Error(data.detail || data.error || `Request failed (${r.status})`);
+  return data;
 }
 
 function escapeHtml(s) {
@@ -54,6 +63,7 @@ function navigate(view, param) {
   if (view === "product" && param) openProduct(param);
   if (view === "cart") renderCart();
   if (view === "checkout") renderCheckout();
+  if (view === "orders") renderOrders();
 }
 
 /* ---------------- Home ---------------- */
@@ -123,18 +133,66 @@ new MutationObserver(() => { clearTimeout(_photoTimer); _photoTimer = setTimeout
 
 async function loadHome() {
   products = await j("/api/products");
+  renderProducts();
+  updateCartBadge();
+}
+
+function renderProducts() {
   const grid = document.getElementById("product-grid");
-  grid.innerHTML = products.map(p => `
+  const categoryNames = [...new Set(products.map(p => p.category || p.noun || p.brand || "Other"))].sort();
+  document.getElementById("category-list").innerHTML = ["All", ...categoryNames].map(category => `
+    <button class="category-chip ${selectedCategory === category ? "active" : ""}" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>
+  `).join("");
+  document.querySelectorAll(".category-chip").forEach(button => {
+    button.addEventListener("click", () => setCategory(button.dataset.category));
+  });
+
+  let visible = products.filter(p => {
+    const category = p.category || p.noun || p.brand || "Other";
+    const matchesCategory = selectedCategory === "All" || category === selectedCategory;
+    const matchesQuery = `${p.name} ${p.brand} ${category} ${p.description}`.toLowerCase().includes(searchQuery);
+    return matchesCategory && matchesQuery;
+  });
+  const sort = document.getElementById("sort-products").value;
+  if (sort === "price-low") visible.sort((a, b) => a.list_price - b.list_price);
+  if (sort === "price-high") visible.sort((a, b) => b.list_price - a.list_price);
+  if (sort === "rating") visible.sort((a, b) => b.rating - a.rating);
+
+  document.getElementById("product-count").textContent = `${visible.length} ${visible.length === 1 ? "product" : "products"}`;
+  grid.innerHTML = visible.length ? visible.map(p => `
     <div class="p-card" onclick="navigate('product','${p.id}')">
-      <img class="thumb" data-pid="${p.id}" src="${p.image}" alt="${escapeHtml(p.name)}" />
+      <img class="thumb" data-pid="${p.id}" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" />
       <div class="body">
         <div class="brand">${escapeHtml(p.brand)}</div>
         <div class="name">${escapeHtml(p.name)}</div>
         <div class="rating-row"><span class="stars">${starString(p.rating)}</span> ${p.rating} &middot; ${p.review_count} reviews</div>
-        <div class="price">$${p.list_price}</div>
+        <div class="card-actions">
+          <div class="price">$${Number(p.list_price).toFixed(2)}</div>
+          <button class="card-add" onclick="event.stopPropagation(); addCartItem('${p.id}')">Add to cart</button>
+        </div>
       </div>
     </div>
-  `).join("");
+  `).join("") : `<div class="empty-note">No products match your search. Try another keyword or category.</div>`;
+  applyPhotos();
+}
+
+function setCategory(category) {
+  selectedCategory = category;
+  renderProducts();
+}
+
+function persistCart() {
+  try { localStorage.setItem("mf_cart", JSON.stringify(cart)); } catch (e) {}
+  updateCartBadge();
+}
+
+function addCartItem(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  const item = cart.find(entry => entry.product_id === productId);
+  if (item) item.qty += 1;
+  else cart.push({product_id: productId, qty: 1, budget: product.list_price, goal: "Get me the best possible deal within my budget."});
+  persistCart();
 }
 
 /* ---------------- Product detail ---------------- */
@@ -297,8 +355,11 @@ async function sendChatMessage() {
   if (chat.intent === "purchase") {
     chatGoal = text;
     const notes = document.getElementById("pd-gift-note").value;
-    cart = {product_id: currentProductId, qty: 1, goal: text, budget};
+    const item = cart.find(entry => entry.product_id === currentProductId);
+    if (item) Object.assign(item, {goal: text, budget});
+    else cart.push({product_id: currentProductId, qty: 1, goal: text, budget});
     updateCartBadge();
+    persistCart();
     await runAutonomousPipeline(currentProductId, budget, text, notes, true);
   }
 
@@ -314,8 +375,10 @@ document.addEventListener("keypress", e => {
 
 function addToCart() {
   const budget = parseFloat(document.getElementById("chat-budget").value) || 50;
-  cart = {product_id: currentProductId, qty: 1, goal: chatGoal, budget};
-  updateCartBadge();
+  const item = cart.find(entry => entry.product_id === currentProductId);
+  if (item) Object.assign(item, {goal: chatGoal, budget});
+  else cart.push({product_id: currentProductId, qty: 1, goal: chatGoal, budget});
+  persistCart();
 }
 
 async function buyNow() {
@@ -324,53 +387,162 @@ async function buyNow() {
   const goal = chatGoal && chatGoal.trim()
     ? chatGoal
     : "Get me the best possible deal within my budget.";
-  cart = {product_id: currentProductId, qty: 1, goal, budget};
-  updateCartBadge();
-  await runAutonomousPipeline(cart.product_id, budget, goal, notes, true);
+  const item = cart.find(entry => entry.product_id === currentProductId);
+  if (item) Object.assign(item, {goal, budget});
+  else cart.push({product_id: currentProductId, qty: 1, goal, budget});
+  persistCart();
+  await runAutonomousPipeline(currentProductId, budget, goal, notes, true);
 }
 
 function updateCartBadge() {
-  document.getElementById("cart-count").textContent = cart ? "1" : "0";
+  document.getElementById("cart-count").textContent = String(cart.reduce((sum, item) => sum + item.qty, 0));
 }
 
 function renderCart() {
   const box = document.getElementById("cart-box");
-  if (!cart) {
+  if (!cart.length) {
     box.innerHTML = `<div class="empty-note">Your cart is empty. <a onclick="navigate('home')" style="color:var(--accent); font-weight:600;">Continue shopping →</a></div>`;
     return;
   }
-  const p = products.find(x => x.id === cart.product_id);
-  box.innerHTML = `
+  const items = cart.map(item => ({item, product: products.find(p => p.id === item.product_id)})).filter(row => row.product);
+  if (!items.length) {
+    box.innerHTML = `<div class="empty-note">Your saved cart items are no longer available. <a onclick="navigate('home')" style="color:var(--accent);font-weight:600;">Continue shopping</a></div>`;
+    return;
+  }
+  const subtotal = items.reduce((sum, row) => sum + row.product.list_price * row.item.qty, 0);
+  box.innerHTML = `${items.map(({item, product}) => `
     <div class="cart-row">
-      <img data-pid="${p.id}" src="${p.image}" />
+      <img data-pid="${product.id}" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" />
       <div>
-        <div class="name">${escapeHtml(p.name)}</div>
-        <div style="color:var(--muted); font-size:12.5px;">Qty: 1</div>
+        <div class="name">${escapeHtml(product.name)}</div>
+        <div style="color:var(--muted);font-size:12.5px;">$${Number(product.list_price).toFixed(2)} each</div>
       </div>
-      <div class="price">$${p.list_price}</div>
+      <div class="price">$${(product.list_price * item.qty).toFixed(2)}</div>
+      <div class="quantity-control">
+        <button class="btn btn-sm btn-outline" onclick="updateCartQty('${product.id}', -1)" aria-label="Decrease quantity">−</button>
+        <span>${item.qty}</span>
+        <button class="btn btn-sm btn-outline" onclick="updateCartQty('${product.id}', 1)" aria-label="Increase quantity">+</button>
+      </div>
     </div>
-    <div class="totals-line total"><span>Subtotal</span><span>$${p.list_price}</span></div>
-    <button class="btn btn-primary" style="margin-top:16px;" onclick="navigate('checkout')">Proceed to Checkout</button>
-  `;
+  `).join("")}
+  <div class="totals-line total"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+  <button class="btn btn-primary" style="margin-top:16px;" onclick="navigate('checkout')">Proceed to Checkout</button>`;
+  applyPhotos();
 }
 
 function renderCheckout() {
   const box = document.getElementById("checkout-summary");
-  if (!cart) { box.innerHTML = `<div class="empty-note">Your cart is empty.</div>`; return; }
-  const p = products.find(x => x.id === cart.product_id);
-  box.innerHTML = `
-    <div class="summary-row"><span>${escapeHtml(p.name)}</span><span style="margin-left:auto; font-weight:700;">$${p.list_price}</span></div>
-    <div class="totals-line"><span>Subtotal</span><span>$${p.list_price}</span></div>
-    <div class="totals-line" style="color:var(--muted);"><span>Your budget</span><span>$${cart.budget}</span></div>
-  `;
+  const items = cart.map(item => ({item, product: products.find(p => p.id === item.product_id)})).filter(row => row.product);
+  if (!items.length) { box.innerHTML = `<div class="empty-note">Your cart is empty.</div>`; document.getElementById("place-order-btn").disabled = true; return; }
+  const subtotal = items.reduce((sum, row) => sum + row.product.list_price * row.item.qty, 0);
+  box.innerHTML = `${items.map(({item, product}) => `
+    <div class="summary-row"><span>${escapeHtml(product.name)} × ${item.qty}</span><span style="margin-left:auto;font-weight:700;">$${(product.list_price * item.qty).toFixed(2)}</span></div>
+  `).join("")}
+  <div class="totals-line total"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+  <div class="totals-line" style="color:var(--muted);"><span>Payment</span><span>Demo checkout · no charge</span></div>`;
   document.getElementById("place-order-btn").disabled = false;
   document.getElementById("place-order-btn").textContent = "Place Order";
 }
 
 async function placeOrder() {
-  if (!cart) return;
-  const notes = document.getElementById("gift-note") ? document.getElementById("gift-note").value : "";
-  await runAutonomousPipeline(cart.product_id, cart.budget, cart.goal, notes);
+  if (!cart.length) return;
+  const customerName = document.getElementById("customer-name").value.trim();
+  const customerEmail = document.getElementById("customer-email").value.trim();
+  const customerAddress = document.getElementById("customer-address").value.trim();
+  if (!customerName || !customerEmail || !customerAddress) {
+    alert("Please enter your name, email, and delivery address.");
+    return;
+  }
+  const notes = document.getElementById("gift-note").value;
+  const button = document.getElementById("place-order-btn");
+  button.disabled = true;
+  button.textContent = "Placing order…";
+  const activity = [];
+  const results = [];
+  try {
+    const checkoutItems = cart.map(item => ({...item}));
+    for (const item of checkoutItems) {
+      const product = products.find(p => p.id === item.product_id);
+      if (!product) continue;
+      for (let count = 0; count < item.qty; count += 1) {
+        const result = await j("/api/run", {
+          method: "POST", headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            product_id: product.id, budget: Number(item.budget),
+            goal: item.goal || "Get me the best possible deal within my budget.",
+            notes, force_fallback: forceFallback,
+            customer_name: customerName, customer_email: customerEmail, customer_address: customerAddress
+          })
+        });
+        result.cartProductId = product.id;
+        results.push(result);
+        if (result.order) {
+          const cartItem = cart.find(entry => entry.product_id === product.id);
+          if (cartItem) {
+            cartItem.qty -= 1;
+            if (cartItem.qty <= 0) cart = cart.filter(entry => entry.product_id !== product.id);
+            persistCart();
+          }
+        }
+        activity.push(...(result.activity_feed || []));
+      }
+    }
+    streamActivity(activity);
+    renderCheckoutConfirmation(results);
+  } catch (error) {
+    console.error("[MarketFlow] checkout failed:", error);
+    alert(`Checkout could not be completed: ${error.message}`);
+    button.disabled = false;
+    button.textContent = "Place Order";
+  }
+}
+
+function updateCartQty(productId, delta) {
+  const item = cart.find(entry => entry.product_id === productId);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(entry => entry.product_id !== productId);
+  persistCart();
+  renderCart();
+}
+
+function renderOrders() {
+  const list = document.getElementById("customer-order-list");
+  list.innerHTML = `<div class="empty-note">Loading orders…</div>`;
+  j("/api/orders").then(orders => {
+    if (!orders.length) {
+      list.innerHTML = `<div class="empty-note">No orders yet. <a href="#" onclick="navigate('home');return false;" style="color:var(--accent);">Start shopping</a></div>`;
+      return;
+    }
+    list.innerHTML = [...orders].reverse().map(order => {
+      const product = products.find(p => p.id === order.product_id);
+      return `<article class="customer-order">
+        <div><strong>Order #${escapeHtml(String(order.order_id))}</strong><div style="font-size:13px;margin-top:5px">${escapeHtml(product ? product.name : "Product unavailable")}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">${escapeHtml(order.customer_name || "Demo customer")} · $${Number(order.final_price).toFixed(2)}</div></div>
+        <span class="order-status">${escapeHtml(order.status || "Processing")}</span>
+      </article>`;
+    }).join("");
+  }).catch(error => { list.innerHTML = `<div class="empty-note">Orders could not be loaded: ${escapeHtml(error.message)}</div>`; });
+}
+
+function renderCheckoutConfirmation(results) {
+  const orders = results.filter(result => result.order);
+  const failures = results.length - orders.length;
+  const box = document.getElementById("receipt-box");
+  box.innerHTML = `
+    <div class="check">${failures ? "🧾" : "✓"}</div>
+    <h1>${orders.length ? "Order placed" : "No order placed"}</h1>
+    <div class="order-no">${orders.length} item${orders.length === 1 ? "" : "s"} ordered${failures ? ` · ${failures} item${failures === 1 ? "" : "s"} need another try` : ""}</div>
+    ${orders.map(result => `<div class="item-row">
+      <img data-pid="${result.product.id}" src="${escapeHtml(result.product.image)}" alt="${escapeHtml(result.product.name)}" />
+      <div style="flex:1"><div style="font-weight:700;font-size:13.5px">${escapeHtml(result.product.name)}</div><div style="color:var(--muted);font-size:12px">Order #${escapeHtml(String(result.order.order_id))} · Processing</div></div>
+      <strong>$${Number(result.order.final_price).toFixed(2)}</strong>
+    </div>`).join("")}
+    ${failures ? `<p style="font-size:13px;color:var(--muted)">One or more offers could not be approved. Those items remain in your cart.</p>` : ""}
+    <button class="btn btn-primary" style="margin-top:20px" onclick="navigate('orders')">View orders</button>
+    <button class="btn btn-outline" style="margin:20px 0 0 8px" onclick="navigate('home')">Continue shopping</button>`;
+  applyPhotos();
+  navigate("confirmation");
 }
 
 /* The single entry point for a full, uninterrupted agent run: Buyer -> Negotiator
@@ -422,8 +594,8 @@ function renderInlineResult(result) {
 function renderConfirmation(result, inline = false) {
   if (inline) {
     renderInlineResult(result);
-    cart = null;
-    updateCartBadge();
+    cart = [];
+    persistCart();
     return;  // stay on the product page: chat + activity + result all visible together
   }
   const box = document.getElementById("receipt-box");
@@ -457,8 +629,8 @@ function renderConfirmation(result, inline = false) {
     `;
   }
 
-  cart = null;
-  updateCartBadge();
+  cart = [];
+  persistCart();
   navigate("confirmation");
 }
 
@@ -503,9 +675,9 @@ async function resetDemoEnvironment() {
   const p = await j(`/api/products/${currentProductId}`);
   renderReviews(p);
   resetReviewForm();
-  cart = null;
+  cart = [];
   lastResult = null;
-  updateCartBadge();
+  persistCart();
   document.getElementById("activity-list").innerHTML =
     `<div class="empty-note">No activity yet -- browse a product and check out to see your assistant at work.</div>`;
   setActivityOpen(false);
@@ -519,4 +691,13 @@ async function resetDemoEnvironment() {
 
 /* ---------------- init ---------------- */
 
-loadHome();
+document.getElementById("product-search").addEventListener("input", event => {
+  searchQuery = event.target.value.trim().toLowerCase();
+  renderProducts();
+});
+document.getElementById("sort-products").addEventListener("change", renderProducts);
+loadHome().catch(error => {
+  console.error("[MarketFlow] catalog failed to load:", error);
+  document.getElementById("product-grid").innerHTML =
+    `<div class="empty-note">Products could not be loaded: ${escapeHtml(error.message)}</div>`;
+});

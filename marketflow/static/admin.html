@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MarketFlow Admin</title>
+  <style>
+    :root { --bg:#f6f7f9; --card:#fff; --border:#e5e7eb; --text:#17191c; --muted:#6b7280; --accent:#2563eb; --danger:#b91c1c; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+    header { height:64px; background:#fff; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 max(24px,calc((100vw - 1200px)/2)); }
+    header a { color:var(--muted); text-decoration:none; font-size:13px; }
+    .brand { font-size:18px; font-weight:750; letter-spacing:-.03em; }
+    main { max-width:1200px; margin:auto; padding:30px 24px 70px; }
+    h1 { font-size:25px; margin:0 0 5px; letter-spacing:-.04em; }
+    h2 { font-size:16px; margin:0 0 18px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .notice { padding:12px 14px; margin:20px 0; border:1px solid #dbeafe; background:#eff6ff; border-radius:7px; color:#1e40af; font-size:12.5px; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:22px 0; }
+    .stat,.panel { border:1px solid var(--border); background:var(--card); border-radius:8px; }
+    .stat { padding:18px; }
+    .stat-label { color:var(--muted); font-size:12px; }
+    .stat-value { font-size:24px; font-weight:750; margin-top:8px; }
+    .panel { padding:20px; margin-top:18px; }
+    .panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+    .panel-head h2 { margin:0; }
+    button,.button { border:1px solid var(--border); border-radius:6px; background:#fff; padding:8px 12px; font:inherit; font-size:12.5px; cursor:pointer; color:var(--text); }
+    button.primary { border-color:var(--accent); background:var(--accent); color:#fff; }
+    button.danger { color:var(--danger); }
+    button:hover { border-color:#9ca3af; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; text-align:left; font-size:12.5px; }
+    th { color:var(--muted); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+    th,td { padding:12px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    td img { width:40px; height:40px; object-fit:cover; border-radius:5px; background:#f1f2f4; }
+    td.actions { white-space:nowrap; }
+    .status { color:#047857; }
+    .status.archived { color:var(--muted); }
+    select,input,textarea { width:100%; border:1px solid var(--border); border-radius:6px; padding:9px 10px; font:inherit; font-size:13px; background:#fff; }
+    label { display:block; color:var(--muted); font-size:12px; margin:0 0 6px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .form-grid .wide { grid-column:1/-1; }
+    .form-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:14px; }
+    .hidden { display:none; }
+    .empty { padding:24px; text-align:center; color:var(--muted); font-size:13px; }
+    #message { min-height:18px; font-size:12.5px; color:var(--danger); }
+    @media(max-width:700px) { .stats { grid-template-columns:1fr; } .form-grid { grid-template-columns:1fr; } .form-grid .wide { grid-column:auto; } header { padding:0 18px; } main { padding:24px 16px; } .panel { padding:14px; } }
+  </style>
+</head>
+<body>
+  <header><a class="brand" href="/">MarketFlow <span class="muted">/ Admin</span></a><a href="/">← Back to shop</a></header>
+  <main>
+    <h1>Store dashboard</h1>
+    <div class="muted">Manage products and demo orders from one place.</div>
+    <div class="notice">Demo admin area: no login, database persistence, or real payments. Data resets when the server restarts. Do not enter real customer information.</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Active products</div><div class="stat-value" id="stat-products">—</div></div>
+      <div class="stat"><div class="stat-label">Orders</div><div class="stat-value" id="stat-orders">—</div></div>
+      <div class="stat"><div class="stat-label">Demo sales</div><div class="stat-value" id="stat-sales">—</div></div>
+    </div>
+    <div id="message" role="status"></div>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Products</h2><button class="primary" id="new-product">Add product</button></div>
+      <div id="product-form-wrap" class="hidden">
+        <form id="product-form">
+          <div class="form-grid">
+            <div><label for="product-name">Product name</label><input id="product-name" required maxlength="120" /></div>
+            <div><label for="product-brand">Brand</label><input id="product-brand" required maxlength="80" /></div>
+            <div><label for="product-category">Category</label><input id="product-category" required maxlength="80" /></div>
+            <div><label for="product-price">Price (USD)</label><input id="product-price" type="number" min="0.01" step="0.01" required /></div>
+            <div class="wide"><label for="product-image">Image URL</label><input id="product-image" type="url" required maxlength="1000" placeholder="https://..." /></div>
+            <div class="wide"><label for="product-description">Description</label><textarea id="product-description" required maxlength="2000" rows="3"></textarea></div>
+          </div>
+          <div class="form-actions"><button type="button" id="cancel-product">Cancel</button><button class="primary" type="submit" id="save-product">Save product</button></div>
+        </form>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th></th><th>Product</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead><tbody id="products-table"></tbody></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Orders</h2><span class="muted">Update the demo fulfillment status</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Order</th><th>Customer</th><th>Item</th><th>Total</th><th>Status</th><th>Update</th></tr></thead><tbody id="orders-table"></tbody></table></div>
+    </section>
+  </main>
+  <script src="/static/admin.js?v=1"></script>
+</body>
+</html>
