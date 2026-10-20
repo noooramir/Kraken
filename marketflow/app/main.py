@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 from fastapi.responses import JSONResponse
@@ -27,13 +27,13 @@ def _product_card(p):
 
 @app.get("/api/products")
 def list_products():
-    return [_product_card(p) for p in store.PRODUCTS.values()]
+    return [_product_card(p) for p in store.PRODUCTS.values() if p.get("active", True)]
 
 
 @app.get("/api/products/{product_id}")
 def get_product(product_id: str):
     p = store.PRODUCTS.get(product_id)
-    if not p:
+    if not p or not p.get("active", True):
         return {"error": "unknown product"}
     return {
         **_product_card(p),
@@ -45,6 +45,94 @@ class ReviewSubmitReq(BaseModel):
     author: str = "You"
     rating: int = 5
     text: str
+
+
+class AdminProductReq(BaseModel):
+    name: str = Field(min_length=2, max_length=120)
+    brand: str = Field(min_length=1, max_length=80)
+    category: str = Field(min_length=1, max_length=80)
+    list_price: float = Field(gt=0, le=100000)
+    image: str = Field(min_length=1, max_length=1000)
+    description: str = Field(min_length=1, max_length=2000)
+
+
+class OrderStatusReq(BaseModel):
+    status: str
+
+
+def _product_id_from_name(name: str) -> str:
+    import re
+    base = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "product"
+    product_id = base
+    suffix = 2
+    while product_id in store.PRODUCTS:
+        product_id = f"{base}-{suffix}"
+        suffix += 1
+    return product_id
+
+
+@app.get("/api/admin/products")
+def admin_list_products():
+    return [_product_card(p) for p in store.PRODUCTS.values()]
+
+
+@app.post("/api/admin/products")
+def admin_create_product(req: AdminProductReq):
+    product_id = _product_id_from_name(req.name)
+    product = {
+        "id": product_id,
+        "name": req.name.strip(),
+        "brand": req.brand.strip(),
+        "category": req.category.strip(),
+        "list_price": req.list_price,
+        "image": req.image.strip(),
+        "gallery": [req.image.strip()],
+        "description": req.description.strip(),
+        "assistant_name": f"{req.brand.strip()} Assistant",
+        "active": True,
+    }
+    store.PRODUCTS[product_id] = product
+    store.REVIEWS.setdefault(product_id, [])
+    return _product_card(product)
+
+
+@app.put("/api/admin/products/{product_id}")
+def admin_update_product(product_id: str, req: AdminProductReq):
+    product = store.PRODUCTS.get(product_id)
+    if not product:
+        return JSONResponse(status_code=404, content={"error": "unknown product"})
+    product.update({
+        "name": req.name.strip(),
+        "brand": req.brand.strip(),
+        "category": req.category.strip(),
+        "list_price": req.list_price,
+        "image": req.image.strip(),
+        "gallery": [req.image.strip()],
+        "description": req.description.strip(),
+        "assistant_name": f"{req.brand.strip()} Assistant",
+    })
+    return _product_card(product)
+
+
+@app.delete("/api/admin/products/{product_id}")
+def admin_archive_product(product_id: str):
+    product = store.PRODUCTS.get(product_id)
+    if not product:
+        return JSONResponse(status_code=404, content={"error": "unknown product"})
+    product["active"] = not product.get("active", True)
+    return {"ok": True, "active": product["active"]}
+
+
+@app.patch("/api/admin/orders/{order_id}")
+def admin_update_order(order_id: int, req: OrderStatusReq):
+    allowed_statuses = {"Processing", "Shipped", "Delivered", "Cancelled"}
+    if req.status not in allowed_statuses:
+        return JSONResponse(status_code=422, content={"error": "invalid order status"})
+    order = next((o for o in store.ORDERS if o.get("order_id") == order_id), None)
+    if not order:
+        return JSONResponse(status_code=404, content={"error": "unknown order"})
+    order["status"] = req.status
+    return order
 
 
 @app.post("/api/products/{product_id}/reviews")
@@ -191,6 +279,9 @@ class RunReq(BaseModel):
     goal: str = ""
     notes: str = ""
     force_fallback: bool = False
+    customer_name: str = ""
+    customer_email: str = ""
+    customer_address: str = ""
 
 
 def _narrate(attack_type, product, offer, decision, order):
@@ -314,6 +405,10 @@ def run_goal(req: RunReq):
         order_id = store.next_order_id()
         order["order_id"] = order_id
         order["product_id"] = req.product_id
+        order["status"] = "Processing"
+        order["customer_name"] = req.customer_name
+        order["customer_email"] = req.customer_email
+        order["customer_address"] = req.customer_address
         store.ORDERS.append(order)
 
         try:
@@ -436,6 +531,11 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 @app.get("/")
 def index():
     return FileResponse(os.path.join(static_dir, "index.html"))
+
+
+@app.get("/admin")
+def admin():
+    return FileResponse(os.path.join(static_dir, "admin.html"))
 
 # Live Cycle feed: records each step of a run so Kraken can show it live
 from . import live_feed  # noqa: E402
