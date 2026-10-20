@@ -8,11 +8,11 @@
    "noun": "DVD player",
    "list_price": 59.99,
    "suggested_budget": 55.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23b45309%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EApex%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EDVD%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1707945272540-35fda815ebbf?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23b45309%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EApex%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EDVD%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1707945272540-35fda815ebbf?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "DVD player. Built from 428 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: customer service, picture, remote, look, sound. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "DVD player. Built from 428 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: customer service, picture, remote, look, sound. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Apex Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -113,7 +113,9 @@
      "verified": false,
      "feature": "dvd"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1707945272540-35fda815ebbf?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-ipod",
@@ -123,11 +125,11 @@
    "noun": "iPod",
    "list_price": 199.99,
    "suggested_budget": 183.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EApple%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EiPod%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1617464985170-8d97d2efd6d4?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EApple%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EiPod%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1617464985170-8d97d2efd6d4?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "MP3 player. Built from 191 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: battery, itunes, design, sound, apple. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "MP3 player. Built from 191 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: battery, itunes, design, sound, apple. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Apple Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -228,7 +230,9 @@
      "verified": false,
      "feature": "ipod"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1617464985170-8d97d2efd6d4?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-canon-g3",
@@ -238,11 +242,11 @@
    "noun": "camera",
    "list_price": 249.99,
    "suggested_budget": 229.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1602209397980-9aeb268ecedb?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1602209397980-9aeb268ecedb?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Digital camera. Built from 285 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: picture, viewfinder, picture quality, control, photo. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Digital camera. Built from 285 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: picture, viewfinder, picture quality, control, photo. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Canon Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -343,7 +347,9 @@
      "verified": false,
      "feature": "weight"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1602209397980-9aeb268ecedb?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-canon-s100",
@@ -353,11 +359,11 @@
    "noun": "camera",
    "list_price": 149.99,
    "suggested_budget": 138.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1585218356057-dc0e8d3558bb?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1585218356057-dc0e8d3558bb?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Digital camera. Built from 218 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: size, pictures, battery, zoom, ease of use. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Digital camera. Built from 218 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: size, pictures, battery, zoom, ease of use. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Canon Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -458,7 +464,9 @@
      "verified": false,
      "feature": "software"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1585218356057-dc0e8d3558bb?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-canon-powershot-sd500",
@@ -468,11 +476,11 @@
    "noun": "camera",
    "list_price": 299.99,
    "suggested_budget": 275.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1505739998589-00fc191ce01d?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECanon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1505739998589-00fc191ce01d?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Digital camera. Built from 148 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: pictures, lcd, image, size, flash. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Digital camera. Built from 148 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: pictures, lcd, image, size, flash. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Canon Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -573,7 +581,9 @@
      "verified": false,
      "feature": "preset"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1505739998589-00fc191ce01d?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-creative-labs-nomad-jukebox-zen-xtra-40gb",
@@ -583,11 +593,11 @@
    "noun": "MP3 player",
    "list_price": 129.99,
    "suggested_budget": 119.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECreative%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EMP3%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1730131332370-8395280c58d6?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ECreative%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EMP3%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1730131332370-8395280c58d6?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "MP3 player. Built from 845 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: sound, price, battery, size, sound quality. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "MP3 player. Built from 845 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: sound, price, battery, size, sound quality. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Creative Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -688,7 +698,9 @@
      "verified": false,
      "feature": "software"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1730131332370-8395280c58d6?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-diaper-champ",
@@ -698,11 +710,11 @@
    "noun": "diaper pail",
    "list_price": 39.99,
    "suggested_budget": 37.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230e7490%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EDiaper%20Champ%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ediaper%20pail%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1564488222994-af24aac33870?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230e7490%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EDiaper%20Champ%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ediaper%20pail%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1564488222994-af24aac33870?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Diaper pail. Built from 239 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: odors, refills, diapers, smell, garbage bags. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Diaper pail. Built from 239 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: odors, refills, diapers, smell, garbage bags. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Diaper Champ Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -803,7 +815,9 @@
      "verified": false,
      "feature": "fill"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1564488222994-af24aac33870?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-hitachi-router",
@@ -813,11 +827,11 @@
    "noun": "router",
    "list_price": 189.99,
    "suggested_budget": 174.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%2392400e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EHitachi%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Erouter%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1720156066527-41497702fc63?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%2392400e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EHitachi%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Erouter%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1720156066527-41497702fc63?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Woodworking power router. Built from 265 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: price, adjustment, power, controls, speed. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Woodworking power router. Built from 265 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: price, adjustment, power, controls, speed. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Hitachi Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -918,7 +932,9 @@
      "verified": false,
      "feature": "control"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1720156066527-41497702fc63?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-linksys-router",
@@ -928,11 +944,11 @@
    "noun": "router",
    "list_price": 49.99,
    "suggested_budget": 46.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23be123c%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ELinksys%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Erouter%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23be123c%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ELinksys%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Erouter%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Wireless router. Built from 216 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: setup, speed, installation, instruction, security. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Wireless router. Built from 216 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: setup, speed, installation, instruction, security. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Linksys Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -1033,7 +1049,9 @@
      "verified": false,
      "feature": "router"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-micromp3",
@@ -1043,11 +1061,11 @@
    "noun": "MP3 player",
    "list_price": 79.99,
    "suggested_budget": 73.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EMicroMP3%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EMP3%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1669248104220-2b3b3906783e?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%237c3aed%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3EMicroMP3%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3EMP3%20player%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1669248104220-2b3b3906783e?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "MP3 player. Built from 573 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: sound, look, size, storage, battery life. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "MP3 player. Built from 573 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: sound, look, size, storage, battery life. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "MicroMP3 Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -1148,7 +1166,9 @@
      "verified": false,
      "feature": "design"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1669248104220-2b3b3906783e?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-nikon-coolpix-4300",
@@ -1158,11 +1178,11 @@
    "noun": "camera",
    "list_price": 179.99,
    "suggested_budget": 165.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENikon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1546087522-81335ed53097?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%231d4ed8%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENikon%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ecamera%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1546087522-81335ed53097?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Digital camera. Built from 203 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: picture, picture quality, size, scene mode, battery life. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Digital camera. Built from 203 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: picture, picture quality, size, scene mode, battery life. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Nikon Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -1263,7 +1283,9 @@
      "verified": false,
      "feature": "camera"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1546087522-81335ed53097?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-nokia-6600",
@@ -1273,11 +1295,11 @@
    "noun": "phone",
    "list_price": 129.99,
    "suggested_budget": 119.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230f766e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENokia%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ephone%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1559312379-6eff3ba65888?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230f766e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENokia%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ephone%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1559312379-6eff3ba65888?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Cell phone. Built from 453 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: bluetooth, battery life, screen, interface, ringtones. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Cell phone. Built from 453 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: bluetooth, battery life, screen, interface, ringtones. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Nokia Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -1378,7 +1400,9 @@
      "verified": false,
      "feature": "mp3 player"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1559312379-6eff3ba65888?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-nokia-6610",
@@ -1388,11 +1412,11 @@
    "noun": "phone",
    "list_price": 99.99,
    "suggested_budget": 92.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230f766e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENokia%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ephone%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1609500537901-91f5b4c900e6?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%230f766e%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENokia%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Ephone%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1609500537901-91f5b4c900e6?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Cell phone. Built from 338 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: size, speakerphone, radio, battery life, screen. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Cell phone. Built from 338 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: size, speakerphone, radio, battery life, screen. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Nokia Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -1493,7 +1517,9 @@
      "verified": false,
      "feature": "volume key"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1609500537901-91f5b4c900e6?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   },
   {
    "id": "real-norton",
@@ -1503,11 +1529,11 @@
    "noun": "software",
    "list_price": 49.99,
    "suggested_budget": 46.0,
-   "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23334155%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENorton%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Esoftware%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E",
+   "image": "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&q=80&auto=format&fit=crop",
    "gallery": [
-    "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%27600%27%20viewBox%3D%270%200%20800%20600%27%3E%3Crect%20width%3D%27800%27%20height%3D%27600%27%20fill%3D%27%23334155%27%2F%3E%3Ctext%20x%3D%27400%27%20y%3D%27290%27%20font-family%3D%27Arial%27%20font-size%3D%2764%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%3ENorton%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27360%27%20font-family%3D%27Arial%27%20font-size%3D%2738%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.9%27%3Esoftware%3C%2Ftext%3E%3Ctext%20x%3D%27400%27%20y%3D%27560%27%20font-family%3D%27Arial%27%20font-size%3D%2722%27%20fill%3D%27white%27%20text-anchor%3D%27middle%27%20opacity%3D%270.6%27%3Eproduct%20photo%20not%20available%3C%2Ftext%3E%3C%2Fsvg%3E"
+    "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&q=80&auto=format&fit=crop"
    ],
-   "description": "Security software. Built from 238 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: support, installation, install, symantec, uninstall. (Price and photo are placeholders, the corpora contain neither.)",
+   "description": "Security software. Built from 238 human-annotated sentences of real amazon.com customer reviews; shoppers mostly talk about: support, installation, install, symantec, uninstall. (Price is illustrative and the photo is looked up separately, the review corpora contain neither.)",
    "assistant_name": "Norton Assistant",
    "price_is_illustrative": true,
    "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
@@ -1608,7 +1634,9 @@
      "verified": false,
      "feature": "installation"
     }
-   ]
+   ],
+   "photo_url": "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&q=80&auto=format&fit=crop",
+   "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model."
   }
  ]
 }

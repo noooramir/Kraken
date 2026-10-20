@@ -58,12 +58,75 @@ function navigate(view, param) {
 
 /* ---------------- Home ---------------- */
 
+
+/* ---------------- Real product photos (Wikimedia Commons, free licence), looked up in the browser ----------------
+   The review corpora have no photos, so each real product asks Commons for a picture of that exact model, then of
+   the product type. Results are cached in localStorage; if nothing matches, the neutral icon stays. */
+const PHOTO_KEY = "mf-photos-v2";
+let photos = {};
+try { photos = JSON.parse(localStorage.getItem(PHOTO_KEY) || "{}"); } catch (e) { photos = {}; }
+
+async function commonsSearch(q, mustHave) {
+  const url = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=15"
+    + "&gsrsearch=" + encodeURIComponent(q) + "&prop=imageinfo&iiprop=url|mime&iiurlwidth=800&format=json&origin=*";
+  const r = await fetch(url);
+  const pages = Object.values(((await r.json()).query || {}).pages || {}).sort((a, b) => a.index - b.index);
+  for (const pg of pages) {
+    const info = (pg.imageinfo || [])[0];
+    const title = (pg.title || "").toLowerCase();
+    if (!info || !/^image\/(jpeg|png)$/.test(info.mime)) continue;
+    if (/logo|icon|diagram|screenshot|map|flag|svg|box art|\.gif/.test(title)) continue;
+    if (mustHave.every(w => title.includes(w))) return info.thumburl || info.url;
+  }
+  return "";
+}
+
+async function findPhoto(p) {
+  const brand = (p.brand || "").toLowerCase();
+  const model = (p.photo_query || "").toLowerCase().split(/\s+/).filter(w => w && w !== brand);
+  const specific = model.filter(w => /\d/.test(w));                 // model numbers like g3, 6600, wrt54g
+  try {
+    let u = await commonsSearch(p.photo_query, [brand, ...specific]);
+    if (!u && specific.length === 0) u = await commonsSearch(p.photo_query, [brand]);
+    if (!u) u = await commonsSearch(p.noun, [(p.noun || "").toLowerCase().split(" ")[0]]);   // generic photo of the product type
+    return u;
+  } catch (e) { return null; }                                       // offline: try again next visit
+}
+
+function applyPhotos() {
+  document.querySelectorAll("img[data-pid]").forEach(img => {
+    const u = photos[img.dataset.pid];
+    if (u && img.getAttribute("src") !== u) { img.setAttribute("src", u); img.style.objectFit = "cover"; }
+  });
+  const main = document.getElementById("pd-main-img");
+  if (main && main.dataset.pid && photos[main.dataset.pid]) {
+    let c = document.getElementById("photo-credit");
+    if (!c) { c = document.createElement("div"); c.id = "photo-credit"; c.style.cssText = "font-size:11px;color:#94a3b8;margin-top:6px";
+      main.insertAdjacentElement("afterend", c); }
+    c.textContent = "Photo: Wikimedia Commons (free licence), may show a similar model.";
+  }
+}
+
+async function loadPhotos(list) {
+  let changed = false;
+  for (const p of list.filter(x => x.id.startsWith("real-") && x.photo_query && !(x.id in photos))) {
+    const u = await findPhoto(p);
+    if (u === null) continue;
+    photos[p.id] = u; changed = true; applyPhotos();
+  }
+  if (changed) { try { localStorage.setItem(PHOTO_KEY, JSON.stringify(photos)); } catch (e) {} }
+}
+
+let _photoTimer = null;
+new MutationObserver(() => { clearTimeout(_photoTimer); _photoTimer = setTimeout(applyPhotos, 30); })
+  .observe(document.documentElement, { childList: true, subtree: true });
+
 async function loadHome() {
   products = await j("/api/products");
   const grid = document.getElementById("product-grid");
   grid.innerHTML = products.map(p => `
     <div class="p-card" onclick="navigate('product','${p.id}')">
-      <img class="thumb" src="${p.image}" alt="${escapeHtml(p.name)}" />
+      <img class="thumb" data-pid="${p.id}" src="${p.image}" alt="${escapeHtml(p.name)}" />
       <div class="body">
         <div class="brand">${escapeHtml(p.brand)}</div>
         <div class="name">${escapeHtml(p.name)}</div>
@@ -89,9 +152,11 @@ async function openProduct(id) {
   document.getElementById("pd-rating-text").textContent = `${p.rating} out of 5 (${p.review_count} reviews)`;
   document.getElementById("pd-price").textContent = `$${p.list_price}`;
   document.getElementById("pd-desc").textContent = p.description;
+  document.getElementById("pd-main-img").dataset.pid = p.id;
   document.getElementById("pd-main-img").src = p.image;
+  { let c = document.getElementById("photo-credit"); if (!c) { c = document.createElement("div"); c.id = "photo-credit"; c.style.cssText = "font-size:11px;color:#94a3b8;margin-top:6px"; document.getElementById("pd-main-img").insertAdjacentElement("afterend", c); } c.textContent = p.photo_credit || ""; }
   document.getElementById("pd-thumbs").innerHTML = p.gallery.map((g, i) => `
-    <img src="${g}" class="${i === 0 ? "active" : ""}" onclick="setMainImg(this, '${g}')" />
+    <img data-pid="${p.id}" src="${g}" class="${i === 0 ? "active" : ""}" onclick="setMainImg(this, '${g}')" />
   `).join("");
   document.getElementById("chat-assistant-name").textContent = p.assistant_name;
   // real-catalog products carry a budget that fits their price; the original three keep 50
@@ -142,7 +207,7 @@ function startProductSync(id, p) {
 }
 
 function setMainImg(el, src) {
-  document.getElementById("pd-main-img").src = src;
+  document.getElementById("pd-main-img").src = el.getAttribute("src") || src;
   document.querySelectorAll(".gallery .thumbs img").forEach(i => i.classList.remove("active"));
   el.classList.add("active");
 }
@@ -277,7 +342,7 @@ function renderCart() {
   const p = products.find(x => x.id === cart.product_id);
   box.innerHTML = `
     <div class="cart-row">
-      <img src="${p.image}" />
+      <img data-pid="${p.id}" src="${p.image}" />
       <div>
         <div class="name">${escapeHtml(p.name)}</div>
         <div style="color:var(--muted); font-size:12.5px;">Qty: 1</div>
@@ -379,7 +444,7 @@ function renderConfirmation(result, inline = false) {
       <h1>Order placed!</h1>
       <div class="order-no">Order #${order.order_id}</div>
       <div class="item-row">
-        <img src="${p.image}" />
+        <img data-pid="${p.id}" src="${p.image}" />
         <div>
           <div style="font-weight:700; font-size:13.5px;">${escapeHtml(p.name)}</div>
           <div style="color:var(--muted); font-size:12px;">Qty: 1</div>

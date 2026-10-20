@@ -244,14 +244,74 @@ def load_review_counts(zip_dir=None):
     return counts
 
 
-def placeholder_image(brand, noun, color):
-    """No product photos exist in the corpora, so draw an honest labelled placeholder (percent-encoded, no quotes)."""
+# Wikimedia Commons search text per product. MarketFlow's page looks these up in the visitor's browser
+# (free-licensed photos only) and falls back to the icon below when nothing safe matches.
+PHOTO_URL = "https://images.unsplash.com/photo-%s?w=800&q=80&auto=format&fit=crop"
+PHOTO_ID = {
+    "real-canon-g3": "1602209397980-9aeb268ecedb",
+    "real-canon-s100": "1585218356057-dc0e8d3558bb",
+    "real-canon-powershot-sd500": "1505739998589-00fc191ce01d",
+    "real-nikon-coolpix-4300": "1546087522-81335ed53097",
+    "real-nokia-6600": "1559312379-6eff3ba65888",
+    "real-nokia-6610": "1609500537901-91f5b4c900e6",
+    "real-ipod": "1617464985170-8d97d2efd6d4",
+    "real-creative-labs-nomad-jukebox-zen-xtra-40gb": "1730131332370-8395280c58d6",
+    "real-micromp3": "1669248104220-2b3b3906783e",
+    "real-linksys-router": "1606904825846-647eb07f5be2",
+    "real-apex-ad2600-progressive-scan-dvd-player": "1707945272540-35fda815ebbf",
+    "real-diaper-champ": "1564488222994-af24aac33870",
+    "real-hitachi-router": "1720156066527-41497702fc63",
+    "real-norton": "1614064641938-3bbee52942c7"
+}
+
+_OLD_PHOTO_QUERY = {
+    "real-apex-ad2600-progressive-scan-dvd-player": "Apex AD-2600 DVD player",
+    "real-ipod": "Apple iPod classic",
+    "real-canon-g3": "Canon PowerShot G3",
+    "real-canon-s100": "Canon PowerShot S100",
+    "real-canon-powershot-sd500": "Canon PowerShot SD500",
+    "real-creative-labs-nomad-jukebox-zen-xtra-40gb": "Creative Nomad Jukebox Zen Xtra",
+    "real-diaper-champ": "Diaper Champ diaper pail",
+    "real-hitachi-router": "Hitachi M12V router",
+    "real-linksys-router": "Linksys WRT54G",
+    "real-micromp3": "MicroMP3 player",
+    "real-nikon-coolpix-4300": "Nikon Coolpix 4300",
+    "real-nokia-6600": "Nokia 6600",
+    "real-nokia-6610": "Nokia 6610",
+    "real-norton": "Norton Internet Security box",
+}
+
+# plain line icons (24x24 grid, scaled), one per product noun; no colours that read as a photo
+_ICONS = {
+    "camera": "<rect x='3' y='7' width='18' height='12' rx='2'/><circle cx='12' cy='13' r='3.5'/><path d='M8 7l1.5-2h5L16 7'/>",
+    "phone": "<rect x='7' y='2' width='10' height='20' rx='2'/><path d='M10 5h4M11 19h2'/>",
+    "player": "<rect x='6' y='2' width='12' height='20' rx='2'/><rect x='8' y='4' width='8' height='6'/><circle cx='12' cy='16' r='3'/>",
+    "router": "<rect x='3' y='13' width='18' height='6' rx='1.5'/><path d='M7 13l-2-6M17 13l2-6M8 16h.01M11 16h.01'/>",
+    "dvd": "<rect x='2' y='8' width='20' height='8' rx='1.5'/><path d='M5 12h6M17 12h.01'/>",
+    "pail": "<path d='M6 8h12l-1.2 12H7.2L6 8z'/><path d='M5 8h14M9 5h6l1 3H8l1-3z'/>",
+    "software": "<rect x='5' y='3' width='14' height='18' rx='1.5'/><circle cx='12' cy='12' r='3'/><path d='M8 6h8'/>",
+}
+
+
+def _icon_for(noun):
+    n = noun.lower()
+    for key, words in (("camera", ("camera",)), ("phone", ("phone",)), ("dvd", ("dvd",)), ("router", ("router",)),
+                       ("pail", ("pail", "diaper")), ("software", ("software", "security", "antivirus")),
+                       ("player", ("player", "mp3", "ipod", "jukebox"))):
+        if any(w in n for w in words):
+            return _ICONS[key]
+    return _ICONS["software"]
+
+
+def placeholder_image(brand, noun, color=None):
+    """Fallback when no photo is found: a light neutral panel with a simple line icon (percent-encoded, no quotes)."""
     from urllib.parse import quote
     svg = (f"<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'>"
-           f"<rect width='800' height='600' fill='{color}'/>"
-           f"<text x='400' y='290' font-family='Arial' font-size='64' font-weight='bold' fill='white' text-anchor='middle'>{brand}</text>"
-           f"<text x='400' y='360' font-family='Arial' font-size='38' fill='white' text-anchor='middle' opacity='0.9'>{noun}</text>"
-           f"<text x='400' y='560' font-family='Arial' font-size='22' fill='white' text-anchor='middle' opacity='0.6'>product photo not available</text>"
+           f"<rect width='800' height='600' fill='#f1f5f9'/>"
+           f"<g transform='translate(280 150) scale(10)' fill='none' stroke='#94a3b8' stroke-width='0.7' "
+           f"stroke-linecap='round' stroke-linejoin='round'>{_icon_for(noun)}</g>"
+           f"<text x='400' y='500' font-family='Arial' font-size='34' font-weight='bold' fill='#64748b' text-anchor='middle'>{brand} {noun}</text>"
+           f"<text x='400' y='550' font-family='Arial' font-size='20' fill='#94a3b8' text-anchor='middle'>photo not available</text>"
            f"</svg>")
     return "data:image/svg+xml;utf8," + quote(svg, safe="")
 
@@ -295,10 +355,12 @@ def build_catalog(products, review_counts, seed=0):
         out.append({
             "id": pid, "name": name, "brand": brand, "category": category, "noun": noun, "list_price": price,
             "suggested_budget": float(round(price * 0.917)),
-            "image": img, "gallery": [img],
+            "gallery": [PHOTO_URL % PHOTO_ID[pid] if pid in PHOTO_ID else img],
+            "image": PHOTO_URL % PHOTO_ID[pid] if pid in PHOTO_ID else img,
+            "photo_credit": "Photo: Unsplash. Illustrative stock photo of this product type, not the exact listed model.",
             "description": (f"{category[:1].upper()}{category[1:]}. Built from {review_counts.get(name, 0)} human-annotated sentences of real "
                             f"amazon.com customer reviews; shoppers mostly talk about: {', '.join(top)}. "
-                            f"(Price and photo are placeholders, the corpora contain neither.)"),
+                            f"(Price is illustrative and the photo is looked up separately, the review corpora contain neither.)"),
             "assistant_name": f"{brand} Assistant",
             "price_is_illustrative": True,
             "source": "Hu & Liu 2004 / Ding, Liu & Yu 2008 annotated amazon.com customer reviews",
