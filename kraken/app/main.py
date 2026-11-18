@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from typing import Optional
 from dotenv import load_dotenv
 
-from . import payloads, detectors, state, marketflow_client, dashboard_data, live_runs
+from . import payloads, detectors, state, marketflow_client, dashboard_data, live_runs, datasets_api
 
 load_dotenv()
 
@@ -338,6 +338,12 @@ def dashboard():
     d["live_session"] = live_runs.session_summary()
     d["rag_benchmark"] = dashboard_data.rag_benchmark()
     return d
+
+
+@app.get("/api/datasets")
+def datasets():
+    """All source datasets + generated attack dataset metadata, stats, and samples."""
+    return datasets_api.build_datasets_response()
 
 
 # ---------------------------------------------------------------------------
