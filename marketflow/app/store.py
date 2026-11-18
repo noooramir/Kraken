@@ -99,6 +99,15 @@ try:
 except Exception as _e:          # never stop MarketFlow from starting because of the optional catalog
     print(f"[marketflow] real catalog not loaded: {_e}")
 
+# Real Amazon reviews replace the hand-written seed reviews of the three core products (see amazon_reviews.py).
+# Must run BEFORE _SEED_REVIEWS is copied so reset_product() restores the real reviews, not the old ones.
+try:
+    from . import amazon_reviews
+    REVIEWS.update(amazon_reviews.load(_seed_review))
+except Exception as _e:          # never stop MarketFlow from starting because of the optional review file
+    print(f"[marketflow] amazon reviews not loaded: {_e}")
+
+
 _SEED_REVIEWS = copy.deepcopy(REVIEWS)
 
 ORDERS = []
@@ -179,6 +188,31 @@ def reset_product(product_id: str):
     REVIEWS[product_id] = copy.deepcopy(_SEED_REVIEWS.get(product_id, []))
     ORDERS.clear()
     return {"ok": True}
+
+
+def review_similarity(product_id: str, query: str, review_id):
+    """Similarity of ONE review to `query` plus its 1-based rank among all of the product's reviews, using the
+    same TF-IDF/cosine computation as retrieve_reviews. Used by the offense runner to record how close a planted
+    review came to the top-k even when it was NOT retrieved. -> {"similarity", "rank", "total"} or None."""
+    reviews = get_reviews(product_id)
+    idx = next((i for i, r in enumerate(reviews) if r["id"] == review_id), None)
+    if idx is None:
+        return None
+    texts = [r["text"] for r in reviews]
+    try:
+        vectorizer = TfidfVectorizer(stop_words="english").fit(texts + [query])
+        sims = list(cosine_similarity(vectorizer.transform([query]), vectorizer.transform(texts))[0])
+    except ValueError:
+        sims = [0.0] * len(reviews)
+    rank = 1 + sum(1 for i, s in enumerate(sims) if s > sims[idx] or (s == sims[idx] and i < idx))
+    return {"similarity": round(float(sims[idx]), 4), "rank": rank, "total": len(reviews)}
+
+
+def real_review_info(product_id: str):
+    """How many of this product's reviews are real dataset reviews (tagged by amazon_reviews.py), and their source
+    label. 'seed' = only hand-written reviews. Planted reviews carry no tag, so they are never counted."""
+    n = sum(1 for r in REVIEWS.get(product_id, []) if r.get("source") == "amazon")
+    return {"count": n, "source": "amazon" if n else "seed"}
 
 
 def rating_summary(product_id: str):
