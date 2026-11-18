@@ -148,6 +148,27 @@ def submit_review(product_id: str, req: ReviewSubmitReq):
     return {"review": entry, "summary": store.rating_summary(product_id), "kraken": check}
 
 
+class ListingEditReq(BaseModel):
+    author: str = "Seller"
+    text: str
+
+
+@app.post("/api/products/{product_id}/listing")
+def edit_listing(product_id: str, req: ListingEditReq):
+    """A seller adds text to the product listing. The Negotiator reads the listing on every order, so this is an
+    injection point (use case I1). Same Kraken retrieval checkpoint as review submission: untrusted text that will
+    be placed in an agent's context. Undone by POST /api/products/{id}/reset."""
+    if product_id not in store.PRODUCTS:
+        return {"error": "unknown product"}
+
+    check = kraken_client.inspect(req.text, "retrieval")
+    if check["decision"] in ("blocked", "flagged"):
+        return {"error": "listing rejected", "kraken": check}
+
+    description = store.append_listing(product_id, req.text)
+    return {"listing": description, "kraken": check}
+
+
 @app.get("/api/policy")
 def get_policy():
     return store.POLICY
@@ -460,6 +481,14 @@ def run_goal(req: RunReq):
             order_id=order_id if is_flagged else None,
             discount_pct=discount_pct_logged if is_flagged else None,
             approved=decision.get("approved") if is_flagged else None,
+        )
+
+    # I1: the seller's listing is read by the Negotiator on every order; log it like a flagged review.
+    listing_text = product.get("description") or ""
+    if detect_markers(listing_text):
+        propagation.record_propagation(
+            run_id, req.product_id, "listing", req.product_id, listing_text, base_hops,
+            order_id=order_id, discount_pct=discount_pct_logged, approved=decision.get("approved"),
         )
 
     buyer_hops = ["buyer_agent"] + (["negotiator_agent", "orchestrator_agent", "checkout_agent"]

@@ -119,7 +119,7 @@ function timeline(seq) {
 
 function comparison(c) {
   if (!c) return `<div class="dash-empty" style="padding:26px 10px">No defense-ON runs recorded yet.<br>This panel compares attack success with Kraken OFF vs ON once the defense phase is run.</div>`;
-  const rows = ["overall","review","goal","notes"].filter(k=>c.off[k]||c.on[k]).map(k => {
+  const rows = ["overall","review","goal","notes","listing"].filter(k=>c.off[k]||c.on[k]).map(k => {
     const o=c.off[k], d=c.on[k], f=x=>x?`${pct(x.asr)} <span style="color:var(--muted)">(${x.k}/${x.n})</span>`:"-";
     return `<tr><td>${k}</td><td>${f(o)}</td><td>${f(d)}</td></tr>`; }).join("");
   return `<table class="dtable"><tr><th>Scope</th><th>Kraken OFF</th><th>Kraken ON</th></tr>${rows}</table>`;

@@ -21,7 +21,7 @@ from pathlib import Path
 
 RESULTS_DIR = Path(__file__).resolve().parents[2] / "offense" / "results"
 MANIFEST = RESULTS_DIR / "included.json"
-VECTORS = ["review", "goal", "notes"]
+VECTORS = ["review", "goal", "notes", "listing"]
 STEALTH = ["blatant", "paraphrased", "stealthy"]
 HIST_LABELS = ["10% or less (in policy)", "11-20%", "21-30%", "31-40%", "41-50%", "over 50%"]
 

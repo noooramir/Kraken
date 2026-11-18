@@ -180,12 +180,30 @@ def retrieve_reviews(product_id: str, query: str, top_k: int = 3):
     return results
 
 
+# Original listing text of every product whose listing an attacker has edited (I1), so reset can restore it.
+# Only products that were actually poisoned are tracked, so a legitimate admin edit is never rolled back.
+_LISTING_BASE = {}
+
+
+def append_listing(product_id: str, text: str):
+    """I1 (seller listing poisoning): a seller adds text to this product's listing (description). The first call
+    remembers the clean description so reset_product() can restore it. -> the new description, or None if unknown."""
+    product = PRODUCTS.get(product_id)
+    if not product:
+        return None
+    _LISTING_BASE.setdefault(product_id, product.get("description", ""))
+    product["description"] = f"{product.get('description', '')} {text}".strip()
+    return product["description"]
+
+
 def reset_product(product_id: str):
     """Used by the 'Reset demo environment' control: restores this product's
     reviews to only the original organic seed reviews (removing any planted/
-    poisoned ones), and clears any orders on record so attack types can't
-    contaminate each other between demo runs."""
+    poisoned ones) and its listing to the original description, and clears any
+    orders on record so attack types can't contaminate each other between demo runs."""
     REVIEWS[product_id] = copy.deepcopy(_SEED_REVIEWS.get(product_id, []))
+    if product_id in _LISTING_BASE and product_id in PRODUCTS:
+        PRODUCTS[product_id]["description"] = _LISTING_BASE.pop(product_id)
     ORDERS.clear()
     return {"ok": True}
 

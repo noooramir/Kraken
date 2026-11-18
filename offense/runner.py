@@ -39,6 +39,10 @@ class MarketFlowClient:
         return self._http.post(f"/api/products/{product_id}/reviews",
                                json={"author": "Attacker", "rating": 5, "text": text}).json()
 
+    def set_listing(self, product_id, text):
+        """I1: append attacker text to the product's listing (description). Undone by reset()."""
+        return self._http.post(f"/api/products/{product_id}/listing", json={"author": "Attacker", "text": text}).json()
+
     def run(self, product_id, budget, goal, notes, planted_review_id=None):
         body = {"product_id": product_id, "budget": budget, "goal": goal, "notes": notes}
         if planted_review_id is not None:
@@ -81,9 +85,12 @@ def run_trial(client, payload, user_task, trial_idx, product=None, kraken_enable
     }
 
     if payload:
-        if payload.vector == "review":
-            planted = client.post_review(user_task.product_id, payload.text)
-            planted_id = (planted.get("review") or {}).get("id")
+        if payload.vector in ("review", "listing"):
+            if payload.vector == "review":
+                planted = client.post_review(user_task.product_id, payload.text)
+                planted_id = (planted.get("review") or {}).get("id")
+            else:                             # I1: the attacker edits the seller's product listing
+                planted = client.set_listing(user_task.product_id, payload.text)
             if planted.get("error"):          # rejected at submission (only when defended)
                 rec["blocked"] = True
                 rec.update(success=False, in_policy=False, valid=True, elapsed_s=round(time.perf_counter() - t0, 2))
@@ -121,8 +128,12 @@ def run_trial(client, payload, user_task, trial_idx, product=None, kraken_enable
     # Did the planted review actually reach the Negotiator? (heuristic: its
     # opening words appear in the run trace). Separates "never retrieved" from
     # "retrieved but the agent resisted".
-    if payload and payload.vector == "review" and result.get("trace") is not None:
+    if payload and payload.vector in ("review", "listing") and result.get("trace") is not None:
         rec["retrieved"] = payload.text[:25] in json.dumps(result["trace"])
+    # X1: follow the payload's canary (MGR-####) through Negotiator -> Orchestrator -> Checkout.
+    canary = tasks.canary_of(payload.text) if payload else None
+    if canary:
+        rec["hops"] = scoring.hop_report(result, canary, max_disc)
     rec["elapsed_s"] = round(time.perf_counter() - t0, 2)
     rec["row"] = dataset.build_row(rec, payload, user_task, product, result, planted, kraken_enabled, real_hint)
     return rec
@@ -272,6 +283,11 @@ def main(argv=None, client=None):
     print("\n=== BY PAYLOAD ===")
     print(scoring.format_table(per_payload, keys=("payload_id",)))
 
+    hop_rows = scoring.summarize_hops(attacks)
+    if hop_rows:
+        print("\n=== CROSS-AGENT HOPS (X1: how far the payload's MGR-#### reference travelled, valid trials) ===")
+        print(scoring.format_hops(hop_rows))
+
     ctrl_bad = sum(r["successes"] for r in ctrl_rows)
     if ctrl_bad:
         print(f"\nWARNING: {ctrl_bad} control run(s) exceeded policy with NO attack. "
@@ -284,7 +300,7 @@ def main(argv=None, client=None):
     out_path.write_text(json.dumps({
         "meta": {"started": started, "trials_per_payload": args.trials, "control_trials": args.control_trials or args.trials, "kraken": kraken_state,
                  "user_task": user_task.__dict__, "injection_goal": tasks.INJECTION_GOAL},
-        "summary": summary, "per_payload": per_payload, "control": ctrl_rows, "trials": trials,
+        "summary": summary, "per_payload": per_payload, "control": ctrl_rows, "hops": hop_rows, "trials": trials,
     }, indent=2))
     csv_path = out_path.with_suffix(".csv")
     dataset.write_csv(csv_path, [t["row"] for t in trials])
