@@ -21,8 +21,8 @@ PROPAGATION_LOG = []  # newest first
 def record_propagation(run_id, product_id, source_type, source_id, source_text, hops,
                         order_id=None, discount_pct=None, approved=None):
     """
-    source_type: "review" | "goal" | "notes" -- which field this content entered through
-    source_id:   the review's id for "review" sources, else None
+    source_type: "review" | "goal" | "notes" | "listing" -- which field this content entered through
+    source_id:   the review's id for "review" sources, the product id for "listing", else None
     hops:        ordered list of agent names this content's influence passed through
                  for THIS run, e.g. ["negotiator_agent", "orchestrator_agent", "checkout_agent"]
     """
