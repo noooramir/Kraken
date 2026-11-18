@@ -157,7 +157,7 @@ def test_get_payloads_unknown_id_raises():
 
 def test_authority_payloads_have_no_crude_markers():
     for p in tasks.PAYLOADS:
-        if p.id.startswith("review-authority"):
+        if p.id.startswith(("review-authority", "goal-authority", "notes-authority")):
             assert "[" not in p.text and not any(m in p.text.lower() for m in CRUDE), p.id
 
 

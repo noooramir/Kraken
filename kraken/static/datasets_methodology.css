@@ -1,0 +1,43 @@
+/* ============ Datasets tab ============ */
+.data-pipeline { display:flex; align-items:center; gap:0; flex-wrap:wrap; justify-content:center; padding:18px 0; }
+.pipe-stage { background:var(--bg-alt); border:1.5px solid var(--border); border-radius:12px; padding:16px 18px; text-align:center; min-width:150px; flex:1; max-width:200px; }
+.pipe-stage.accent { background:var(--accent-bg); border-color:var(--accent); }
+.pipe-icon { font-size:24px; margin-bottom:4px; }
+.pipe-label { font-weight:800; font-size:12.5px; color:var(--navy); }
+.pipe-detail { font-size:10.5px; color:var(--muted); margin-top:4px; }
+.pipe-arrow { font-size:22px; font-weight:800; color:var(--accent); padding:0 8px; }
+
+/* ============ Methodology tab ============ */
+/* Threat taxonomy */
+.tax-grid { display:flex; flex-direction:column; gap:14px; }
+.tax-category { background:var(--bg-alt); border-radius:10px; padding:16px 18px; }
+.tax-cat-head { margin-bottom:6px; }
+.tax-tag { display:inline-block; color:#fff; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; padding:3px 10px; border-radius:20px; }
+.tax-cat-desc { font-size:12.5px; color:var(--muted); margin-bottom:12px; }
+.tax-cases { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:10px; }
+.tax-case { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+.tax-case-id { display:inline-block; font-weight:800; font-size:13px; color:var(--accent); margin-right:6px; }
+.tax-case-name { font-weight:700; font-size:12.5px; }
+.tax-vec { display:block; font-size:10.5px; color:var(--muted); margin:3px 0 4px; font-family:ui-monospace,Consolas,monospace; }
+.tax-case-desc { font-size:11.5px; color:var(--muted); }
+
+/* Algorithm flowcharts */
+.algo-flow { display:flex; flex-direction:column; gap:0; margin:10px 0 14px; }
+.algo-step { display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--bg-alt); }
+.algo-step:last-child { border-bottom:none; }
+.algo-num { width:28px; height:28px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.algo-step div { font-size:12.5px; color:var(--muted); }
+.algo-step b { color:var(--navy); }
+.algo-box { background:var(--bg-alt); border-radius:8px; padding:12px 14px; font-size:12px; font-family:ui-monospace,Consolas,monospace; color:var(--navy); }
+.algo-box-title { font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin-bottom:6px; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+
+/* Detection tier flow */
+.tier-flow { display:flex; flex-direction:column; align-items:center; gap:0; margin:14px 0; }
+.tier-box { width:100%; max-width:600px; border:1.5px solid var(--border); border-radius:10px; padding:14px 18px; text-align:center; }
+.tier-box.tier-green { border-color:var(--success); background:var(--success-bg); }
+.tier-box.tier-blue { border-color:var(--accent); background:var(--accent-bg); }
+.tier-box.tier-orange { border-color:var(--warn); background:var(--warn-bg); }
+.tier-box.tier-red { border-color:var(--danger); background:var(--danger-bg); }
+.tier-name { font-weight:800; font-size:13px; color:var(--navy); margin-bottom:4px; }
+.tier-desc { font-size:12px; color:var(--muted); }
+.tier-arrow { font-size:16px; font-weight:800; color:var(--muted); padding:4px 0; }
