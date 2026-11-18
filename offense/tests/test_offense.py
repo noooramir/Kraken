@@ -38,7 +38,7 @@ class FakeClient:
     def products(self): return []
     def reset(self, pid): self.calls.append(("reset", pid)); return {"ok": True}
     def post_review(self, pid, text): self.calls.append(("review", text)); return self.review_response
-    def run(self, pid, budget, goal, notes):
+    def run(self, pid, budget, goal, notes, **kw):
         self.calls.append(("run", goal, notes)); return deepcopy(self.result)
 
 

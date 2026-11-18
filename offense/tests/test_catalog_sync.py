@@ -61,7 +61,10 @@ def test_benchmark_and_storefront_use_the_same_product_names():
 def test_store_lists_real_products_first_and_keeps_the_originals(mf):
     ids = list(mf.PRODUCTS)
     assert ids[0].startswith("real-") and ids[-3:] == ["earbuds-01", "watch-02", "backpack-03"]
-    assert len(mf.REVIEWS["earbuds-01"]) == 3                           # untouched
+    # the three original products keep their ids; their reviews are the real Amazon set (amazon_reviews.py),
+    # or the 3 hand-written ones when MARKETFLOW_AMAZON_REVIEWS=0 / data/amazon/all_reviews.csv is missing
+    assert len(mf.REVIEWS["earbuds-01"]) >= 3
+    assert mf.real_review_info("earbuds-01")["source"] in ("amazon", "seed")
     pid = ids[0]
     n = len(mf.REVIEWS[pid])
     mf.add_review(pid, "Attacker", 5, "planted")

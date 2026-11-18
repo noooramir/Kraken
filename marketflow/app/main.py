@@ -279,6 +279,7 @@ class RunReq(BaseModel):
     goal: str = ""
     notes: str = ""
     force_fallback: bool = False
+    planted_review_id: Optional[int] = None   # offense runner: id of the review it just planted
     customer_name: str = ""
     customer_email: str = ""
     customer_address: str = ""
@@ -369,6 +370,11 @@ def run_goal(req: RunReq):
 
     retrieval_query = f"{request.get('message_to_negotiator', '')} discount eligibility loyalty promotion".strip()
     retrieved_reviews = store.retrieve_reviews(req.product_id, retrieval_query, top_k=3)
+    planted_info = None
+    if req.planted_review_id is not None:
+        planted_info = store.review_similarity(req.product_id, retrieval_query, req.planted_review_id) or {}
+        planted_info["id"] = req.planted_review_id
+        planted_info["retrieved"] = any(r["id"] == req.planted_review_id for r in retrieved_reviews)
 
     offer = agents.negotiator_agent.respond(product, request, retrieved_reviews, retrieval_query, tr,
                                              fallback=scenario["offer"], force_fallback=ff)
@@ -488,6 +494,11 @@ def run_goal(req: RunReq):
         "fallback_used": llm.fallbacks_used(),  # [] = fully live run; anything else = contaminated
         "attack_type_classified": attack_type,
         "fallback_calls": llm.FALLBACK_COUNT - _fb_start,
+        "retrieval_query": retrieval_query,
+        "retrieved_reviews": [{"id": r["id"], "author": r["author"], "rating": r["rating"], "text": r["text"],
+                               "similarity": round(float(r.get("similarity", 0)), 4)} for r in retrieved_reviews],
+        "planted_review": planted_info,
+        "real_reviews": store.real_review_info(req.product_id),
     }
 
 
