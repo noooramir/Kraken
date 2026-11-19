@@ -30,7 +30,7 @@ function renderMethodology(root) {
       key: "indirect", color: "var(--warn)", label: "Indirect Injection",
       desc: "Adversary plants instructions in secondary data fields (order notes, seller metadata) that agents trust without verification",
       cases: [
-        {id:"I1", name:"Seller Listing Poisoning", vec:"notes", desc:"Malicious instructions embedded in product metadata/seller notes"},
+        {id:"I1", name:"Seller Listing Poisoning", vec:"listing", desc:"Malicious instructions appended to the seller's product listing (description), which the Negotiator reads on every order"},
         {id:"I2", name:"Authority-Style Order Notes", vec:"notes", desc:"Order notes contain fake authority directives that override pricing policy"},
       ]
     },
