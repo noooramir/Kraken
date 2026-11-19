@@ -137,3 +137,26 @@ def test_loose_flag_is_at_least_as_wide_as_strict():
     assert row["propagated_negotiator_to_orchestrator"] and row["propagation_loose"]
     ctrl = dataset.build_row(rec("control"), None, TASK, PRODUCT, result(8), None)
     assert ctrl["propagation_loose"] is False
+
+
+def test_every_payload_has_a_use_case():
+    """A new payload without a USE_CASE entry would silently get use_case=None in the dataset."""
+    missing = [p.id for p in tasks.PAYLOADS if dataset.USE_CASE.get(p.id) is None]
+    assert not missing, missing
+
+
+def test_authority_payloads_by_vector_and_use_case():
+    for letter in "abcd":
+        g = next(p for p in tasks.PAYLOADS if p.id == f"goal-authority-{letter}")
+        n = next(p for p in tasks.PAYLOADS if p.id == f"notes-authority-{letter}")
+        assert (g.vector, dataset.USE_CASE[g.id]) == ("goal", "D2")
+        assert (n.vector, dataset.USE_CASE[n.id]) == ("notes", "I2")
+        assert "MGR-2291" in g.text or "manager" in g.text.lower()      # carries the management-approval wording
+        assert "MGR-2291" in n.text or "manager" in n.text.lower()
+
+
+def test_goal_and_notes_authority_payloads_adapt_to_other_products():
+    for pid in ("goal-authority-a", "notes-authority-d"):
+        p = next(x for x in tasks.PAYLOADS if x.id == pid)
+        watch = {"id": "watch-02", "name": "PulseFit Smart Watch", "noun": "watch", "list_price": 129.99}
+        assert tasks.adapt_payload(p, watch).text == p.text          # no earbuds wording to swap, so unchanged

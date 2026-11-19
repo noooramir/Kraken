@@ -160,6 +160,7 @@
   footer.site { text-align:center; padding:40px 24px; color:var(--muted); font-size:12px; border-top:1px solid var(--border); margin-top:20px; }
 </style>
 <link rel="stylesheet" href="/static/dashboard.css" />
+<link rel="stylesheet" href="/static/datasets_methodology.css" />
 <link rel="stylesheet" href="/static/lifecycle.css" />
 </head>
 <body>
@@ -172,6 +173,8 @@
       <a onclick="scrollToId('defense')">Live Enforcement</a>
       <a onclick="scrollToId('architecture')">Architecture</a>
       <a onclick="showView('dashboard')" id="nav-dashboard">Dashboard</a>
+      <a onclick="showView('datasets')" id="nav-datasets">Datasets</a>
+      <a onclick="showView('methodology')" id="nav-methodology">Methodology</a>
     </nav>
     <label class="target-pick" title="Every attack and enforcement check from this page targets this MarketFlow product">Target
       <select id="target-product"><option value="">loading...</option></select></label>
@@ -281,10 +284,14 @@
 
 </div>
 <div id="view-dashboard" style="display:none"><div class="wrap" id="live-root" style="padding-top:28px"></div><div class="wrap" id="dash-root" style="padding-top:18px"></div></div>
+<div id="view-datasets" style="display:none"><div class="wrap" id="view-datasets-inner" style="padding-top:28px"></div></div>
+<div id="view-methodology" style="display:none"><div class="wrap" id="view-methodology-inner" style="padding-top:28px"></div></div>
 <footer class="site">Kraken</footer>
 
 <script src="/static/app.js"></script>
 <script src="/static/dashboard.js"></script>
+<script src="/static/datasets.js"></script>
+<script src="/static/methodology.js"></script>
 <script src="/static/lifecycle.js"></script>
 </body>
 </html>
