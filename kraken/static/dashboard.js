@@ -7,13 +7,20 @@ const pct = (x, d=0) => x == null ? "-" : (x*100).toFixed(d) + "%";
 const lvlOf = a => a >= .8 ? "Critical" : a >= .5 ? "High" : a >= .2 ? "Medium" : a > 0 ? "Low" : "Info";
 
 function showView(name) {
-  const dash = name === "dashboard";
-  document.getElementById("view-main").style.display = dash ? "none" : "";
-  document.getElementById("view-dashboard").style.display = dash ? "" : "none";
-  const n = document.getElementById("nav-dashboard");
-  if (n) n.style.color = dash ? "var(--navy)" : "";
+  const views = ["main", "dashboard", "datasets", "methodology"];
+  views.forEach(v => {
+    const el = document.getElementById("view-" + v);
+    if (el) el.style.display = (v === name) ? "" : "none";
+  });
+  // highlight active nav link
+  ["dashboard", "datasets", "methodology"].forEach(v => {
+    const n = document.getElementById("nav-" + v);
+    if (n) n.style.color = (v === name) ? "var(--navy)" : "";
+  });
   window.scrollTo({top: 0});
-  if (dash) { initLivePanel(); loadDashboard(); }
+  if (name === "dashboard") { initLivePanel(); loadDashboard(); }
+  if (name === "datasets") { loadDatasets(); }
+  if (name === "methodology") { loadMethodology(); }
 }
 
 let _dashTimer = null;

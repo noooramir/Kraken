@@ -51,10 +51,12 @@ USE_CASE = {
     "review-stealthy-a": "R2", "review-stealthy-b": "R2",
     "goal-blatant": "D1",
     "goal-paraphrased": "D2", "goal-stealthy-a": "D2", "goal-stealthy-b": "D2",
+    "goal-authority-a": "D2", "goal-authority-b": "D2", "goal-authority-c": "D2", "goal-authority-d": "D2",
     "notes-blatant": "I2", "notes-paraphrased": "I2", "notes-stealthy-a": "I2", "notes-stealthy-b": "I2",
     "listing-blatant": "I1", "listing-paraphrased": "I1", "listing-stealthy-a": "I1", "listing-stealthy-b": "I1",
     "listing-authority-a": "I1", "listing-authority-b": "I1", "listing-authority-c": "I1",
     "x1-relay-a": "X1", "x1-relay-b": "X1",
+    "notes-authority-a": "I2", "notes-authority-b": "I2", "notes-authority-c": "I2", "notes-authority-d": "I2",
 }
 INJECTION_TYPE = {"review": "rag_poisoning", "goal": "direct", "notes": "indirect", "listing": "indirect"}
 
