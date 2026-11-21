@@ -171,7 +171,7 @@ def _wrap_kraken():
             _tl.handoff_n = n + 1              # main.py inspects goal first, then notes
             src = "goal" if n == 0 else "notes"
         elif checkpoint == "retrieval":
-            src = "review"
+            src = getattr(_tl, "source_hint", None) or "review"     # "listing" while a seller edits a listing
         rid = None if checkpoint == "retrieval" else getattr(_tl, "run_id", None)
         if not text:
             return orig(text, checkpoint, *a, **k)
@@ -179,6 +179,7 @@ def _wrap_kraken():
             if node == "kraken_in" and src:
                 emit("entry", "in",
                      {"review": "Review submitted by a shopper",
+                      "listing": "Seller edited the product listing",
                       "goal": "Shopper goal entering the pipeline",
                       "notes": "Delivery note entering the pipeline"}[src],
                      text, run_id=rid, source=src)
@@ -196,7 +197,7 @@ def _wrap_kraken():
                  cache_hit=bool(res.get("cache_hit")), reachable=res.get("kraken_reachable", True),
                  checkpoint=checkpoint, source=src, ms=round((time.perf_counter() - t0) * 1000))
             if decision in ("blocked", "flagged"):
-                where = {"retrieval": "review submission", "handoff": "the input handoff",
+                where = {"retrieval": "listing submission" if src == "listing" else "review submission", "handoff": "the input handoff",
                          "cross_agent_handoff": "the Negotiator to Orchestrator handoff"}.get(checkpoint, checkpoint)
                 emit("outcome", "result", f"Stopped by Kraken at {where}", res.get("reason") or "",
                      run_id=rid, outcome="blocked", where=checkpoint)

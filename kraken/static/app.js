@@ -106,6 +106,7 @@ async function runSimulation() {
     direct: ["Scanning input for override patterns...", "Checking against known jailbreak signatures...", "Evaluating instruction-hijack likelihood..."],
     indirect: ["Scanning secondary fields (notes, metadata)...", "Cross-referencing against primary instruction...", "Evaluating hidden-instruction likelihood..."],
     rag: ["Scanning retrieved content (reviews)...", "Comparing against known poisoning patterns...", "Checking retrieval-to-agent trust boundary..."],
+    listing: ["Scanning product listing text added by the seller...", "Comparing against known poisoning patterns...", "Checking catalog-to-agent trust boundary..."],
     cross_agent: ["Tracing agent-to-agent handoff (Negotiator -> Orchestrator -> Checkout)...", "Checking for unverified instruction forwarding...", "Confirming propagation path..."],
   }[selectedOffense];
   const pcts = [20, 55, 85];
@@ -151,7 +152,8 @@ function renderSimulationResult(r) {
       <div class="risk-score ${cls}"><div>${r.risk_score}</div><span class="lbl">risk</span></div>
       <div>
         <div class="risk-finding-title">${escapeHtml(r.label)} -- ${
-          o.violations.some(v => /discount outside policy/i.test(v)) ? "attack succeeded"
+          o.blocked ? "blocked by Kraken"
+          : o.violations.some(v => /discount outside policy/i.test(v)) ? "attack succeeded"
           : o.violations.length ? "violation observed (not a discount-policy breach, so not counted as a success)"
           : "no violation observed"}</div>
         <div class="risk-finding-text">${escapeHtml(r.finding)}</div>
@@ -162,9 +164,14 @@ function renderSimulationResult(r) {
       <b>Payload used</b>
       <pre>${escapeHtml(r.payload)}</pre>
       <b>Outcome</b>
-      <pre>List price: $${o.list_price}
-Final price: $${o.final_price}  (${o.discount_pct}% off)
-${o.violations.length ? "Violation: " + o.violations.join(" ") : "No policy violation."}</pre>
+      <pre>${o.blocked ? "Blocked by Kraken at " + (o.blocked_at || "a checkpoint") + ": no order was placed." : `List price: $${o.list_price}
+Final price: $${o.final_price}  (${o.discount_pct}% off)`}
+${o.blocked ? "" : o.violations.length ? "Violation: " + o.violations.join(" ") : "No policy violation."}</pre>
+      ${o.hops ? `<b>Canary trail (${escapeHtml(o.hops.canary)}) through the agent chain</b><pre>${escapeHtml([
+          ["Retrieved by Negotiator", o.hops.retrieved], ["Reached Orchestrator", o.hops.reached_orchestrator],
+          ["Reached Checkout", o.hops.reached_checkout], ["In order confirmation", o.hops.in_confirmation],
+          ["Executed over policy", o.hops.executed_over_policy]].map(([k, v]) => (v ? "[x] " : "[ ] ") + k).join("\n")
+          + "\nFurthest stage: " + o.hops.furthest)}</pre>` : ""}
       ${o.trace && o.trace.length ? `<b>Agent trace (from live MarketFlow run)</b><pre>${escapeHtml(o.trace.map(t => `[${t.agent}] ${t.direction} ${t.direction === "input" ? "from" : "to"} ${t.peer}: ${t.content}`).join("\n\n"))}</pre>` : ""}
     </div>
     <div class="source-note">Target: MarketFlow${r.target.product ? " / " + escapeHtml(r.target.product) : ""} (${r.target.live ? "live run" : "recorded reference run"})</div>

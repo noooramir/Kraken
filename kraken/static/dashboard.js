@@ -208,13 +208,16 @@ function initLivePanel() {
       <button class="btn btn-primary" data-atk="direct">Direct</button>
       <button class="btn btn-primary" data-atk="indirect">Indirect</button>
       <button class="btn btn-primary" data-atk="rag">RAG poisoning</button>
-      <button class="btn btn-primary" data-atk="cross_agent">Cross-agent</button>
-      <label>Review payload <select id="live-variant"><option value="authority-a">authority-a (official notice)</option><option value="paraphrased">paraphrased (store notice)</option></select></label>
+      <button class="btn btn-primary" data-atk="listing">Listing poisoning</button>
+      <button class="btn btn-primary" data-atk="cross_agent">Cross-agent propagation</button>
+      <button class="btn btn-primary" data-atk="listing" data-sweep="1" title="Fires every I1 listing payload">Run all: Listing (7)</button>
+      <button class="btn btn-primary" data-atk="cross_agent" data-sweep="1" title="Fires both X1 relay payloads">Run all: Cross-agent (2)</button>
+      <label>Review payload (RAG only) <select id="live-variant"><option value="authority-a">authority-a (official notice)</option><option value="paraphrased">paraphrased (store notice)</option></select></label>
       <label>Trials <select id="live-trials"><option>1</option><option>3</option><option>5</option><option>10</option></select></label>
       <button class="btn btn-outline" id="live-clear">Clear</button>
     </div>
     <div class="console" id="live-console"><span class="l-info">Pick an attack above. Each trial takes roughly 20-60 seconds (4 paced Gemini calls).</span></div></div>`;
-  root.querySelectorAll("[data-atk]").forEach(b => b.onclick = () => startLive(b.dataset.atk));
+  root.querySelectorAll("[data-atk]").forEach(b => b.onclick = () => startLive(b.dataset.atk, b.dataset.sweep === "1"));
   document.getElementById("live-clear").onclick = () => { document.getElementById("live-console").innerHTML = ""; };
 }
 
@@ -226,7 +229,7 @@ function liveLog(kind, text, t) {
   c.appendChild(d); c.scrollTop = c.scrollHeight;
 }
 
-async function startLive(atk) {
+async function startLive(atk, sweep) {
   if (_liveJob) { liveLog("error", "A run is already in progress."); return; }
   const btns = document.querySelectorAll("#live-root [data-atk]");
   btns.forEach(b => b.disabled = true);
@@ -234,7 +237,7 @@ async function startLive(atk) {
     const r = await fetch("/api/live/start", {method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({attack_type: atk, product_id: (typeof targetProduct === "function" ? targetProduct() : null),
                             variant: document.getElementById("live-variant").value,
-                            trials: parseInt(document.getElementById("live-trials").value, 10)})});
+                            trials: parseInt(document.getElementById("live-trials").value, 10), sweep: !!sweep})});
     const d = await r.json();
     if (d.error) { liveLog("error", d.error); btns.forEach(b => b.disabled = false); return; }
     _liveJob = {id: d.id, since: 0};
