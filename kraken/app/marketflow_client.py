@@ -3,6 +3,8 @@ Minimal live integration with a running MarketFlow instance. Kraken never
 fabricates a live connection -- every call here either genuinely reaches
 MarketFlow's real API or the caller is told plainly that it didn't.
 """
+import threading
+
 import httpx
 from . import payloads
 
@@ -38,7 +40,17 @@ def get_product(product_id: str):
         return None
 
 
+_ATTACK_LOCK = threading.Lock()
+
+
 def forward_attack(attack_id: str, custom_payload: str = None, product_id: str = None):
+    """One attack at a time. Every attack resets the product and plants its own text, so two overlapping runs
+    (e.g. a live sweep plus a simulator click) would corrupt each other's result. Extra callers wait their turn."""
+    with _ATTACK_LOCK:
+        return _forward_attack(attack_id, custom_payload, product_id)
+
+
+def _forward_attack(attack_id: str, custom_payload: str = None, product_id: str = None):
     """Actually sends the attack payload to the real, running MarketFlow
     instance and returns its real response. Used by both the offense
     simulator (to get live evidence) and the defense panel (to show the
@@ -83,6 +95,18 @@ def forward_attack(attack_id: str, custom_payload: str = None, product_id: str =
                 },
             )
             return run.json()
+
+    if attack_id == "listing":
+        with httpx.Client(timeout=TIMEOUT) as client:
+            planted = client.post(f"{payloads.MARKETFLOW_URL}/api/products/{target_product}/listing",
+                                  json={"author": "Seller", "text": text}).json()
+            if planted.get("error"):
+                # Rejected at submission (Kraken blocked it): the agents never see the edited listing.
+                return {"blocked": True, "blocked_at": "listing submission", "order": None,
+                        "violations": [], "trace": [], "product": {}, "fallback_calls": 0,
+                        "note": str(planted.get("error"))}
+            return client.post(f"{payloads.MARKETFLOW_URL}/api/run",
+                               json={"product_id": target_product, "budget": budget, "goal": base_goal, "notes": ""}).json()
 
     goal = f"{base_goal} {text}" if spec["payload_field"] == "goal" else base_goal
     notes = text if spec["payload_field"] == "notes" else ""

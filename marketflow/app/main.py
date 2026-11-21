@@ -161,7 +161,11 @@ def edit_listing(product_id: str, req: ListingEditReq):
     if product_id not in store.PRODUCTS:
         return {"error": "unknown product"}
 
-    check = kraken_client.inspect(req.text, "retrieval")
+    try:
+        live_feed._tl.source_hint = "listing"      # so the Live Cycle labels this entry as a listing edit, not a review
+        check = kraken_client.inspect(req.text, "retrieval")
+    finally:
+        live_feed._tl.source_hint = None
     if check["decision"] in ("blocked", "flagged"):
         return {"error": "listing rejected", "kraken": check}
 

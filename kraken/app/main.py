@@ -78,6 +78,11 @@ SCAN_STEPS = {
         "Comparing against known poisoning patterns...",
         "Checking retrieval-to-agent trust boundary...",
     ],
+    "listing": [
+        "Scanning product listing text added by the seller...",
+        "Comparing against known poisoning patterns...",
+        "Checking catalog-to-agent trust boundary...",
+    ],
     "cross_agent": [
         "Tracing agent-to-agent handoff (Negotiator -> Orchestrator -> Checkout)...",
         "Checking for unverified instruction forwarding...",
@@ -133,7 +138,9 @@ def simulate(req: SimulateReq):
             "order_placed": bool(mf_result.get("order")),
             "fallback_calls": mf_result.get("fallback_calls") or 0,
             "blocked": bool(mf_result.get("blocked")),
+            "blocked_at": mf_result.get("blocked_at"),
             "payload_retrieved": live_runs.payload_retrieved(mf_result, text),   # None for non-review attacks
+            "hops": live_runs.hops_for(mf_result, text),                         # canary trail (X1), None if no canary
         }
         if outcome["fallback_calls"]:
             source = f"live-CONTAMINATED (scripted fallback used for {outcome['fallback_calls']} agent call(s))"
@@ -161,7 +168,7 @@ def simulate(req: SimulateReq):
         }
 
     # Risk score: base per type + regex/classifier signal + violation bonus
-    base = {"direct": 55, "indirect": 60, "rag": 65, "cross_agent": 70}[req.attack_type]
+    base = {"direct": 55, "indirect": 60, "rag": 65, "listing": 65, "cross_agent": 70}[req.attack_type]
     score = base + len(r1["matches"]) * 5 + round(c2["score"] * 15)
     if outcome["violations"]:
         score += 15
@@ -180,6 +187,9 @@ def simulate(req: SimulateReq):
                            "(real reviews outranked it), so the agents never saw the attack.")
     elif live and not is_custom:
         finding = "Live run failed; no finding."
+    if live_ok and outcome.get("blocked"):
+        finding = (f"Kraken BLOCKED this attack at {outcome.get('blocked_at') or 'a checkpoint'}. "
+                   "The agents never saw the planted text and no order was placed.")
 
     return {
         "attack_type": req.attack_type,
@@ -320,11 +330,12 @@ class LiveReq(BaseModel):
     variant: Optional[str] = "authority-a"
     trials: int = 1
     product_id: Optional[str] = None
+    sweep: bool = False
 
 
 @app.post("/api/live/start")
 def live_start(req: LiveReq):
-    return live_runs.start(req.attack_type, req.variant, req.trials, req.product_id)
+    return live_runs.start(req.attack_type, req.variant, req.trials, req.product_id, req.sweep)
 
 
 @app.get("/api/live/{job_id}")

@@ -22,6 +22,8 @@ def _payload_text(job):
         atk = job["attack_type"]
         if atk == "control":
             return ""
+        if job.get("current_payload"):
+            return job["current_payload"]      # a sweep: the payload being fired right now
         if atk in ("rag", "cross_agent"):
             text = payloads.RAG_VARIANTS.get(job["variant"], payloads.RAG_VARIANTS["authority-a"])
         else:
