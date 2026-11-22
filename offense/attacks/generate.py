@@ -8,6 +8,10 @@ Usage (from the kraken-poc folder, same venv as offense/):
 
     python -m offense.attacks.generate --product earbuds-01 --rounds 60
 
+To fire the generated payloads (searched against the target product's reviews):
+
+    python -m offense.runner --only-generated --trials 5 --product-id <product id>
+
 This only READS the live review set (via MarketFlow's HTTP API, same as
 offense/runner.py's MarketFlowClient) to search against real competing
 text -- it does not plant anything. Planting + firing stays in

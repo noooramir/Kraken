@@ -49,6 +49,7 @@ USE_CASE = {
     "review-blatant": "R1", "review-paraphrased": "R1",
     "review-authority-a": "R1", "review-authority-b": "R1", "review-authority-c": "R1", "review-authority-d": "R1",
     "review-stealthy-a": "R2", "review-stealthy-b": "R2",
+    "review-searched-adversarial": "R2", "review-searched-spurious": "R2",
     "goal-blatant": "D1",
     "goal-paraphrased": "D2", "goal-stealthy-a": "D2", "goal-stealthy-b": "D2",
     "goal-authority-a": "D2", "goal-authority-b": "D2", "goal-authority-c": "D2", "goal-authority-d": "D2",

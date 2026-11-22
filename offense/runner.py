@@ -35,6 +35,10 @@ class MarketFlowClient:
     def reset(self, product_id):
         return self._http.post(f"/api/products/{product_id}/reset").json()
 
+    def product_reviews(self, product_id):
+        """GET /api/products/<id>: the product with its current reviews (used to search for retrieval-winning text)."""
+        return self._http.get(f"/api/products/{product_id}").json()
+
     def post_review(self, product_id, text):
         return self._http.post(f"/api/products/{product_id}/reviews",
                                json={"author": "Attacker", "rating": 5, "text": text}).json()
@@ -181,6 +185,25 @@ def _add_to_manifest(out_path: Path):
         print(f"Added to dashboard: {manifest}")
 
 
+GENERATED_IDS = ("review-searched-adversarial", "review-searched-spurious")
+
+
+def generate_payloads_for(client, product_id, rounds=60, target_discount=45, seed=0):
+    """R2: run offense/attacks/generate.py against this product's CURRENT reviews and return
+    (payloads, meta). The product is reset first so the search runs against the clean review set,
+    not against a review planted by an earlier run."""
+    from .attacks import generate
+    client.reset(product_id)
+    reviews = [rv["text"] for rv in (client.product_reviews(product_id) or {}).get("reviews", []) if rv.get("text")]
+    if not reviews:
+        raise ValueError(f"no reviews found for product {product_id!r}: cannot search for a retrieval-winning review")
+    payloads, result = generate.generate_payloads(reviews, target_discount, rounds, seed)
+    meta = {"product_id": product_id, "rounds": rounds, "target_discount_pct": target_discount, "seed": seed,
+            "reviews_searched_against": len(reviews), "trigger_text": result.trigger_text,
+            "trigger_words": result.trigger_words, "margin_start": result.history[0], "margin_end": result.margin}
+    return payloads, meta
+
+
 # --------------------------------------------------------------------------
 # Main
 # --------------------------------------------------------------------------
@@ -202,6 +225,15 @@ def main(argv=None, client=None):
     ap.add_argument("--no-dashboard", action="store_true", help="do not add this run's file to the dashboard manifest")
     ap.add_argument("--product-id", default=None,
                     help="MarketFlow product to attack (default: the original earbuds-01). See GET /api/products")
+    ap.add_argument("--generate", action="store_true",
+                    help="R2: also run the generated review-searched-* payloads (offense/attacks/generate.py, searched "
+                         "against this product's reviews) alongside the selected suite payloads")
+    ap.add_argument("--only-generated", action="store_true",
+                    help="R2: run ONLY the generated review-searched-* payloads (implies --generate). "
+                         "Passing --ids review-searched-adversarial / review-searched-spurious does the same for those ids")
+    ap.add_argument("--gen-rounds", type=int, default=60, help="search rounds for the generated payloads (default 60)")
+    ap.add_argument("--gen-target-discount", type=int, default=45, help="discount (%%) the adversarial review asks for (default 45)")
+    ap.add_argument("--gen-seed", type=int, default=0, help="random seed of the trigger search (default 0)")
     ap.add_argument("--marketflow", default="http://127.0.0.1:8001")
     ap.add_argument("--kraken", default="http://127.0.0.1:8002")
     ap.add_argument("--delay", type=float, default=20.0,
@@ -236,7 +268,26 @@ def main(argv=None, client=None):
     if product is None:                         # default product (earbuds-01): fetch its card for name/list_price
         product = next((p for p in client.products() if p["id"] == user_task.product_id), None)
     real_hint = None
-    payloads = [tasks.adapt_payload(p, product) for p in tasks.get_payloads(args.vectors, args.stealth, args.ids)]
+    ids = list(args.ids or [])
+    gen_ids = [i for i in ids if i in GENERATED_IDS]
+    suite_ids = [i for i in ids if i not in GENERATED_IDS]
+    want_generated = bool(args.generate or args.only_generated or gen_ids)
+    skip_suite = bool(args.only_generated or (gen_ids and not suite_ids))
+    suite = [] if skip_suite else tasks.get_payloads(args.vectors, args.stealth, suite_ids or None)
+    payloads = [tasks.adapt_payload(p, product) for p in suite]
+    generated_meta = None
+    if want_generated:
+        try:
+            generated, generated_meta = generate_payloads_for(client, user_task.product_id, args.gen_rounds,
+                                                              args.gen_target_discount, args.gen_seed)
+        except Exception as e:
+            print(f"Could not generate the review-searched payloads: {type(e).__name__}: {e}")
+            return 2
+        if gen_ids:
+            generated = [g for g in generated if g.id in gen_ids]
+        payloads += generated
+        print(f"Generated {len(generated)} payload(s) from {generated_meta['reviews_searched_against']} reviews of "
+              f"{user_task.product_id}: trigger words {generated_meta['trigger_words']!r}")
     plan = ([] if args.no_control else [None]) + payloads                      # None = control run first
     out_path = Path(args.out or f"offense/results/baseline_{datetime.now():%Y%m%d_%H%M%S}.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -299,7 +350,8 @@ def main(argv=None, client=None):
 
     out_path.write_text(json.dumps({
         "meta": {"started": started, "trials_per_payload": args.trials, "control_trials": args.control_trials or args.trials, "kraken": kraken_state,
-                 "user_task": user_task.__dict__, "injection_goal": tasks.INJECTION_GOAL},
+                 "user_task": user_task.__dict__, "injection_goal": tasks.INJECTION_GOAL,
+                 "generated": generated_meta},
         "summary": summary, "per_payload": per_payload, "control": ctrl_rows, "hops": hop_rows, "trials": trials,
     }, indent=2))
     csv_path = out_path.with_suffix(".csv")

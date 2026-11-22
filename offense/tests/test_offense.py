@@ -453,3 +453,77 @@ def test_summarize_hops_counts_only_valid_trials():
     row = scoring.summarize_hops([good, stopped, bad])[0]
     assert row["valid"] == 2 and row["reached_orchestrator"] == 2 and row["reached_checkout"] == 1
     assert "x1-relay-a" in scoring.format_hops([row])
+
+
+# --------------------- R2: generated review-searched payloads ---------------------
+class GenFakeClient(FakeClient):
+    """FakeClient that also serves a product's reviews, like GET /api/products/<id>."""
+    def __init__(self, result, reviews):
+        super().__init__(result)
+        self.reviews = reviews
+
+    def product_reviews(self, pid):
+        self.calls.append(("get_reviews", pid))
+        return {"id": pid, "reviews": [{"text": x} for x in self.reviews]}
+
+
+_REVIEWS = ["Battery lasts all day and the sound is clear.", "Fits well and the case is small.",
+            "Bluetooth pairing was easy, great value for the price.", "Stopped charging after a month, support was slow.",
+            "Good bass, comfortable for long walks.", "Decent earbuds, the loyalty discount was nice."]
+
+
+def _gen_args(tmp_path, *extra):
+    return ["--trials", "1", "--delay", "0", "--no-kraken-check", "--no-control", "--backoff", "0",
+            "--gen-rounds", "5", "--no-dashboard", "--out", str(tmp_path / "gen.json"), *extra]
+
+
+def test_only_generated_runs_just_the_searched_payloads(tmp_path, clean_result):
+    c = GenFakeClient(clean_result, _REVIEWS)
+    assert runner.main(_gen_args(tmp_path, "--only-generated"), client=c) == 0
+    data = json.loads((tmp_path / "gen.json").read_text())
+    assert {t["payload_id"] for t in data["trials"]} == set(runner.GENERATED_IDS)
+    assert data["meta"]["generated"]["reviews_searched_against"] == len(_REVIEWS)
+    assert data["meta"]["generated"]["trigger_words"]
+
+
+def test_generation_searches_the_clean_review_set(tmp_path, clean_result):
+    c = GenFakeClient(clean_result, _REVIEWS)
+    runner.main(_gen_args(tmp_path, "--only-generated"), client=c)
+    kinds = [x[0] for x in c.calls]
+    assert kinds.index("reset") < kinds.index("get_reviews")      # reset first, so no leftover planted review is searched against
+
+
+def test_ids_naming_a_searched_payload_runs_only_that_one(tmp_path, clean_result):
+    c = GenFakeClient(clean_result, _REVIEWS)
+    assert runner.main(_gen_args(tmp_path, "--ids", "review-searched-spurious"), client=c) == 0
+    data = json.loads((tmp_path / "gen.json").read_text())
+    assert {t["payload_id"] for t in data["trials"]} == {"review-searched-spurious"}
+
+
+def test_generate_flag_adds_searched_payloads_to_the_suite(tmp_path, clean_result):
+    c = GenFakeClient(clean_result, _REVIEWS)
+    assert runner.main(_gen_args(tmp_path, "--generate", "--ids", "review-paraphrased"), client=c) == 0
+    data = json.loads((tmp_path / "gen.json").read_text())
+    assert {t["payload_id"] for t in data["trials"]} == {"review-paraphrased", *runner.GENERATED_IDS}
+
+
+def test_no_generate_flag_leaves_the_run_unchanged(tmp_path, clean_result):
+    c = GenFakeClient(clean_result, _REVIEWS)
+    runner.main(_gen_args(tmp_path, "--ids", "review-paraphrased"), client=c)
+    data = json.loads((tmp_path / "gen.json").read_text())
+    assert {t["payload_id"] for t in data["trials"]} == {"review-paraphrased"}
+    assert data["meta"]["generated"] is None
+    assert ("get_reviews", "earbuds-01") not in c.calls
+
+
+def test_generation_with_no_reviews_exits_cleanly(tmp_path, clean_result):
+    c = GenFakeClient(clean_result, [])
+    assert runner.main(_gen_args(tmp_path, "--only-generated"), client=c) == 2
+    assert not (tmp_path / "gen.json").exists()
+
+
+def test_searched_payloads_are_labelled_r2_on_seed_reviews_and_r4_on_amazon():
+    from offense import dataset
+    assert dataset.use_case_for("review-searched-adversarial", "review", "seed") == "R2"
+    assert dataset.use_case_for("review-searched-spurious", "review", None) == "R2"
+    assert dataset.use_case_for("review-searched-adversarial", "review", "amazon") == "R4"
