@@ -211,6 +211,8 @@ function initLivePanel() {
       <button class="btn btn-primary" data-atk="listing">Listing poisoning</button>
       <button class="btn btn-primary" data-atk="cross_agent">Cross-agent propagation</button>
       <button class="btn btn-primary" data-atk="listing" data-sweep="1" title="Fires every I1 listing payload">Run all: Listing (7)</button>
+      <button class="btn btn-primary" data-atk="retrieval_targeted" data-sweep="1" title="Fires both retrieval-targeted review payloads">Run all: Retrieval-targeted (2)</button>
+      <button class="btn btn-primary" data-atk="among_real" data-sweep="1" title="Fires all 8 review payloads into the store of real reviews">Run all: Among real reviews (8)</button>
       <button class="btn btn-primary" data-atk="cross_agent" data-sweep="1" title="Fires both X1 relay payloads">Run all: Cross-agent (2)</button>
       <label>Review payload (RAG only) <select id="live-variant"><option value="authority-a">authority-a (official notice)</option><option value="paraphrased">paraphrased (store notice)</option></select></label>
       <label>Trials <select id="live-trials"><option>1</option><option>3</option><option>5</option><option>10</option></select></label>

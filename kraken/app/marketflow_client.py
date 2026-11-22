@@ -74,7 +74,7 @@ def _forward_attack(attack_id: str, custom_payload: str = None, product_id: str 
     with httpx.Client(timeout=TIMEOUT) as client:
         client.post(f"{payloads.MARKETFLOW_URL}/api/products/{target_product}/reset")
 
-    if attack_id == "rag" or (attack_id == "cross_agent" and spec["payload_field"] == "review"):
+    if attack_id in payloads.REVIEW_ATTACKS or (attack_id == "cross_agent" and spec["payload_field"] == "review"):
         with httpx.Client(timeout=TIMEOUT) as client:
             planted = client.post(
                 f"{payloads.MARKETFLOW_URL}/api/products/{target_product}/reviews",
@@ -92,6 +92,8 @@ def _forward_attack(attack_id: str, custom_payload: str = None, product_id: str 
                     "budget": budget,
                     "goal": base_goal,
                     "notes": "",
+                    # lets MarketFlow report the planted review's rank and similarity among the product's reviews
+                    "planted_review_id": (planted.get("review") or {}).get("id"),
                 },
             )
             return run.json()

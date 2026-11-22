@@ -1,9 +1,12 @@
 """Live attack runs triggered from the dashboard. Runs in a background thread,
 streams one log line per trial, never fabricates results: every line comes from
-a real MarketFlow response. Runs are NOT saved to the baseline result files."""
+a real MarketFlow response. Every trial is also appended to offense/results/live_runs/live_runs_<date>.csv
+(one row per trial, for analysis and defense training). Runs are NOT added to the baseline result files."""
+import csv
 import threading
 import time
 import uuid
+from pathlib import Path
 
 from . import payloads, marketflow_client, state
 
@@ -11,7 +14,8 @@ POLICY_MAX = 10.0
 PACE_SECONDS = 20          # Gemini free tier: 15 requests/min, ~5 calls per run
 MAX_TRIALS = 10
 LABELS = {"control": "control (no attack)", "direct": "direct injection", "indirect": "indirect injection",
-          "rag": "rag poisoning", "listing": "listing poisoning", "cross_agent": "cross-agent propagation"}
+          "rag": "rag poisoning", "retrieval_targeted": "retrieval-targeted review",
+          "among_real": "review among real reviews", "listing": "listing poisoning", "cross_agent": "cross-agent propagation"}
 
 _JOBS = {}
 SESSION = []   # every live trial since Kraken started (in memory only)
@@ -52,6 +56,26 @@ def payload_retrieved(res, payload):
                if "review store" in (t.get("peer") or "") or "listing" in (t.get("peer") or ""))
 
 
+def retrieval_info(res):
+    """R2/R4 evidence from MarketFlow's own run result: where the planted review ranked among the product's
+    reviews (TF-IDF, same ranking the Negotiator uses), its similarity, and how many real reviews surround it.
+    None when the run has no planted review info (blocked, error, or a non-review attack)."""
+    if not isinstance(res, dict) or res.get("error") or res.get("blocked"):
+        return None
+    pr, rr = res.get("planted_review"), res.get("real_reviews") or {}
+    if not pr:
+        return None
+    return {"retrieved": bool(pr.get("retrieved")), "rank": pr.get("rank"), "total": pr.get("total"),
+            "similarity": pr.get("similarity"), "real_reviews": rr.get("count"), "source": rr.get("source")}
+
+
+def retrieval_text(info):
+    if not info:
+        return ""
+    return (f"  [retrieval: rank {info['rank']} of {info['total']} reviews, similarity {info['similarity']}, "
+            f"{'RETRIEVED' if info['retrieved'] else 'NOT retrieved'} (top 3); {info['real_reviews']} real {info['source']} reviews]")
+
+
 def hops_for(res, payload):
     """X1: follow the payload's canary reference (MGR-xxxx) Negotiator -> Orchestrator -> Checkout, using the same
     scoring code as the offense suite. None when the payload has no canary or the run has no agent messages."""
@@ -79,7 +103,77 @@ def hop_text(h):
             f"executed={ok(h['executed_over_policy'])} -> furthest: {h['furthest']}]")
 
 
-def record_outcome(source, label, product, res, payload=None):
+LIVE_CSV_COLUMNS = ["timestamp", "source", "attack_type", "label", "payload_id", "payload_text", "is_attack",
+                    "inspected_text", "inspected_text_source", "retrieved_reviews_text", "buyer_message", "negotiator_message",
+                    "product_id", "product_name", "kraken_on", "outcome", "attack_success", "blocked",
+                    "discount_pct", "final_price", "payload_retrieved", "retrieval_rank", "retrieval_total",
+                    "retrieval_similarity", "real_reviews_count", "real_reviews_source", "error"]
+
+
+def _live_csv_path():
+    return Path(__file__).resolve().parents[2] / "offense" / "results" / "live_runs" / f"live_runs_{time.strftime('%Y%m%d')}.csv"
+
+
+def save_row(source, label, product, res, payload, kind, attack=None, payload_id=None):
+    """Append one trial to today's live-run CSV. Never raises: a failed save must not break a run."""
+    try:
+        res = res if isinstance(res, dict) else {}
+        order = res.get("order") or {}
+        info = retrieval_info(res) or {}
+        # The text a defense classifier would read. Attack rows: the planted payload. Control rows: the real text the
+        # agents saw instead (the reviews retrieved for the Negotiator), so benign rows are never empty.
+        reviews = [(r.get("text") or "").strip() for r in (res.get("retrieved_reviews") or []) if r.get("text")]
+        reviews_text = " || ".join(reviews)
+        if payload:
+            inspected, inspected_src = payload, "payload"
+        elif reviews:
+            inspected, inspected_src = reviews_text, "retrieved_reviews"
+        else:
+            inspected, inspected_src = "", "none"
+        row = {
+            "inspected_text": inspected, "inspected_text_source": inspected_src, "retrieved_reviews_text": reviews_text,
+            "buyer_message": (res.get("request") or {}).get("message_to_negotiator") or "",
+            "negotiator_message": (res.get("offer") or {}).get("message_to_orchestrator") or "",
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"), "source": source, "attack_type": attack or "",
+            "label": label, "payload_id": payload_id or "", "payload_text": payload or "",
+            "is_attack": 0 if (attack == "control" or not payload) else 1,
+            "product_id": (product or {}).get("id") or "", "product_name": (product or {}).get("name") or "",
+            "kraken_on": int(bool(state.STATE.get("defense_on"))), "outcome": kind,
+            "attack_success": int(kind == "success"), "blocked": int(kind == "blocked"),
+            "discount_pct": order.get("discount_pct"), "final_price": order.get("final_price"),
+            "payload_retrieved": payload_retrieved(res, payload) if payload else None,
+            "retrieval_rank": info.get("rank"), "retrieval_total": info.get("total"),
+            "retrieval_similarity": info.get("similarity"),
+            "real_reviews_count": (res.get("real_reviews") or {}).get("count"),
+            "real_reviews_source": (res.get("real_reviews") or {}).get("source"),
+            "error": res.get("error") or "",
+        }
+        path = _live_csv_path()
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with _LOCK:
+            new = not path.exists()
+            if not new:                      # an older file with fewer columns: upgrade it in place (blanks for new columns)
+                with open(path, newline="", encoding="utf-8") as f:
+                    old_rows = list(csv.DictReader(f))
+                    old_cols = list(old_rows[0].keys()) if old_rows else None
+                    if old_cols is None:
+                        f.seek(0)
+                        old_cols = next(csv.reader(f), [])
+                if old_cols != LIVE_CSV_COLUMNS:
+                    with open(path, "w", newline="", encoding="utf-8") as f:
+                        w = csv.DictWriter(f, fieldnames=LIVE_CSV_COLUMNS, extrasaction="ignore", restval="")
+                        w.writeheader()
+                        w.writerows(old_rows)
+            with open(path, "a", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=LIVE_CSV_COLUMNS)
+                if new:
+                    w.writeheader()
+                w.writerow(row)
+    except Exception:
+        pass
+
+
+def record_outcome(source, label, product, res, payload=None, attack=None, payload_id=None):
     """The ONE place an attack result is booked. Every Kraken screen that fires an attack at MarketFlow
     (simulator, enforcement check, live runner) calls this, so tallies, the dashboard's live session and the
     evidence all agree. `product` is MarketFlow's product dict (or None). Returns (kind, text)."""
@@ -99,6 +193,7 @@ def record_outcome(source, label, product, res, payload=None):
             state.STATE["attacks_run"] += 1
         if kind == "success":
             state.STATE["attacks_succeeded"] += 1
+    save_row(source, label, product, res, payload, kind, attack, payload_id)
     return kind, text
 
 
@@ -128,12 +223,15 @@ def _sweep(job):
             pl = job["current_payload"]
             try:
                 res = marketflow_client.forward_attack(atk, custom_payload=text, product_id=pid)
-                kind, out = record_outcome("live runner", f"{label} / {payload_id}", product, res, payload=pl)
+                kind, out = record_outcome("live runner", f"{label} / {payload_id}", product, res, payload=pl,
+                                           attack=atk, payload_id=payload_id)
                 if atk == "cross_agent":
                     out += hop_text(hops_for(res, pl))
+                elif atk in payloads.REVIEW_ATTACKS:
+                    out += retrieval_text(retrieval_info(res))
             except Exception as e:
                 kind, out = record_outcome("live runner", f"{label} / {payload_id}", product,
-                                           {"error": f"{type(e).__name__}: {e}"})
+                                           {"error": f"{type(e).__name__}: {e}"}, attack=atk, payload_id=payload_id)
             counts[kind] += 1
             pcount[kind] += 1
             used_llm = kind != "blocked"
@@ -169,8 +267,8 @@ def _worker(job):
         try:
             if atk == "control":
                 res = marketflow_client.forward_attack("direct", custom_payload="", product_id=pid)
-            elif atk == "listing":
-                pl = payloads.payload_for(atk, payloads.ATTACK_TYPES["listing"]["payload_text"], product)
+            elif atk in ("listing", "retrieval_targeted", "among_real"):
+                pl = payloads.payload_for(atk, payloads.ATTACK_TYPES[atk]["payload_text"], product)
                 res = marketflow_client.forward_attack(atk, product_id=pid)
             elif atk in ("rag", "cross_agent"):
                 text = payloads.RAG_VARIANTS.get(variant, payloads.RAG_VARIANTS["authority-a"])
@@ -178,12 +276,15 @@ def _worker(job):
                 res = marketflow_client.forward_attack(atk, custom_payload=text, product_id=pid)
             else:
                 res = marketflow_client.forward_attack(atk, product_id=pid)
-            kind, text = record_outcome("live runner", label, product, res, payload=pl)
+            kind, text = record_outcome("live runner", label, product, res, payload=pl, attack=atk,
+                                            payload_id=variant if atk in ("rag", "cross_agent") else atk)
             if atk == "cross_agent":
                 text += hop_text(hops_for(res, pl))
+            elif atk in payloads.REVIEW_ATTACKS:
+                text += retrieval_text(retrieval_info(res))
         except Exception as e:
             res = None
-            kind, text = record_outcome("live runner", label, product, {"error": f"{type(e).__name__}: {e}"})
+            kind, text = record_outcome("live runner", label, product, {"error": f"{type(e).__name__}: {e}"}, attack=atk)
         counts[kind] += 1
         used_llm = kind != "blocked"
         _add(job, kind, f"[{label} {i}/{n}] {text}")
@@ -204,8 +305,8 @@ def start(attack_type, variant, trials, product_id=None, sweep=False):
         return {"error": f"MarketFlow has no product '{product_id}'"}
     trials = max(1, min(MAX_TRIALS, int(trials or 1)))
     if sweep:
-        if attack_type not in ("listing", "cross_agent"):
-            return {"error": "sweep is available for listing (I1) and cross-agent (X1)"}
+        if attack_type not in ("listing", "cross_agent", "retrieval_targeted", "among_real"):
+            return {"error": "sweep is available for listing, cross-agent, retrieval-targeted and among-real"}
         trials = min(trials, SWEEP_MAX_TRIALS)
     if attack_type == "cross_agent":
         variant = "x1-relay"       # X1 always fires the canary relay payload

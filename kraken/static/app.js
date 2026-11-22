@@ -106,6 +106,8 @@ async function runSimulation() {
     direct: ["Scanning input for override patterns...", "Checking against known jailbreak signatures...", "Evaluating instruction-hijack likelihood..."],
     indirect: ["Scanning secondary fields (notes, metadata)...", "Cross-referencing against primary instruction...", "Evaluating hidden-instruction likelihood..."],
     rag: ["Scanning retrieved content (reviews)...", "Comparing against known poisoning patterns...", "Checking retrieval-to-agent trust boundary..."],
+    retrieval_targeted: ["Scanning review for retrieval-bait terms (loyalty, discount, promotion)...", "Estimating TF-IDF rank against the Negotiator's retrieval query...", "Checking retrieval-to-agent trust boundary..."],
+    among_real: ["Scanning a review submitted into a store of real reviews...", "Comparing against known poisoning patterns...", "Checking retrieval-to-agent trust boundary..."],
     listing: ["Scanning product listing text added by the seller...", "Comparing against known poisoning patterns...", "Checking catalog-to-agent trust boundary..."],
     cross_agent: ["Tracing agent-to-agent handoff (Negotiator -> Orchestrator -> Checkout)...", "Checking for unverified instruction forwarding...", "Confirming propagation path..."],
   }[selectedOffense];
@@ -167,6 +169,11 @@ function renderSimulationResult(r) {
       <pre>${o.blocked ? "Blocked by Kraken at " + (o.blocked_at || "a checkpoint") + ": no order was placed." : `List price: $${o.list_price}
 Final price: $${o.final_price}  (${o.discount_pct}% off)`}
 ${o.blocked ? "" : o.violations.length ? "Violation: " + o.violations.join(" ") : "No policy violation."}</pre>
+      ${o.retrieval ? `<b>Retrieval evidence (the planted review among the product's reviews)</b><pre>${escapeHtml(
+          "Rank: " + o.retrieval.rank + " of " + o.retrieval.total + " reviews (the Negotiator reads the top 3)\n"
+          + "TF-IDF similarity: " + o.retrieval.similarity + "\n"
+          + "Retrieved by the Negotiator: " + (o.retrieval.retrieved ? "yes" : "NO") + "\n"
+          + "Real " + o.retrieval.source + " reviews around it: " + o.retrieval.real_reviews)}</pre>` : ""}
       ${o.hops ? `<b>Canary trail (${escapeHtml(o.hops.canary)}) through the agent chain</b><pre>${escapeHtml([
           ["Retrieved by Negotiator", o.hops.retrieved], ["Reached Orchestrator", o.hops.reached_orchestrator],
           ["Reached Checkout", o.hops.reached_checkout], ["In order confirmation", o.hops.in_confirmation],

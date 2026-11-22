@@ -78,6 +78,16 @@ SCAN_STEPS = {
         "Comparing against known poisoning patterns...",
         "Checking retrieval-to-agent trust boundary...",
     ],
+    "retrieval_targeted": [
+        "Scanning review for retrieval-bait terms (loyalty, discount, promotion)...",
+        "Estimating TF-IDF rank against the Negotiator's retrieval query...",
+        "Checking retrieval-to-agent trust boundary...",
+    ],
+    "among_real": [
+        "Scanning a review submitted into a store of real reviews...",
+        "Comparing against known poisoning patterns...",
+        "Checking retrieval-to-agent trust boundary...",
+    ],
     "listing": [
         "Scanning product listing text added by the seller...",
         "Comparing against known poisoning patterns...",
@@ -123,7 +133,7 @@ def simulate(req: SimulateReq):
     ref = payloads.RECORDED_REFERENCE[req.attack_type]
     live_ok = mf_result is not None and "error" not in mf_result
     if live_ok:
-        live_runs.record_outcome("simulator", spec["label"], prod, mf_result, payload=text)
+        live_runs.record_outcome("simulator", spec["label"], prod, mf_result, payload=text, attack=spec["id"], payload_id=spec["id"])
     if live_ok:
         # ALWAYS report the live result, including when the agents resisted
         # (order is None). Previously a resisted attack fell through to the
@@ -140,6 +150,7 @@ def simulate(req: SimulateReq):
             "blocked": bool(mf_result.get("blocked")),
             "blocked_at": mf_result.get("blocked_at"),
             "payload_retrieved": live_runs.payload_retrieved(mf_result, text),   # None for non-review attacks
+            "retrieval": live_runs.retrieval_info(mf_result),                    # R2/R4: rank + similarity among real reviews
             "hops": live_runs.hops_for(mf_result, text),                         # canary trail (X1), None if no canary
         }
         if outcome["fallback_calls"]:
@@ -168,7 +179,7 @@ def simulate(req: SimulateReq):
         }
 
     # Risk score: base per type + regex/classifier signal + violation bonus
-    base = {"direct": 55, "indirect": 60, "rag": 65, "listing": 65, "cross_agent": 70}[req.attack_type]
+    base = {"direct": 55, "indirect": 60, "rag": 65, "retrieval_targeted": 65, "among_real": 65, "listing": 65, "cross_agent": 70}[req.attack_type]
     score = base + len(r1["matches"]) * 5 + round(c2["score"] * 15)
     if outcome["violations"]:
         score += 15
@@ -303,7 +314,7 @@ def defense_run(req: DefenseRunReq):
     entry = state.record_defense_run(req.attack_type, checkpoint, decision, cache_hit, reason, tiers,
                                       marketflow_result=mf_result)
     if mf_result is not None:
-        live_runs.record_outcome("enforcement", spec["label"], prod, mf_result, payload=text)
+        live_runs.record_outcome("enforcement", spec["label"], prod, mf_result, payload=text, attack=spec["id"], payload_id=spec["id"])
     elif decision == "blocked" and req.forward_to_marketflow:
         live_runs.record_outcome("enforcement", spec["label"], prod,
                                  {"blocked": True, "blocked_at": f"{checkpoint} checkpoint (Kraken)"})
