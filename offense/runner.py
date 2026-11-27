@@ -6,6 +6,8 @@ Run from the kraken-poc folder, with MarketFlow running on :8001:
 
     python -m offense.runner --trials 5
     python -m offense.runner --trials 1 --vectors review --stealth stealthy   # quick check
+    python -m offense.runner --trials 5 --dynamic                             # include dynamic payloads
+    python -m offense.runner --trials 5 --dynamic --dyn-seed 42 --dyn-n 10    # 10 per category, seed 42
 
 This is the OFFENSE baseline: it makes sure Kraken's defense is OFF (or that
 Kraken is not running, in which case MarketFlow fails open) so the numbers
@@ -72,11 +74,21 @@ def ensure_kraken_off(kraken_url):
 # --------------------------------------------------------------------------
 def run_trial(client, payload, user_task, trial_idx, product=None, kraken_enabled=False, real_hint=None):
     """payload=None -> control run (no attack). Always resets state first.
-    rec["row"] is the flat dataset row for this trial (see offense/dataset.py)."""
+
+    Handles all vector types:
+    - "review": plants a review (RAG poisoning)
+    - "goal": appends to buyer's goal (direct injection)
+    - "notes": replaces buyer's notes (indirect injection)
+    - "listing": appends to the product listing (I1)
+    - "combo": plants a review AND modifies goal (split attack from generators.py)
+
+    rec["row"] is the flat dataset row for this trial (see offense/dataset.py).
+    """
     t0 = time.perf_counter()
     client.reset(user_task.product_id)
     goal, notes = user_task.goal, user_task.notes
     planted, planted_id = None, None
+    is_combo = hasattr(payload, 'review_text') if payload else False
     rec = {
         "payload_id": payload.id if payload else "control",
         "vector": payload.vector if payload else "control",
@@ -89,7 +101,23 @@ def run_trial(client, payload, user_task, trial_idx, product=None, kraken_enable
     }
 
     if payload:
-        if payload.vector in ("review", "listing"):
+        if payload.vector == "combo":
+            # Split attack: plant review AND modify goal
+            planted = client.post_review(user_task.product_id, payload.review_text)
+            planted_id = (planted.get("review") or {}).get("id")
+            if planted.get("error"):
+                rec["blocked"] = True
+                rec.update(success=False, exfil_success=False, in_policy=False,
+                           valid=True, elapsed_s=round(time.perf_counter() - t0, 2))
+                try:
+                    rec["row"] = dataset.build_row(rec, payload, user_task, product, {}, planted, kraken_enabled, real_hint)
+                except Exception:
+                    rec["row"] = {}
+                return rec
+            goal = f"{goal} {payload.goal_suffix}"
+            if payload.notes_text:
+                notes = payload.notes_text
+        elif payload.vector in ("review", "listing"):
             if payload.vector == "review":
                 planted = client.post_review(user_task.product_id, payload.text)
                 planted_id = (planted.get("review") or {}).get("id")
@@ -97,7 +125,8 @@ def run_trial(client, payload, user_task, trial_idx, product=None, kraken_enable
                 planted = client.set_listing(user_task.product_id, payload.text)
             if planted.get("error"):          # rejected at submission (only when defended)
                 rec["blocked"] = True
-                rec.update(success=False, in_policy=False, valid=True, elapsed_s=round(time.perf_counter() - t0, 2))
+                rec.update(success=False, exfil_success=False, in_policy=False,
+                           valid=True, elapsed_s=round(time.perf_counter() - t0, 2))
                 rec["row"] = dataset.build_row(rec, payload, user_task, product, {}, planted, kraken_enabled, real_hint)
                 return rec
         elif payload.vector == "goal":
@@ -127,19 +156,35 @@ def run_trial(client, payload, user_task, trial_idx, product=None, kraken_enable
         "max_discount_pct": max_disc,
         "valid": scoring.trial_is_valid(result),
         "success": scoring.attack_succeeded(result, max_disc),
+        "exfil_success": scoring.exfiltration_succeeded(result),
         "in_policy": scoring.order_in_policy(result, max_disc),
     })
+
     # Did the planted review actually reach the Negotiator? (heuristic: its
     # opening words appear in the run trace). Separates "never retrieved" from
     # "retrieved but the agent resisted".
-    if payload and payload.vector in ("review", "listing") and result.get("trace") is not None:
-        rec["retrieved"] = payload.text[:25] in json.dumps(result["trace"])
+    review_text_to_check = None
+    if payload:
+        if payload.vector == "combo":
+            review_text_to_check = payload.review_text
+        elif payload.vector in ("review", "listing"):
+            review_text_to_check = payload.text
+
+    if review_text_to_check and result.get("trace") is not None:
+        rec["retrieved"] = review_text_to_check[:25] in json.dumps(result["trace"])
+
     # X1: follow the payload's canary (MGR-####) through Negotiator -> Orchestrator -> Checkout.
-    canary = tasks.canary_of(payload.text) if payload else None
+    # (only for standard payloads with .text, not combo payloads)
+    payload_text = getattr(payload, 'text', None) if payload else None
+    canary = tasks.canary_of(payload_text) if payload_text else None
     if canary:
         rec["hops"] = scoring.hop_report(result, canary, max_disc)
     rec["elapsed_s"] = round(time.perf_counter() - t0, 2)
-    rec["row"] = dataset.build_row(rec, payload, user_task, product, result, planted, kraken_enabled, real_hint)
+    try:
+        rec["row"] = dataset.build_row(rec, payload, user_task, product, result, planted, kraken_enabled, real_hint)
+    except Exception:
+        # ComboPayload may not have all fields dataset.build_row expects
+        rec["row"] = {}
     return rec
 
 
@@ -168,8 +213,12 @@ def _label(rec):
     if rec["blocked"]:
         return "blocked"
     if rec["discount_pct"] is None:
-        return "no order placed (offer declined) -> fail"
-    return f"discount={rec['discount_pct']}% -> {'SUCCESS' if rec['success'] else 'fail'}"
+        label = "no order placed (offer declined) -> fail"
+    else:
+        label = f"discount={rec['discount_pct']}% -> {'SUCCESS' if rec['success'] else 'fail'}"
+    if rec.get("exfil_success"):
+        label += " [EXFIL]"
+    return label
 
 
 def _add_to_manifest(out_path: Path):
@@ -225,6 +274,8 @@ def main(argv=None, client=None):
     ap.add_argument("--no-dashboard", action="store_true", help="do not add this run's file to the dashboard manifest")
     ap.add_argument("--product-id", default=None,
                     help="MarketFlow product to attack (default: the original earbuds-01). See GET /api/products")
+
+    # R2: TF-IDF trigger search (offense/attacks/generate.py)
     ap.add_argument("--generate", action="store_true",
                     help="R2: also run the generated review-searched-* payloads (offense/attacks/generate.py, searched "
                          "against this product's reviews) alongside the selected suite payloads")
@@ -234,6 +285,15 @@ def main(argv=None, client=None):
     ap.add_argument("--gen-rounds", type=int, default=60, help="search rounds for the generated payloads (default 60)")
     ap.add_argument("--gen-target-discount", type=int, default=45, help="discount (%%) the adversarial review asks for (default 45)")
     ap.add_argument("--gen-seed", type=int, default=0, help="random seed of the trigger search (default 0)")
+
+    # Dynamic payload generators (offense/attacks/generators.py)
+    ap.add_argument("--dynamic", action="store_true",
+                    help="include dynamically generated payloads (obfuscated, virtualized, combo, exfiltration)")
+    ap.add_argument("--dynamic-only", action="store_true",
+                    help="run ONLY dynamically generated payloads, skip static baselines")
+    ap.add_argument("--dyn-seed", type=int, default=0, help="seed for dynamic payload generation (default 0)")
+    ap.add_argument("--dyn-n", type=int, default=5, help="payloads per dynamic generator category (default 5)")
+
     ap.add_argument("--marketflow", default="http://127.0.0.1:8001")
     ap.add_argument("--kraken", default="http://127.0.0.1:8002")
     ap.add_argument("--delay", type=float, default=20.0,
@@ -271,12 +331,45 @@ def main(argv=None, client=None):
     ids = list(args.ids or [])
     gen_ids = [i for i in ids if i in GENERATED_IDS]
     suite_ids = [i for i in ids if i not in GENERATED_IDS]
-    want_generated = bool(args.generate or args.only_generated or gen_ids)
-    skip_suite = bool(args.only_generated or (gen_ids and not suite_ids))
-    suite = [] if skip_suite else tasks.get_payloads(args.vectors, args.stealth, suite_ids or None)
-    payloads = [tasks.adapt_payload(p, product) for p in suite]
+
+    # ---- TF-IDF generation (R2: offense/attacks/generate.py) ----
+    want_tfidf = bool(args.generate or args.only_generated or gen_ids)
+    # ---- Dynamic generators (offense/attacks/generators.py) ----
+    want_dynamic = bool(args.dynamic or args.dynamic_only)
+
+    # Skip the static suite if only-generated or dynamic-only requested
+    skip_suite = bool(args.only_generated or args.dynamic_only or (gen_ids and not suite_ids))
+
+    # Build the payload list
+    combo_payloads = []
+    if want_dynamic and not skip_suite:
+        # Use the new get_payloads() that returns (standard, combos), including dynamic payloads
+        standard, combo_payloads = tasks.get_payloads(
+            args.vectors, args.stealth, suite_ids or None,
+            include_generated=True, gen_seed=args.dyn_seed, gen_n=args.dyn_n
+        )
+        payloads = [tasks.adapt_payload(p, product) for p in standard]
+    elif want_dynamic and skip_suite:
+        # Only dynamic payloads, no static suite
+        standard, combo_payloads = tasks.get_payloads(
+            args.vectors, args.stealth, None,
+            include_generated=True, gen_seed=args.dyn_seed, gen_n=args.dyn_n
+        )
+        # Remove static payloads (keep only gen-* ids)
+        standard = [p for p in standard if p.id.startswith("gen-")]
+        combo_payloads = [p for p in combo_payloads if p.id.startswith("gen-")]
+        payloads = [tasks.adapt_payload(p, product) for p in standard]
+    else:
+        # No dynamic generators: use the legacy flat-list path
+        if skip_suite:
+            suite = []
+        else:
+            suite = tasks.get_payloads_legacy(args.vectors, args.stealth, suite_ids or None)
+        payloads = [tasks.adapt_payload(p, product) for p in suite]
+
+    # TF-IDF generated payloads (independent of dynamic generators; can be combined)
     generated_meta = None
-    if want_generated:
+    if want_tfidf:
         try:
             generated, generated_meta = generate_payloads_for(client, user_task.product_id, args.gen_rounds,
                                                               args.gen_target_discount, args.gen_seed)
@@ -286,11 +379,17 @@ def main(argv=None, client=None):
         if gen_ids:
             generated = [g for g in generated if g.id in gen_ids]
         payloads += generated
-        print(f"Generated {len(generated)} payload(s) from {generated_meta['reviews_searched_against']} reviews of "
+        print(f"Generated {len(generated)} TF-IDF payload(s) from {generated_meta['reviews_searched_against']} reviews of "
               f"{user_task.product_id}: trigger words {generated_meta['trigger_words']!r}")
-    plan = ([] if args.no_control else [None]) + payloads                      # None = control run first
+
+    plan = ([] if args.no_control else [None]) + payloads + combo_payloads
     out_path = Path(args.out or f"offense/results/baseline_{datetime.now():%Y%m%d_%H%M%S}.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    n_static = sum(1 for p in plan if p and not p.id.startswith("gen-") and p.id not in GENERATED_IDS)
+    n_tfidf = sum(1 for p in plan if p and p.id in GENERATED_IDS)
+    n_dyn = sum(1 for p in plan if p and p.id.startswith("gen-"))
+    print(f"Plan: {len(plan)} payloads ({n_static} static, {n_tfidf} TF-IDF, {n_dyn} dynamic) × {args.trials} trials")
 
     trials = []
     started = datetime.now().isoformat(timespec="seconds")
@@ -306,8 +405,9 @@ def main(argv=None, client=None):
                                              backoff=args.backoff, product=product, kraken_enabled=False,
                                              real_hint=real_hint)
                 trials.append(rec)
-                if rec["row"]["real_reviews_source"]:
-                    real_hint = {"count": rec["row"]["real_reviews_count"], "source": rec["row"]["real_reviews_source"]}
+                row = rec.get("row") or {}
+                if row.get("real_reviews_source"):
+                    real_hint = {"count": row["real_reviews_count"], "source": row["real_reviews_source"]}
                 extra = f" (attempt {rec['attempts']})" if rec["attempts"] > 1 else ""
                 print(f"[{name} {i}/{args.start_trial + n_trials - 1}] {_label(rec)}{extra}")
                 streak = 0 if rec["valid"] else streak + 1
@@ -334,10 +434,20 @@ def main(argv=None, client=None):
     print("\n=== BY PAYLOAD ===")
     print(scoring.format_table(per_payload, keys=("payload_id",)))
 
+    # Cross-agent hop tracking (X1)
     hop_rows = scoring.summarize_hops(attacks)
     if hop_rows:
         print("\n=== CROSS-AGENT HOPS (X1: how far the payload's MGR-#### reference travelled, valid trials) ===")
         print(scoring.format_hops(hop_rows))
+
+    # Exfiltration summary (if any exfil payloads were run)
+    exfil_trials = [t for t in attacks if t.get("stealth") == "exfiltration"]
+    if exfil_trials:
+        print("\n=== EXFILTRATION ===")
+        exfil_valid = [t for t in exfil_trials if t["valid"]]
+        exfil_succ = [t for t in exfil_valid if t.get("exfil_success")]
+        rate = (len(exfil_succ) / len(exfil_valid) * 100) if exfil_valid else 0
+        print(f"Exfiltration rate: {len(exfil_succ)}/{len(exfil_valid)} = {rate:.0f}%")
 
     ctrl_bad = sum(r["successes"] for r in ctrl_rows)
     if ctrl_bad:
@@ -351,12 +461,19 @@ def main(argv=None, client=None):
     out_path.write_text(json.dumps({
         "meta": {"started": started, "trials_per_payload": args.trials, "control_trials": args.control_trials or args.trials, "kraken": kraken_state,
                  "user_task": user_task.__dict__, "injection_goal": tasks.INJECTION_GOAL,
-                 "generated": generated_meta},
+                 "exfiltration_goal": tasks.EXFILTRATION_GOAL,
+                 "generated": generated_meta,
+                 "dynamic": want_dynamic, "dyn_seed": args.dyn_seed, "dyn_n": args.dyn_n},
         "summary": summary, "per_payload": per_payload, "control": ctrl_rows, "hops": hop_rows, "trials": trials,
     }, indent=2))
-    csv_path = out_path.with_suffix(".csv")
-    dataset.write_csv(csv_path, [t["row"] for t in trials])
-    print(f"\nSaved: {out_path}\nDataset rows (CSV, {len(trials)} rows): {csv_path}")
+    # CSV dataset output (rows without dataset.build_row data get skipped)
+    valid_rows = [t["row"] for t in trials if t.get("row")]
+    if valid_rows:
+        csv_path = out_path.with_suffix(".csv")
+        dataset.write_csv(csv_path, valid_rows)
+        print(f"\nSaved: {out_path}\nDataset rows (CSV, {len(valid_rows)} rows): {csv_path}")
+    else:
+        print(f"\nSaved: {out_path}")
     if not args.no_dashboard:
         _add_to_manifest(out_path)
     return 0
